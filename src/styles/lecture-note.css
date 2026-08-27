@@ -92,22 +92,24 @@
   border-left-color: #0f172a;
 }
 
-/* ── Figure / 대표 그림 ── */
-.lecture-hero {
+/* ── Figure / 대표 그림 ──
+   본문 텍스트는 왼쪽 정렬 그대로. 그림(figure)만 가운데로 모은다.
+   선택자는 global.css 의 `.prose-lecture figure` (0,1,1) 를 이기려고 `.prose-lecture` 로 스코프. */
+.prose-lecture .lecture-hero {
   margin: 0 -9.5rem 2.5rem -11.5rem;
 }
-.lecture-figure {
-  /* 기본 그림은 본문 폭을 가득 채우지 않는다 — 자연 크기로, 너무 크면 여기서 캡. */
-  margin: 2.5rem auto;
+.prose-lecture .lecture-figure {
+  /* 본문 폭을 가득 채우지 않는다 — 34rem 에서 캡하고 가운데 정렬 */
   max-width: 34rem;
+  margin: 2.5rem auto;
 }
-.lecture-hero img {
+.prose-lecture .lecture-hero img {
   display: block;
   width: 100%;
   height: auto;
   border-radius: 0.5rem;
 }
-.lecture-figure img {
+.prose-lecture .lecture-figure img {
   display: block;
   max-width: 100%;
   height: auto;
@@ -115,7 +117,7 @@
   border-radius: 0.5rem;
 }
 /* 자작 인라인 SVG 다이어그램 — 캡 안에서 폭을 채운다 */
-.lecture-figure svg,
+.prose-lecture .lecture-figure svg,
 .prose-lecture > svg {
   display: block;
   width: 100%;
@@ -123,14 +125,14 @@
   max-width: 100%;
   margin: 0 auto;
 }
-/* wide: 캡을 풀고 본문보다 살짝 넓게 */
-.lecture-figure--wide {
+/* wide: 캡을 풀고 본문보다 살짝 넓게 (여전히 가운데) */
+.prose-lecture .lecture-figure--wide {
   max-width: none;
   margin-left: -4.5rem;
   margin-right: -4.5rem;
 }
-.lecture-figure figcaption,
-.lecture-hero figcaption {
+.prose-lecture .lecture-figure figcaption,
+.prose-lecture .lecture-hero figcaption {
   margin-top: 0.6rem;
   text-align: center;
   font-size: 0.875rem;
@@ -325,12 +327,12 @@
   .lecture-shell__main {
     padding-right: 0;
   }
-  .lecture-hero {
+  .prose-lecture .lecture-hero {
     margin: 0 0 2.5rem;
   }
-  .lecture-figure--wide {
-    margin-left: 0;
-    margin-right: 0;
+  .prose-lecture .lecture-figure--wide {
+    margin-left: auto;
+    margin-right: auto;
   }
   .sidenote {
     float: none;
