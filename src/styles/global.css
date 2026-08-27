@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import "katex/dist/katex.min.css";
+/* 수식은 rehype-katex 를 output:'mathml' 로 돌린다 (astro.config.mjs) → KaTeX CSS·폰트
+   불필요, 인라인 style 도 없어 엄격 CSP 와 충돌 없음. 브라우저 기본 MathML 렌더. */
 
 /* 라이트 전용, 학술 사이트풍 최소 디자인 */
 :root {
@@ -174,9 +175,18 @@ a {
   margin: 2.75rem 0;
 }
 
-/* 수식이 가로로 넘칠 때 스크롤 */
-.katex-display {
+/* MathML 디스플레이 수식($$...$$, 각 $$ 는 별도 줄) — 블록·가운데·가로 넘침 스크롤 */
+math[display="block"] {
+  display: block;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 0.25rem 0;
+  margin: 1.4rem 0;
+  text-align: center;
+}
+.prose-basic p:has(> math[display="block"]:only-child),
+.prose-lecture p:has(> math[display="block"]:only-child) {
+  text-align: center;
+}
+math {
+  font-size: 1.05em;
 }
