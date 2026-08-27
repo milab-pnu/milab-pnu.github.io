@@ -12,7 +12,7 @@ const years = [...new Set(papers.map((p) => p.year))].sort((a, b) => b - a);
 {
   years.map((year) => (
     <section class="mb-8">
-      <h3 class="mb-3 text-sm font-semibold text-slate-400">{year}</h3>
+      <h3 class="mb-3 text-sm font-semibold text-slate-500">{year}</h3>
       <ol class="space-y-4">
         {papers
           .filter((p) => p.year === year)

@@ -25,19 +25,19 @@ const semesters: {
   {
     semesters.map((s) => (
       <section class="mb-8">
-        <h2 class="mb-3 text-sm font-semibold text-slate-400">{s.label}</h2>
+        <h2 class="mb-3 text-sm font-semibold text-slate-500">{s.label}</h2>
         <ul class="space-y-2">
           {s.courses.map((c) => (
             <li class="border-l-2 border-slate-200 pl-4">
               {c.href ? (
                 <a class="font-medium text-slate-900 hover:underline" href={c.href}>
                   {c.title}
-                  <span class="ml-1.5 font-normal text-slate-400">{c.titleEn}</span>
+                  <span class="ml-1.5 font-normal text-slate-500">{c.titleEn}</span>
                 </a>
               ) : (
                 <span class="font-medium text-slate-900">
                   {c.title}
-                  <span class="ml-1.5 font-normal text-slate-400">{c.titleEn}</span>
+                  <span class="ml-1.5 font-normal text-slate-500">{c.titleEn}</span>
                 </span>
               )}
             </li>

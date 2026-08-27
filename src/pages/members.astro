@@ -53,7 +53,7 @@ const GROUPS: { label: string; roles: string[] }[] = [
               <p class="text-xl font-bold text-slate-900">
                 {professor.data.name}
                 {professor.data.nameEn && (
-                  <span class="ml-2 text-base font-normal text-slate-400">
+                  <span class="ml-2 text-base font-normal text-slate-500">
                     {professor.data.nameEn}
                   </span>
                 )}
@@ -108,7 +108,7 @@ const GROUPS: { label: string; roles: string[] }[] = [
               ))}
             </ul>
           ) : (
-            <p class="text-sm text-slate-400">—</p>
+            <p class="text-sm text-slate-500">—</p>
           )}
         </section>
       );
