@@ -2,11 +2,16 @@
 export const SITE = {
   name: "MI Lab",
   fullName: "Multimodal Intelligence Lab",
+  fullNameKo: "멀티모달 지능 연구실",
   org: "Pusan National University",
   orgKo: "부산대학교",
+  dept: "Graduate School of Data Science",
+  deptKo: "데이터사이언스전문대학원",
   description:
-    "부산대학교 Multimodal Intelligence Lab — 멀티모달 인공지능 연구실",
+    "부산대학교 데이터사이언스전문대학원 멀티모달 지능 연구실 (Multimodal Intelligence Lab)",
   email: "jaehoon.oh@pusan.ac.kr",
+  phone: "051-510-7293",
+  address: "부산광역시 금정구 부산대학로63번길 2, 제12공학관 326호",
 } as const;
 
 export const NAV: { label: string; href: string }[] = [

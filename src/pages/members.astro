@@ -2,11 +2,20 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
+import Icon from "../components/Icon.astro";
 import { withBase } from "../consts";
 
 const members = (await getCollection("members")).sort(
   (a, b) => a.data.order - b.data.order,
 );
+
+/** 외부 링크 url 로 아이콘 종류 판별 */
+function iconFor(url: string): "scholar" | "linkedin" | "github" | "link" {
+  if (/scholar\.google\./.test(url)) return "scholar";
+  if (/linkedin\.com/.test(url)) return "linkedin";
+  if (/github\.com/.test(url)) return "github";
+  return "link";
+}
 
 const GROUPS: { key: string; label: string; roles: string[] }[] = [
   { key: "faculty", label: "지도교수", roles: ["professor"] },
@@ -59,22 +68,39 @@ const GROUPS: { key: string; label: string; roles: string[] }[] = [
                         {m.data.interests.join(" · ")}
                       </p>
                     )}
-                    <div class="mt-1 flex gap-2 text-xs">
+                    <div class="mt-2 flex items-center gap-2.5 text-slate-400">
                       {m.data.email && (
-                        <a class="text-indigo-600 underline" href={`mailto:${m.data.email}`}>
-                          email
+                        <a
+                          class="hover:text-indigo-600"
+                          href={`mailto:${m.data.email}`}
+                          aria-label={`${m.data.name} 이메일`}
+                        >
+                          <Icon name="mail" />
                         </a>
                       )}
                       {m.data.homepage && (
                         <a
-                          class="text-indigo-600 underline"
+                          class="hover:text-indigo-600"
                           href={m.data.homepage}
                           target="_blank"
                           rel="noopener"
+                          aria-label={`${m.data.name} 홈페이지`}
                         >
-                          homepage
+                          <Icon name="link" />
                         </a>
                       )}
+                      {m.data.links.map((l) => (
+                        <a
+                          class="hover:text-indigo-600"
+                          href={l.url}
+                          target="_blank"
+                          rel="noopener"
+                          aria-label={`${m.data.name} ${l.label}`}
+                          title={l.label}
+                        >
+                          <Icon name={iconFor(l.url)} />
+                        </a>
+                      ))}
                     </div>
                   </div>
                 </div>

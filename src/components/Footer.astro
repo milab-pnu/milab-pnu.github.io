@@ -1,15 +1,35 @@
 ---
 import { SITE } from "../consts";
+import Icon from "./Icon.astro";
 const year = new Date().getFullYear();
 ---
 
 <footer class="mt-20 border-t border-slate-200 bg-slate-50">
   <div class="mx-auto max-w-5xl px-4 py-10 text-sm text-slate-500">
-    <p class="font-semibold text-slate-700">{SITE.fullName} ({SITE.name})</p>
-    <p class="mt-1">{SITE.orgKo} · {SITE.org}</p>
-    <p class="mt-1">
-      문의: <a class="underline hover:text-slate-700" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+    <p class="font-semibold text-slate-700">
+      {SITE.fullNameKo} · {SITE.fullName} ({SITE.name})
     </p>
-    <p class="mt-4 text-xs text-slate-400">© {year} {SITE.name}. All rights reserved.</p>
+    <p class="mt-1">{SITE.orgKo} {SITE.deptKo} · {SITE.org}, {SITE.dept}</p>
+
+    <div class="mt-3 space-y-1">
+      <p class="flex items-center gap-2">
+        <Icon name="map" class="h-4 w-4 shrink-0 text-slate-400" />
+        {SITE.address}
+      </p>
+      <p class="flex items-center gap-2">
+        <Icon name="phone" class="h-4 w-4 shrink-0 text-slate-400" />
+        <a class="hover:text-slate-700" href={`tel:${SITE.phone.replace(/-/g, "")}`}>
+          {SITE.phone}
+        </a>
+      </p>
+      <p class="flex items-center gap-2">
+        <Icon name="mail" class="h-4 w-4 shrink-0 text-slate-400" />
+        <a class="hover:text-slate-700" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </p>
+    </div>
+
+    <p class="mt-4 text-xs text-slate-400">
+      © {year} {SITE.fullName}, {SITE.org}. All rights reserved.
+    </p>
   </div>
 </footer>
