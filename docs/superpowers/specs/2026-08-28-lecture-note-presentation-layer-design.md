@@ -40,6 +40,22 @@
 - **영상**: YouTube(`youtube-nocookie.com`) + Vimeo(`player.vimeo.com`) 2종.
 - **인용**: 본문 `<Cite n={1}/>` → 하단 `<References>` 항목으로. 사이드노트는 설명 전용(인용 아님).
 
+## 콘텐츠 repo ↔ 사이트 계약
+
+- 편집·커밋·push 는 **과목 repo** 에서 한다: 작업 클론 `pnu/lectures/2026-02/<folder>/`
+  (GitHub `jaehoonoh-pnu/<slug>`, `lectures.config.json`). 예: folder `advanced_deep_learning`
+  ↔ slug `2026f-advanced-deep-learning`.
+- 빌드 때 `sync-lectures.mjs` 가 각 repo 를 `milab-pnu/lectures/<slug>/` 로 `--depth 1`
+  clone(detached HEAD) → 컬렉션이 `./lectures/*/weeks/*.{md,mdx}` 로 스캔 → 라우트
+  `/lecture/<slug>/<note>`. `milab-pnu/lectures/` 는 **절대 커밋하지 않는다**.
+- `weeks/*.mdx` 는 bare 태그(`<Sidenote>` 등)를 쓰고, 컴포넌트는 `milab-pnu` 빌드 시점에
+  `[note].astro` 가 주입한다. **`.mdx` 는 `milab-pnu` 빌드를 통해서만 렌더된다** — 단독으로는
+  안 됨. 계약 = "다음 컴포넌트 이름이 전역 제공됨": `Sidenote`, `Figure`, `Video`, `Callout`,
+  `Details`, `References`, `Cite`. 이 목록을 `docs/lecture-authoring.md` 에 고정한다.
+- **로컬 미리보기 함정**: `./dev.ps1` 은 sync 가 GitHub 최신을 당겨오므로, 표현 계층 개발 중
+  샘플 `.mdx` 를 확인하려면 그 노트를 과목 repo 에 **push** 해야 보인다. 구현 단계에서 임시
+  샘플 노트를 과목 repo 하나(ADL)에 push 해 검증하고, 계층 완성 후 정리·삭제한다.
+
 ## 파일 배치
 
 ```
