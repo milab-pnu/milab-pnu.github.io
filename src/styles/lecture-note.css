@@ -97,16 +97,24 @@
   margin: 0 -9.5rem 2.5rem -11.5rem;
 }
 .lecture-figure {
-  margin: 2.5rem 0;
+  /* 기본 그림은 본문 폭을 가득 채우지 않는다 — 자연 크기로, 너무 크면 여기서 캡. */
+  margin: 2.5rem auto;
+  max-width: 34rem;
 }
-.lecture-figure img,
 .lecture-hero img {
   display: block;
   width: 100%;
   height: auto;
   border-radius: 0.5rem;
 }
-/* 자작 인라인 SVG 다이어그램 */
+.lecture-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 0.5rem;
+}
+/* 자작 인라인 SVG 다이어그램 — 캡 안에서 폭을 채운다 */
 .lecture-figure svg,
 .prose-lecture > svg {
   display: block;
@@ -115,7 +123,9 @@
   max-width: 100%;
   margin: 0 auto;
 }
+/* wide: 캡을 풀고 본문보다 살짝 넓게 */
 .lecture-figure--wide {
+  max-width: none;
   margin-left: -4.5rem;
   margin-right: -4.5rem;
 }
