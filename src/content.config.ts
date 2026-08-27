@@ -19,8 +19,10 @@ const members = defineCollection({
   schema: z.object({
     name: z.string(),
     nameEn: z.string().optional(),
-    role: z.enum(["professor", "postdoc", "phd", "ms", "undergrad", "alumni"]),
-    title: z.string().optional(), // 예: "지도교수", "박사과정"
+    role: z.enum(["professor", "postdoc", "phd", "ms", "undergrad"]),
+    title: z.string().optional(), // 입학 시기 등. 예: "2026.09 ~"
+    // true 면 Members 에서 빠지고 Alumni 페이지에 표시됨 (role 은 phd/ms 유지)
+    alumni: z.boolean().default(false),
     email: z.string().optional(),
     photo: z.string().optional(), // /members/xxx.jpg (public 기준)
     homepage: z.string().optional(),

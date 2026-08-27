@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import MemberCard from "../components/MemberCard.astro";
+
+const members = (await getCollection("members")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const alumni = members.filter((m) => m.data.alumni);
+
+const GROUPS: { label: string; roles: string[] }[] = [
+  { label: "Ph.D.", roles: ["phd"] },
+  { label: "M.S.", roles: ["ms"] },
+];
+---
+
+<BaseLayout title="Alumni" description="MI Lab 졸업생">
+  <PageHeader title="Alumni" />
+
+  {
+    alumni.length === 0 && (
+      <p class="rounded-xl border border-dashed border-slate-300 p-10 text-center text-slate-400">
+        아직 졸업생이 없습니다.
+      </p>
+    )
+  }
+
+  {
+    GROUPS.map((group) => {
+      const list = alumni.filter((m) => group.roles.includes(m.data.role));
+      if (list.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <h2 class="mb-4 text-lg font-bold text-slate-900">{group.label}</h2>
+          <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((m) => (
+              <MemberCard member={m} />
+            ))}
+          </ul>
+        </section>
+      );
+    })
+  }
+</BaseLayout>

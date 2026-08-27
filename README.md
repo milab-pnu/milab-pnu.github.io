@@ -27,16 +27,21 @@ src/
 │   ├── members/           # 구성원 — md 1개 = 1명 (frontmatter)
 │   └── papers/            # 논문 — md 1개 = 1건
 ├── layouts/BaseLayout.astro
-├── components/            # Nav, Footer, PageHeader
-└── pages/                 # index / members / project / paper / lecture
+├── components/            # Nav, Footer, PageHeader, MemberCard, Icon
+└── pages/                 # index / members / alumni / project / paper / lecture
 ```
 
 ### 콘텐츠 수정 방법
 
 - **뉴스 추가**: `src/content/news/2026-09-01-something.md` 생성, frontmatter에 `title`, `date`.
-- **구성원 추가**: `src/content/members/NN-name.md` 생성. `role`(professor/postdoc/phd/ms/undergrad/alumni),
-  `order`(정렬), 선택적으로 `photo`(`public/members/xxx.jpg` 기준 경로).
-  professor 는 `education` / `workHistory` 배열(한 줄 = 한 항목)과 본문(소개글)이 크게 표시됨.
+- **구성원 추가**: `src/content/members/NN-name.md` 생성.
+  - `role`: professor / postdoc / phd / ms / undergrad
+  - `title`: 입학 시기 등 (예: `"2026.09 ~"`)
+  - `email`: 카드에 텍스트로 표시됨
+  - `order`: 정렬 (작을수록 위)
+  - `photo`: 사진을 `public/members/` 에 두고 `photo: "/members/파일명.jpg"` (jpg/png/webp, 정사각형 권장)
+  - `alumni: true`: Members 에서 빠지고 **Alumni** 페이지(Ph.D./M.S. 구분)로 이동. role 은 phd/ms 유지.
+  - professor 는 `education` / `workHistory` 배열(한 줄 = 한 항목)과 본문(소개글)이 크게 표시됨.
 - **논문 추가**: `src/content/papers/YYYY-slug.md` 생성. `title/authors/venue/year/links`.
 - 페이지 본문(과제 소개 문구 등)은 해당 `src/pages/*.astro` 파일에서 직접 편집.
 - 사이트 이름·이메일·연구실 정보는 `src/consts.ts` 의 `SITE` 객체.

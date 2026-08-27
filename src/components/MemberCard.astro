@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Icon from "./Icon.astro";
+import { withBase } from "../consts";
+
+interface Props {
+  member: CollectionEntry<"members">;
+}
+const { member } = Astro.props;
+const m = member.data;
+
+/** 외부 링크 url 로 아이콘 종류 판별 */
+function iconFor(url: string): "scholar" | "linkedin" | "github" | "link" {
+  if (/scholar\.google\./.test(url)) return "scholar";
+  if (/linkedin\.com/.test(url)) return "linkedin";
+  if (/github\.com/.test(url)) return "github";
+  return "link";
+}
+---
+
+<li class="rounded-xl border border-slate-200 p-4">
+  <div class="flex items-start gap-3">
+    {
+      m.photo ? (
+        <img
+          src={withBase(m.photo)}
+          alt={m.name}
+          class="h-14 w-14 rounded-full object-cover"
+        />
+      ) : (
+        <div class="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+          <span class="text-lg font-bold">{m.name.at(0)}</span>
+        </div>
+      )
+    }
+    <div class="min-w-0">
+      <p class="font-semibold text-slate-900">
+        {m.name}
+        {m.nameEn && (
+          <span class="ml-1 text-sm font-normal text-slate-400">{m.nameEn}</span>
+        )}
+      </p>
+      {m.title && <p class="text-sm text-slate-500">{m.title}</p>}
+      {
+        m.email && (
+          <p class="mt-1 text-xs">
+            <a class="text-indigo-600 hover:underline" href={`mailto:${m.email}`}>
+              {m.email}
+            </a>
+          </p>
+        )
+      }
+      {
+        (m.homepage || m.links.length > 0) && (
+          <div class="mt-2 flex items-center gap-2.5 text-slate-400">
+            {m.homepage && (
+              <a
+                class="hover:text-indigo-600"
+                href={m.homepage}
+                target="_blank"
+                rel="noopener"
+                aria-label={`${m.name} 홈페이지`}
+              >
+                <Icon name="link" />
+              </a>
+            )}
+            {m.links.map((l) => (
+              <a
+                class="hover:text-indigo-600"
+                href={l.url}
+                target="_blank"
+                rel="noopener"
+                aria-label={`${m.name} ${l.label}`}
+                title={l.label}
+              >
+                <Icon name={iconFor(l.url)} />
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</li>
