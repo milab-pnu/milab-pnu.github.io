@@ -275,6 +275,36 @@
   border-radius: 0.25rem;
 }
 
+/* ── 표 (GFM) ── */
+.prose-lecture table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.prose-lecture thead th {
+  text-align: left;
+  font-weight: 700;
+  color: #0f172a;
+  background: #f8fafc;
+  border-bottom: 2px solid #cbd5e1;
+  padding: 0.6rem 0.9rem;
+}
+.prose-lecture tbody td {
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+}
+.prose-lecture tbody tr:last-child td {
+  border-bottom: 1px solid #cbd5e1;
+}
+.prose-lecture table code {
+  background: transparent;
+  padding: 0;
+  white-space: nowrap;
+}
+
 /* ── 반응형 ── */
 @media (max-width: 1100px) {
   .lecture-shell {
@@ -316,5 +346,10 @@
     border: 1px solid #e2e8f0;
     border-radius: 0.5rem;
     padding: 1rem;
+  }
+  .prose-lecture table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
   }
 }
