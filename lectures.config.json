@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "slug": "2026f-advanced-deep-learning",
+    "repo": "https://github.com/jaehoonoh-pnu/2026f-advanced-deep-learning.git",
+    "ref": "main"
+  },
+  {
+    "slug": "2026f-applied-data-science",
+    "repo": "https://github.com/jaehoonoh-pnu/2026f-applied-data-science.git",
+    "ref": "main"
+  }
+]

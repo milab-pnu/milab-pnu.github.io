@@ -67,9 +67,9 @@ function syncOne(entry) {
   const dest = join(lecturesDir, entry.slug);
   const isRepo = existsSync(join(dest, ".git"));
 
-  if (!isRepo && existsSync(dest)) {
+  if (!isRepo && existsSync(dest) && readdirSync(dest).length > 0) {
     console.error(
-      `[lectures] ${dest} 가 git repo 가 아님 — 폴더를 지우고 다시 실행하세요`,
+      `[lectures] ${dest} 에 git repo 가 아닌 파일이 있음 — 폴더를 지우고 다시 실행하세요`,
     );
     process.exit(1);
   }
