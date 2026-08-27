@@ -44,7 +44,7 @@ milab-pnu/
 ├── dev.ps1                        # 시작 전 sync 호출 추가
 ├── package.json                   # lectures:sync / predev / prebuild 스크립트
 ├── .gitignore                     # + /lectures/
-├── .github/workflows/deploy.yml   # sync 단계 + nightly cron
+├── .github/workflows/deploy.yml   # sync 단계 추가, workflow_dispatch 트리거
 └── src/
     ├── content.config.ts          # + courses 컬렉션
     └── pages/lecture/
@@ -96,10 +96,10 @@ package.json:
 
 ## 강의 자료 업데이트 / 재배포 흐름
 
-강의 repo에서 `git push` → 메인 사이트 재빌드. "언제 재빌드되나" 를 3중으로:
+강의 repo에서 `git push` → 메인 사이트 재빌드. 트리거 2가지 (cron 안 씀):
 
 1. **`notify.yml` (강의 repo, 주 경로)** — push 트리거로 `milab` repo 배포 워크플로 호출.
-   push 후 약 1분 내 라이브. 웹 UI·폰·다른 PC 어디서 push하든 동작.
+   push 후 약 1~2분 내 라이브. 웹 UI·폰·다른 PC 어디서 push하든 동작.
    ```yaml
    name: notify milab
    on: { push: { branches: [main] } }
@@ -107,19 +107,18 @@ package.json:
      notify:
        runs-on: ubuntu-latest
        steps:
-         - run: |
-             gh workflow run deploy.yml -R jaehoonoh-pnu/milab
+         - run: gh workflow run deploy.yml -R jaehoonoh-pnu/milab
            env:
              GH_TOKEN: ${{ secrets.MILAB_DEPLOY_TOKEN }}
    ```
-   - `MILAB_DEPLOY_TOKEN` = fine-grained PAT. 대상 repo = `jaehoonoh-pnu/milab` 하나,
-     권한 = **Actions: write** 하나. 각 강의 repo secret 에 저장.
+   - `MILAB_DEPLOY_TOKEN` = fine-grained PAT.
+     - Resource owner: `jaehoonoh-pnu`, Repository access: **`milab` 하나만**
+     - Permissions: **Actions → Read and write** 하나만 (그 외 전부 No access)
+     - 만료: 1년 권장(달력에 갱신 알림) 또는 무기한. 유출 시 피해 = "정적 사이트 재빌드 실행"뿐.
+     - 두 강의 repo 각각에 `MILAB_DEPLOY_TOKEN` 이름으로 secret 등록 (`gh secret set`).
    - `deploy.yml` 의 `prebuild` 훅이 `sync-lectures` 를 돌리므로 최신 강의 콘텐츠가 반영됨.
-2. **수동 버튼** — GitHub → milab → Actions → deploy → "Run workflow". secret·설정 불필요 fallback.
-3. **nightly cron** — 트리거를 놓쳐도 다음날 03:00 KST 반영. 안전망.
-
-secret 이 꺼려지면 1번 대신 로컬 래퍼(`lecture.ps1`): 강의 repo에서 `git push` +
-`gh workflow run deploy.yml -R jaehoonoh-pnu/milab` 한 번에. (내 PC에서 push할 때만 동작)
+2. **수동 버튼 (fallback)** — GitHub → milab → Actions → deploy → "Run workflow".
+   설정 불필요. notify 가 실패했거나 즉시 재배포하고 싶을 때.
 
 ## 콘텐츠 스키마 (`courses` 컬렉션, `src/content.config.ts`)
 
@@ -178,18 +177,16 @@ BaseLayout + PageHeader 재사용. 인라인 JS/스타일 0 유지, CSP 그대�
 ```yaml
 on:
   push: { branches: [main] }
-  workflow_dispatch:
-  schedule:
-    - cron: "0 18 * * *"        # 03:00 KST — 강의 repo 변경분 반영
+  workflow_dispatch:            # notify.yml / 수동 버튼이 이걸 호출
 # …
       - run: npm ci
       - run: npm run lectures:sync
       - run: npm run build
 ```
 
+- `on.schedule` (cron) 없음 — 트리거는 push + workflow_dispatch 뿐.
 - `actions/checkout` 의 `submodules` 주석 줄 삭제(안 씀).
 - 공개 repo clone → 토큰 불필요. (강의 repo → milab 트리거용 PAT 는 위 "재배포 흐름" 참고)
-- cron 이 변경 없어도 매일 재배포 → 무해(정적·무료).
 
 ## 부트스트랩 순서 (구현)
 
@@ -223,4 +220,3 @@ on:
 - 인터랙티브 위젯: 메인 repo에 컴포넌트 구현 + `<Content components={…} />` 주입, React 재도입.
 - 에셋 동기화 스크립트(`lectures/<slug>/public/**` → `public/lectures/<slug>/**`).
 - 강의 repo 템플릿(`notify.yml` + `course.md` 골격 포함, `gh repo create --template`).
-- cron 이 매일 재배포하는 게 거슬리면 제거(트리거 2중이면 충분).
