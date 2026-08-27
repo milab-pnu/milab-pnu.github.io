@@ -1,6 +1,8 @@
 ---
-// 번호는 CSS counter(sidenote) 로 자동 (lecture-note.css). JS 불필요.
-// 데스크톱: 우측 여백 float. ≤1100px: 본문 내 인라인 블록.
+// 본문에는 위첨자 번호(.sidenote-ref), 우측 여백에는 같은 번호 + 내용(.sidenote).
+// 번호는 CSS counter(sidenote) — .sidenote-ref 에서만 증가시키고 .sidenote 는 읽기만.
+// JS 불필요. 데스크톱: 우측 여백 float. ≤1100px: 본문 내 인라인 블록.
 ---
 
+<sup class="sidenote-ref" aria-hidden="true"></sup>
 <aside class="sidenote"><slot /></aside>
