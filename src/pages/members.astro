@@ -3,8 +3,9 @@ import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import MemberCard from "../components/MemberCard.astro";
-import Icon from "../components/Icon.astro";
-import { withBase, iconFor } from "../consts";
+import ProfileList from "../components/ProfileList.astro";
+import MemberLinks from "../components/MemberLinks.astro";
+import { withBase } from "../consts";
 
 const members = (await getCollection("members")).sort(
   (a, b) => a.data.order - b.data.order,
@@ -18,7 +19,10 @@ const ProfBody =
     : null;
 
 const current = members.filter((m) => !m.data.alumni);
+// role enum(professor/postdoc/phd/ms/undergrad) 을 빠짐없이 커버해야 함 —
+// 어느 그룹에도 안 걸리면 그 구성원은 페이지에서 사라짐
 const GROUPS: { label: string; roles: string[] }[] = [
+  { label: "Postdoctoral Researchers", roles: ["postdoc"] },
   { label: "Ph.D. Students", roles: ["phd"] },
   { label: "M.S. Students", roles: ["ms"] },
   { label: "Undergraduate Students", roles: ["undergrad"] },
@@ -67,33 +71,11 @@ const GROUPS: { label: string; roles: string[] }[] = [
                   </a>
                 </p>
               )}
-              {(professor.data.homepage || professor.data.links.length > 0) && (
-                <div class="mt-2 flex items-center gap-2.5 text-slate-400">
-                  {professor.data.homepage && (
-                    <a
-                      class="hover:text-indigo-600"
-                      href={professor.data.homepage}
-                      target="_blank"
-                      rel="noopener"
-                      aria-label={`${professor.data.name} 홈페이지`}
-                    >
-                      <Icon name="link" />
-                    </a>
-                  )}
-                  {professor.data.links.map((l) => (
-                    <a
-                      class="hover:text-indigo-600"
-                      href={l.url}
-                      target="_blank"
-                      rel="noopener"
-                      aria-label={`${professor.data.name} ${l.label}`}
-                      title={l.label}
-                    >
-                      <Icon name={iconFor(l.url)} />
-                    </a>
-                  ))}
-                </div>
-              )}
+              <MemberLinks
+                name={professor.data.name}
+                homepage={professor.data.homepage}
+                links={professor.data.links}
+              />
             </div>
           </div>
 
@@ -103,41 +85,11 @@ const GROUPS: { label: string; roles: string[] }[] = [
             </div>
           )}
 
-          {professor.data.education.length > 0 && (
-            <div class="mt-5 border-t border-slate-200 pt-5">
-              <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-600">
-                Education
-              </h3>
-              <ul class="mt-2 space-y-1 text-sm text-slate-700">
-                {professor.data.education.map((e) => {
-                  const depth = e.length - e.trimStart().length;
-                  return (
-                    <li style={depth ? `margin-left:${depth * 0.75}em` : undefined}>
-                      {e.trimStart()}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-
-          {professor.data.workHistory.length > 0 && (
-            <div class="mt-5 border-t border-slate-200 pt-5">
-              <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-600">
-                Work History
-              </h3>
-              <ul class="mt-2 space-y-1 text-sm text-slate-700">
-                {professor.data.workHistory.map((w) => {
-                  const depth = w.length - w.trimStart().length;
-                  return (
-                    <li style={depth ? `margin-left:${depth * 0.75}em` : undefined}>
-                      {w.trimStart()}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
+          <ProfileList heading="Education" items={professor.data.education} />
+          <ProfileList
+            heading="Work History"
+            items={professor.data.workHistory}
+          />
         </div>
       </section>
     )

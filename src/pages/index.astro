@@ -9,9 +9,11 @@ const news = (await getCollection("news")).sort(
     b.data.order - a.data.order,
 );
 
+// 날짜는 UTC 자정으로 파싱되므로(z.coerce.date) 표시도 UTC 기준으로 —
+// 안 그러면 UTC 서쪽 방문자에게 하루 빠르게 보이고 <time datetime> 과도 어긋남
 const fmt = (d: Date) =>
-  `${d.getFullYear()}. ${String(d.getMonth() + 1).padStart(2, "0")}. ${String(
-    d.getDate(),
+  `${d.getUTCFullYear()}. ${String(d.getUTCMonth() + 1).padStart(2, "0")}. ${String(
+    d.getUTCDate(),
   ).padStart(2, "0")}`;
 
 // TODO: 실제 링크로 교체

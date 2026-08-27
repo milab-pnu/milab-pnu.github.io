@@ -1,0 +1,42 @@
+---
+// 구성원 외부 링크 아이콘 줄 (교수 카드 / MemberCard 공용).
+import Icon from "./Icon.astro";
+import { iconFor } from "../consts";
+
+interface Props {
+  name: string;
+  homepage?: string;
+  links: { label: string; url: string }[];
+}
+const { name, homepage, links } = Astro.props;
+---
+
+{
+  (homepage || links.length > 0) && (
+    <div class="mt-2 flex items-center gap-2.5 text-slate-400">
+      {homepage && (
+        <a
+          class="hover:text-indigo-600"
+          href={homepage}
+          target="_blank"
+          rel="noopener"
+          aria-label={`${name} 홈페이지`}
+        >
+          <Icon name="link" />
+        </a>
+      )}
+      {links.map((l) => (
+        <a
+          class="hover:text-indigo-600"
+          href={l.url}
+          target="_blank"
+          rel="noopener"
+          aria-label={`${name} ${l.label}`}
+          title={l.label}
+        >
+          <Icon name={iconFor(l.url)} />
+        </a>
+      ))}
+    </div>
+  )
+}

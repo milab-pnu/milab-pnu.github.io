@@ -11,6 +11,11 @@ interface Props {
 
 const { title, description = SITE.description } = Astro.props;
 const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} — ${SITE.fullName}`;
+
+// 정규 URL (Astro.site + 현재 경로). site 미설정 시 생략.
+const canonical = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : undefined;
 ---
 
 <!doctype html>
@@ -20,11 +25,14 @@ const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} — ${SITE.
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <link rel="icon" href={withBase("/favicon.ico")} sizes="any" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    {canonical && <meta property="og:url" content={canonical} />}
   </head>
   <body class="flex min-h-screen flex-col">
     <Nav />

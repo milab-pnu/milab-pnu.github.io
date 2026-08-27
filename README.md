@@ -26,10 +26,11 @@ src/
 │   ├── news/              # 메인 "최신 뉴스" — md 1개 = 항목 1개
 │   └── members/           # 구성원 — md 1개 = 1명 (frontmatter)
 ├── data/                  # publications.bib / preprints.bib (Paper 페이지 소스)
-├── lib/bibtex.ts          # .bib 파서
+├── lib/bibtex.ts          # .bib 파서 (파싱 실패 시 빌드를 세움)
 ├── layouts/BaseLayout.astro
-├── components/            # Nav, Footer, PageHeader, MemberCard, PaperList, Icon
-└── pages/                 # index / members / alumni / project / paper / lecture
+├── components/            # Nav, Footer, PageHeader, MemberCard, MemberLinks,
+│                          #   ProfileList, PaperList, Icon
+└── pages/                 # index / members / alumni / project / paper / lecture / 404
 ```
 
 ### 콘텐츠 수정 방법

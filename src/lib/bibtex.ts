@@ -59,6 +59,14 @@ function parseBibtex(src: string): BibEntry[] {
     const key = body.slice(0, firstComma).trim();
     const rest = body.slice(firstComma + 1);
 
+    // citekey 에 공백/중괄호가 있으면 앞 항목의 문법 오류(쉼표 누락 등)로
+    // 두 항목이 뭉친 것 — 조용히 잘못 렌더하지 말고 빌드를 세운다.
+    if (!/^[A-Za-z0-9_:.\-/]+$/.test(key)) {
+      throw new Error(
+        `[bibtex] 잘못된 citekey "${key}" — 바로 앞 항목의 .bib 문법을 확인하세요.`,
+      );
+    }
+
     const fields: Record<string, string> = {};
     let k = 0;
     while (k < rest.length) {
@@ -95,6 +103,16 @@ function parseBibtex(src: string): BibEntry[] {
     }
 
     entries.push({ type, key, fields });
+  }
+
+  // 파서가 조용히 항목을 흘리면(중괄호 짝 안 맞음, 키 뒤 쉼표 누락 등)
+  // 빌드를 실패시켜서 논문이 소리 없이 사라지는 걸 막는다.
+  const expected = (text.match(/@[A-Za-z]+\s*\{/g) ?? []).length;
+  if (entries.length !== expected) {
+    throw new Error(
+      `[bibtex] @엔트리 ${expected}개 중 ${entries.length}개만 파싱됨 — ` +
+        `.bib 문법(중괄호 짝, citekey 뒤 쉼표)을 확인하세요.`,
+    );
   }
 
   return entries;

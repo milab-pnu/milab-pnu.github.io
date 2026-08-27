@@ -23,14 +23,16 @@ export const NAV: { label: string; href: string }[] = [
   { label: "LECTURE", href: "/lecture" },
 ];
 
+/** 뒤 슬래시 없는 base ("/milab" 또는 "") */
+const BASE = import.meta.env.BASE_URL.replace(/\/+$/, "");
+
 /**
  * base 경로(예: "/milab")를 앞에 붙여 내부 링크를 만든다.
  * GitHub Pages / 커스텀 도메인 / 학교 서버 어디로 옮겨도 이 함수만 통하면 됨.
  */
 export function withBase(path: string): string {
-  const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
-  if (path === "/") return `${base}/`;
-  return `${base}/${path.replace(/^\/+/, "")}`;
+  if (path === "/") return `${BASE}/`;
+  return `${BASE}/${path.replace(/^\/+/, "")}`;
 }
 
 /** 외부 프로필 링크 url 로 아이콘 종류 판별 (Icon.astro 의 name) */
@@ -43,8 +45,7 @@ export function iconFor(url: string): "scholar" | "linkedin" | "github" | "link"
 
 /** 현재 경로가 nav 항목과 일치하는지(활성 표시용) */
 export function isActive(currentPath: string, href: string): boolean {
-  const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
-  const cur = currentPath.replace(base, "").replace(/\/+$/, "") || "/";
+  const cur = currentPath.replace(BASE, "").replace(/\/+$/, "") || "/";
   if (href === "/") return cur === "/";
   return cur === href || cur.startsWith(href + "/");
 }

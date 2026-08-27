@@ -1,0 +1,30 @@
+---
+// 교수 카드의 Education / Work History 블록 (동일 구조라 공용화).
+// 항목 문자열 앞의 공백으로 들여쓰기 단계를 표현한다 (실데이터는 0 또는 4칸).
+// inline style 대신 Tailwind 클래스만 사용 — CSP(style-src) 를 깨지 않기 위함.
+interface Props {
+  heading: string;
+  items: string[];
+}
+const { heading, items } = Astro.props;
+
+function indentClass(s: string): string {
+  const depth = s.length - s.trimStart().length;
+  return depth >= 8 ? "ml-12" : depth >= 4 ? "ml-6" : "";
+}
+---
+
+{
+  items.length > 0 && (
+    <div class="mt-5 border-t border-slate-200 pt-5">
+      <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-600">
+        {heading}
+      </h3>
+      <ul class="mt-2 space-y-1 text-sm text-slate-700">
+        {items.map((s) => (
+          <li class={indentClass(s)}>{s.trimStart()}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
