@@ -152,12 +152,6 @@ lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안
 
 - **이 repo 의 `lectures/<slug>/` 폴더에서 직접 커밋하지 말 것.** sync 스크립트가
   매번 덮어쓰는(detached HEAD) 빌드 입력물이다. 편집은 항상 강의 repo 를 따로 클론해서.
-- 강의 repo 를 처음 클론하면 **git 이름/이메일을 그 repo 에 설정**해야 커밋된다
-  (이 PC 에 `--global` 설정이 없음):
-  ```sh
-  git config user.name  "jaehoonoh-pnu"
-  git config user.email "321630286+jaehoonoh-pnu@users.noreply.github.com"
-  ```
 - `MILAB_DEPLOY_TOKEN` PAT 이 **만료되면 자동 재배포가 조용히 멈춘다.** 그럴 땐
   milab → Actions → deploy → "Run workflow" 로 수동 배포하거나 PAT 재발급(아래).
 - `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론될 폴더명 = URL
