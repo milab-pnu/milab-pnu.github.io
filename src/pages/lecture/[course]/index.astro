@@ -131,7 +131,7 @@ const showLinks = notes.length > 0 || weeks.some((w) => w.discussion != null);
                             {wkNotes.map((note) => (
                               <li>
                                 <a
-                                  class="text-indigo-600 hover:underline"
+                                  class="text-slate-900 underline decoration-slate-300 underline-offset-2 hover:decoration-slate-900"
                                   href={withBase(
                                     `/lecture/${slug}/${noteSlugOf(note.id)}`,
                                   )}
@@ -150,7 +150,7 @@ const showLinks = notes.length > 0 || weeks.some((w) => w.discussion != null);
                       <td class="py-2.5">
                         {w.discussion != null ? (
                           <a
-                            class="text-indigo-600 hover:underline"
+                            class="text-slate-900 underline decoration-slate-300 underline-offset-2 hover:decoration-slate-900"
                             href={`${discussionsBase}/${w.discussion}`}
                             target="_blank"
                             rel="noopener"
