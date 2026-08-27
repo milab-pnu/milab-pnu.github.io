@@ -11,10 +11,36 @@
 
 ```sh
 npm install
-npm run dev       # http://localhost:4321/milab
+npm run dev       # 개발 서버 (포그라운드) — http://localhost:4321/milab
 npm run build     # dist/ 로 정적 빌드
 npm run preview   # 빌드 결과 미리보기
 ```
+
+### 개발 서버 켜고 끄기 (백그라운드)
+
+`npm run dev` 는 터미널을 물고 있어서, 서버를 백그라운드로 띄우고
+다른 작업을 하려면 `dev.ps1` 스크립트를 쓴다.
+
+```powershell
+.\dev.ps1            # 시작 (= start)
+.\dev.ps1 stop       # 종료
+.\dev.ps1 status     # 실행 여부
+.\dev.ps1 logs       # 로그 (-Follow 로 실시간)
+.\dev.ps1 restart    # 재시작
+```
+
+PowerShell 이 아니거나 스크립트 실행이 막혀 있으면 npm 스크립트로도 동일하게:
+
+```sh
+npm run dev:bg       # 시작 (백그라운드)
+npm run dev:stop     # 종료
+npm run dev:status   # 실행 여부
+npm run dev:logs     # 로그
+```
+
+> 처음 한 번 스크립트 실행이 막히면(실행 정책):
+> `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` 또는
+> `powershell -ExecutionPolicy Bypass -File .\dev.ps1 start`
 
 ## 구조
 
