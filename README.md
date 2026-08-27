@@ -21,13 +21,14 @@ npm run preview   # 빌드 결과 미리보기
 ```
 src/
 ├── consts.ts              # 사이트 이름, 네비게이션, withBase() 링크 헬퍼
-├── content.config.ts      # 콘텐츠 컬렉션 스키마 (news / members / papers)
+├── content.config.ts      # 콘텐츠 컬렉션 스키마 (news / members)
 ├── content/
 │   ├── news/              # 메인 "최신 뉴스" — md 1개 = 항목 1개
-│   ├── members/           # 구성원 — md 1개 = 1명 (frontmatter)
-│   └── papers/            # 논문 — md 1개 = 1건
+│   └── members/           # 구성원 — md 1개 = 1명 (frontmatter)
+├── data/                  # publications.bib / preprints.bib (Paper 페이지 소스)
+├── lib/bibtex.ts          # .bib 파서
 ├── layouts/BaseLayout.astro
-├── components/            # Nav, Footer, PageHeader, MemberCard, Icon
+├── components/            # Nav, Footer, PageHeader, MemberCard, PaperList, Icon
 └── pages/                 # index / members / alumni / project / paper / lecture
 ```
 
@@ -42,7 +43,9 @@ src/
   - `photo`: 사진을 `public/members/` 에 두고 `photo: "/members/파일명.jpg"` (jpg/png/webp, 정사각형 권장)
   - `alumni: true`: Members 에서 빠지고 **Alumni** 페이지(Ph.D./M.S. 구분)로 이동. role 은 phd/ms 유지.
   - professor 는 `education` / `workHistory` 배열(한 줄 = 한 항목)과 본문(소개글)이 크게 표시됨.
-- **논문 추가**: `src/content/papers/YYYY-slug.md` 생성. `title/authors/venue/year/links`.
+- **논문 추가/수정**: `src/data/publications.bib` (학회·워크샵) 또는 `src/data/preprints.bib` 에
+  BibTeX 항목 추가. 저자는 `\underline{Jaehoon Oh}` 로 감싸면 굵게, `*` 는 동등 기여로 표시됨.
+  venue 는 `booktitle`(publication) / `journal`(preprint, `arXiv:xxxx` 또는 URL) 사용.
 - 페이지 본문(과제 소개 문구 등)은 해당 `src/pages/*.astro` 파일에서 직접 편집.
 - 사이트 이름·이메일·연구실 정보는 `src/consts.ts` 의 `SITE` 객체.
 

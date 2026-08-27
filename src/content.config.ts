@@ -38,19 +38,6 @@ const members = defineCollection({
   }),
 });
 
-// 논문
-const papers = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/papers" }),
-  schema: z.object({
-    title: z.string(),
-    authors: z.string(),
-    venue: z.string(), // 예: "ICLR 2026"
-    year: z.number(),
-    type: z.enum(["conference", "journal", "workshop", "preprint"]).default("conference"),
-    links: z
-      .array(z.object({ label: z.string(), url: z.string() }))
-      .default([]),
-  }),
-});
+// 논문은 content collection 대신 src/data/*.bib 를 빌드 타임에 파싱 (src/lib/bibtex.ts)
 
-export const collections = { news, members, papers };
+export const collections = { news, members };

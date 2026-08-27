@@ -1,0 +1,59 @@
+---
+import type { Paper } from "../lib/bibtex";
+
+interface Props {
+  papers: Paper[];
+}
+const { papers } = Astro.props;
+
+const years = [...new Set(papers.map((p) => p.year))].sort((a, b) => b - a);
+const hasEqual = papers.some((p) => p.hasEqual);
+---
+
+{
+  years.map((year) => (
+    <section class="mb-8">
+      <h3 class="mb-3 text-sm font-semibold text-slate-400">{year}</h3>
+      <ol class="space-y-4">
+        {papers
+          .filter((p) => p.year === year)
+          .map((p) => (
+            <li class="border-l-2 border-slate-200 pl-4">
+              <p class="font-medium text-slate-900">
+                {p.url ? (
+                  <a class="hover:underline" href={p.url} target="_blank" rel="noopener">
+                    {p.title}
+                  </a>
+                ) : (
+                  p.title
+                )}
+              </p>
+              <p class="mt-0.5 text-sm text-slate-600">
+                {p.authors.map((a, i) => (
+                  <>
+                    {i > 0 && ", "}
+                    <span class={a.me ? "font-semibold text-slate-900" : undefined}>
+                      {a.name}
+                    </span>
+                    {a.equal && <sup>*</sup>}
+                  </>
+                ))}
+              </p>
+              <p class="mt-0.5 text-sm italic text-slate-500">
+                {p.venue}
+                {p.year ? `, ${p.year}` : ""}
+              </p>
+            </li>
+          ))}
+      </ol>
+    </section>
+  ))
+}
+
+{
+  hasEqual && (
+    <p class="mt-1 text-xs text-slate-400">
+      <sup>*</sup> 는 동등 기여를 의미합니다.
+    </p>
+  )
+}
