@@ -71,11 +71,17 @@ src/
 ├── layouts/BaseLayout.astro
 ├── components/            # Nav, Footer, PageHeader, MemberCard, MemberLinks,
 │                          #   ProfileList, PaperList, Icon
-└── pages/                 # index / members / alumni / project / paper / lecture / 404
+└── pages/
+    ├── index / members / alumni / project / paper / 404
+    └── lecture/           # index(목록) · [course]/index(강의) · [course]/[note](주차 노트)
 
-lectures.config.json       # 강의 repo 목록 [{ slug, repo, ref }]
-scripts/sync-lectures.mjs  # 위 목록의 repo 를 lectures/<slug>/ 로 clone (빌드 전 자동)
-lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안 됨)
+lectures.config.json       # 강의 repo 목록 [{ slug, repo, ref }]  (아래 "강의 페이지")
+scripts/
+├── sync-lectures.mjs      # 위 목록의 repo 를 lectures/<slug>/ 로 clone (빌드 전 자동)
+├── new-lecture.ps1        # 새 강의 repo 생성·클론·스캐폴드 자동화
+└── lecture-template/      # 새 강의 골격 파일
+lectures/                  # sync-lectures 가 clone 하는 곳 (.gitignore — 커밋 안 됨)
+docs/superpowers/specs/    # 설계 문서
 ```
 
 ### 콘텐츠 수정 방법
@@ -94,7 +100,7 @@ lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안
   venue 는 `booktitle`(publication) / `journal`(preprint, `arXiv:xxxx` 또는 URL) 사용.
   - **링크**: 항목에 `url = {https://...}` 필드를 추가하면 제목이 그 주소로 링크됨
     (모든 항목 공통). 없으면 preprint 는 arXiv/OpenReview 주소를 자동 인식.
-- **강의**: 이 repo 가 아니라 강의별 repo 의 `course.md` 를 고친다 (아래 "강의 페이지").
+- **강의**: 이 repo 가 아니라 `pnu/lectures/<학기>/<과목>/` 에서 고친다 (아래 "강의 페이지").
 - 페이지 본문(과제 소개 문구 등)은 해당 `src/pages/*.astro` 파일에서 직접 편집.
 - 사이트 이름·이메일·연구실 정보는 `src/consts.ts` 의 `SITE` 객체.
 
