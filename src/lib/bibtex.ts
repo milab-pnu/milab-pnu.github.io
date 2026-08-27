@@ -155,14 +155,15 @@ function parseVenue(entry: BibEntry): { venue: string; url?: string } {
 export function bibToPapers(src: string): Paper[] {
   const papers = parseBibtex(src).map((e) => {
     const authors = parseAuthors(e.fields.author ?? "");
-    const { venue, url } = parseVenue(e);
+    const { venue, url: venueUrl } = parseVenue(e);
+    // .bib 에 url = {https://...} 를 넣으면 그 링크가 우선 (모든 항목 공통)
     return {
       key: e.key,
       title: cleanTitle(e.fields.title ?? ""),
       authors,
       venue,
       year: Number(e.fields.year) || 0,
-      url,
+      url: e.fields.url || venueUrl,
       hasEqual: authors.some((a) => a.equal),
     } satisfies Paper;
   });

@@ -46,6 +46,8 @@ src/
 - **논문 추가/수정**: `src/data/publications.bib` (학회·워크샵) 또는 `src/data/preprints.bib` 에
   BibTeX 항목 추가. 저자는 `\underline{Jaehoon Oh}` 로 감싸면 굵게, `*` 는 동등 기여로 표시됨.
   venue 는 `booktitle`(publication) / `journal`(preprint, `arXiv:xxxx` 또는 URL) 사용.
+  - **링크**: 항목에 `url = {https://...}` 필드를 추가하면 제목이 그 주소로 링크됨
+    (모든 항목 공통). 없으면 preprint 는 arXiv/OpenReview 주소를 자동 인식.
 - 페이지 본문(과제 소개 문구 등)은 해당 `src/pages/*.astro` 파일에서 직접 편집.
 - 사이트 이름·이메일·연구실 정보는 `src/consts.ts` 의 `SITE` 객체.
 

@@ -7,7 +7,6 @@ interface Props {
 const { papers } = Astro.props;
 
 const years = [...new Set(papers.map((p) => p.year))].sort((a, b) => b - a);
-const hasEqual = papers.some((p) => p.hasEqual);
 ---
 
 {
@@ -48,12 +47,4 @@ const hasEqual = papers.some((p) => p.hasEqual);
       </ol>
     </section>
   ))
-}
-
-{
-  hasEqual && (
-    <p class="mt-1 text-xs text-slate-400">
-      <sup>*</sup> 는 동등 기여를 의미합니다.
-    </p>
-  )
 }
