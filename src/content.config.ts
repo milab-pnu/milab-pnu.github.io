@@ -52,13 +52,14 @@ const courses = defineCollection({
     location: z.string().optional(),
     credits: z.number().optional(),
     summary: z.string().optional(), // <meta description> 용. 화면엔 표시 안 함
-    // 강의 계획 표. 지금은 주제만, 나중에 주차 노트가 생기면 행에 slug 를 붙여 링크
+    // 강의 계획 표. url 은 그 주차 강의자료 링크 (슬라이드 PDF·노션 등 외부 주소)
     weeks: z
       .array(
         z.object({
           n: z.number(),
           topic: z.string(),
           date: z.string().optional(),
+          url: z.string().optional(),
         }),
       )
       .default([]),

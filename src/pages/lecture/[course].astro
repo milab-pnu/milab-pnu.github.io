@@ -40,7 +40,7 @@ const showDate = weeks.some((w) => w.date);
     </h1>
     {d.titleEn && <p class="mt-1 text-lg text-slate-500">{d.title}</p>}
 
-    <dl class="mt-4 space-y-1 text-sm text-slate-600">
+    <dl class="mt-4 space-y-1 text-base text-slate-600">
       {
         meta.length > 0 && (
           <div class="flex gap-2">
@@ -78,27 +78,39 @@ const showDate = weeks.some((w) => w.date);
 
   {
     weeks.length > 0 && (
-      <section class="mt-10">
-        <h2 class="mb-3 text-lg font-bold text-slate-900">Schedule</h2>
+      <section class="mt-12">
+        <h2 class="mb-4 text-xl font-bold text-slate-900">Schedule</h2>
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
+          <table class="w-full text-left text-base">
             <thead>
-              <tr class="border-b border-slate-300 text-slate-500">
-                <th class="py-2 pr-4 font-semibold">주차</th>
-                {showDate && <th class="py-2 pr-4 font-semibold">날짜</th>}
-                <th class="py-2 font-semibold">주제</th>
+              <tr class="border-b border-slate-300 text-sm text-slate-500">
+                <th class="py-2.5 pr-4 font-semibold">주차</th>
+                {showDate && <th class="py-2.5 pr-4 font-semibold">날짜</th>}
+                <th class="py-2.5 font-semibold">주제</th>
               </tr>
             </thead>
             <tbody>
               {weeks.map((w) => (
                 <tr class="border-b border-slate-100">
-                  <td class="py-2 pr-4 tabular-nums text-slate-500">{w.n}</td>
+                  <td class="py-2.5 pr-4 tabular-nums text-slate-500">{w.n}</td>
                   {showDate && (
-                    <td class="py-2 pr-4 tabular-nums text-slate-500">
+                    <td class="py-2.5 pr-4 tabular-nums text-slate-500">
                       {w.date ?? ""}
                     </td>
                   )}
-                  <td class="py-2 text-slate-800">{w.topic}</td>
+                  <td class="py-2.5 text-slate-800">
+                    {w.topic}
+                    {w.url && (
+                      <a
+                        class="ml-2 text-sm font-medium text-indigo-600 hover:underline"
+                        href={w.url}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        강의자료 ↗
+                      </a>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
