@@ -208,6 +208,8 @@ pnu/
   덮어쓰는(detached HEAD) 빌드 입력물이다. 편집은 `pnu/lectures/<학기>/<과목>/` 에서.
 - `MILAB_DEPLOY_TOKEN` PAT 이 **만료되면 자동 재배포가 조용히 멈춘다.** 그럴 땐
   milab → Actions → deploy → "Run workflow" 로 수동 배포하거나 PAT 재발급(아래).
+- 드물게 **자동 배포가 "성공"인데 사이트에 반영이 안 될 때**가 있다(GitHub Pages 퍼블리시
+  일시 실패). 같은 "Run workflow" 버튼으로 한 번 더 돌리면 된다.
 - `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론될 폴더명 = URL
   경로(`/lecture/<slug>`) 로 그대로 쓰인다.
 - 강의 repo 는 **public** 이어야 한다(빌드 시 토큰 없이 clone). private 로 하려면 sync
