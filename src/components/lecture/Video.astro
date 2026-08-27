@@ -1,0 +1,39 @@
+---
+interface Props {
+  src: string;
+  caption?: string;
+}
+const { src, caption } = Astro.props;
+
+function toEmbed(url: string): { src: string; title: string } {
+  const yt = url.match(
+    /(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([\w-]{11})/,
+  );
+  if (yt) {
+    return {
+      src: `https://www.youtube-nocookie.com/embed/${yt[1]}`,
+      title: "YouTube 동영상",
+    };
+  }
+  const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vm) {
+    return { src: `https://player.vimeo.com/video/${vm[1]}`, title: "Vimeo 동영상" };
+  }
+  throw new Error(`<Video>: 지원하지 않는 URL: ${url} — YouTube / Vimeo 만 가능`);
+}
+
+const { src: embedSrc, title } = toEmbed(src);
+---
+
+<figure class="lecture-video">
+  <div class="lecture-video__frame">
+    <iframe
+      src={embedSrc}
+      title={title}
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+      allowfullscreen></iframe>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
