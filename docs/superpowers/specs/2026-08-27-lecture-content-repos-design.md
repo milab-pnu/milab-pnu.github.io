@@ -23,7 +23,7 @@ E2E 검증됨: course.md 수정 → push → notify.yml(success) → milab 배�
 
 **3차 (2026-08-28):**
 - 강의 노트 페이지 = `NoteLayout.astro` (사이트 Nav/Footer 없는 독립 문서, `.prose-lecture`
-  읽기 타이포, 상·하단에 강의로 가는 작은 링크만). `HeadMeta.astro` 로 `<head>` 공통부
+  읽기 타이포, 맨 아래 "← 전체 일정" 링크만). `HeadMeta.astro` 로 `<head>` 공통부
   (CSP 포함) 추출 → BaseLayout/NoteLayout 공유.
 - 강의 첫 페이지에서 "← Lecture" 뒤로가기 제거 (nav 에 LECTURE 있음).
 - 노트 이미지: `weeks/assets/` 상대경로 → Astro 이미지 파이프라인 자동 통과

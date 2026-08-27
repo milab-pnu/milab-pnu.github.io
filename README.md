@@ -179,8 +179,7 @@ pnu/
 ```
 
 강의 노트 페이지(`/lecture/<slug>/<노트>`)는 **사이트 네비/푸터 없는 독립 문서**로 렌더된다
-(읽기 중심, 상·하단에 그 강의로 가는 작은 링크만). 강의 첫 페이지(`course.md`)는 사이트
-크롬 있음.
+(읽기 중심, 맨 아래에 "← 전체 일정" 링크만). 강의 첫 페이지(`course.md`)는 사이트 크롬 있음.
 
 `course.md` frontmatter: `title`, `titleEn?`, `term`("2026 Fall"), `semester`("2026-02",
 정렬용), `instructor?`, `schedule?`, `location?`, `credits?`, `summary?`(검색엔진용 메타
