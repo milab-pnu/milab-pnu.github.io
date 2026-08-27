@@ -25,7 +25,7 @@ export const NAV: { label: string; href: string }[] = [
 ];
 
 /**
- * base 경로(예: "/milab-pnu")를 앞에 붙여 내부 링크를 만든다.
+ * base 경로(예: "/milab")를 앞에 붙여 내부 링크를 만든다.
  * GitHub Pages / 커스텀 도메인 / 학교 서버 어디로 옮겨도 이 함수만 통하면 됨.
  */
 export function withBase(path: string): string {

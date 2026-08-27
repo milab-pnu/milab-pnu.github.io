@@ -1,4 +1,4 @@
-# milab-pnu
+# milab
 
 부산대학교 **Multimodal Intelligence Lab (MI Lab)** 웹사이트.
 
@@ -11,7 +11,7 @@
 
 ```sh
 npm install
-npm run dev       # http://localhost:4321/milab-pnu
+npm run dev       # http://localhost:4321/milab
 npm run build     # dist/ 로 정적 빌드
 npm run preview   # 빌드 결과 미리보기
 ```
@@ -45,7 +45,7 @@ src/
 1. 이 저장소를 GitHub 에 push (`main` 브랜치).
 2. 저장소 **Settings → Pages → Build and deployment → Source** 를 **GitHub Actions** 로 설정.
 3. `astro.config.mjs` 의 `site` 를 실제 값으로 수정:
-   - project pages: `site: 'https://<GitHub사용자명>.github.io'`, `base: '/milab-pnu'` (현재 기본값)
+   - project pages: `site: 'https://<GitHub사용자명>.github.io'`, `base: '/milab'` (현재 기본값)
    - 사용자/조직 pages 또는 커스텀 도메인: `base` 를 `'/'` 로.
 4. `main` 에 push 하면 `.github/workflows/deploy.yml` 이 자동 빌드·배포.
 

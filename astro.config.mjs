@@ -16,10 +16,10 @@ const processor = unified({
 
 // https://astro.build/config
 export default defineConfig({
-  // GitHub Pages project site: https://jaehoonoh-pnu.github.io/milab-pnu
+  // GitHub Pages project site: https://jaehoonoh-pnu.github.io/milab
   // 커스텀 도메인/학교 서버로 옮기면 site 를 그 도메인으로, base 는 '/' 로.
   site: 'https://jaehoonoh-pnu.github.io',
-  base: '/milab-pnu',
+  base: '/milab',
   integrations: [mdx(), react()],
   vite: {
     plugins: [tailwindcss()],
