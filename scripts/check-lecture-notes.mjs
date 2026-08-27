@@ -19,7 +19,7 @@ const STRICT_CSP =
   "img-src 'self' data:; font-src 'self' data:; " +
   "base-uri 'none'; form-action 'none'; object-src 'none'";
 
-/** dist 안의 모든 index.html 경로 (재귀) */
+/** dist 안의 모든 .html 경로 (재귀) */
 function htmlFiles(dir) {
   const out = [];
   for (const e of readdirSync(dir, { withFileTypes: true })) {
@@ -35,10 +35,14 @@ if (!existsSync(dist)) {
   process.exit(1);
 }
 
+let noteCount = 0;
+
 for (const file of htmlFiles(dist)) {
   const html = readFileSync(file, "utf8");
   const rel = file.slice(dist.length + 1).replace(/\\/g, "/");
-  const isNote = /^lecture\/[^/]+\/[^/]+\//.test(rel) && rel !== "lecture/index.html";
+  // 강의 노트 페이지: /lecture/<slug>/<note>/ (강의 목록·강의 첫 페이지 제외)
+  const isNote =
+    /^lecture\/[^/]+\/[^/]+\//.test(rel) && rel !== "lecture/index.html";
 
   const cspMatch = html.match(
     /http-equiv="Content-Security-Policy"\s+content="([^"]+)"/,
@@ -46,24 +50,53 @@ for (const file of htmlFiles(dist)) {
   const csp = cspMatch?.[1] ?? null;
 
   if (isNote) {
-    if (csp !== NOTE_CSP) err(rel, `강의 노트 CSP 불일치\n  기대: ${NOTE_CSP}\n  실제: ${csp}`);
+    noteCount++;
+    if (csp !== NOTE_CSP)
+      err(rel, `강의 노트 CSP 불일치\n  기대: ${NOTE_CSP}\n  실제: ${csp}`);
     // 인라인 style= 금지
     if (/<[^>]+\sstyle=/.test(html)) err(rel, "인라인 style= 속성 발견");
-    // 본문 있는 인라인 <script> 금지 (src= 만 허용)
+    // 실행되는 인라인 <script> 금지 (src= 또는 비실행 type 만 허용)
     for (const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
-      if (m[2].trim() && !/\bsrc=/.test(m[1])) err(rel, "인라인 <script> 본문 발견");
+      const attrs = m[1];
+      const body = m[2].trim();
+      const hasSrc = /\bsrc=/.test(attrs);
+      const nonExecType =
+        /\btype=(["'])(?:application\/(?:ld\+)?json|text\/template)\1/.test(
+          attrs,
+        );
+      if (body && !hasSrc && !nonExecType)
+        err(rel, "인라인 <script> 본문 발견");
     }
-    // <Cite> → <References> 참조 무결성: class="cite" href="#ref-N" 마다 id="ref-N" 존재
-    for (const m of html.matchAll(/class="cite"[^>]*href="#(ref-\d+)"/g)) {
-      if (!html.includes(`id="${m[1]}"`)) err(rel, `인용 [${m[1]}] 에 대응하는 참고문헌 항목 없음`);
+    // <Cite> → <References> 참조 무결성.
+    // 계약: <a class="cite" ... href="#ref-N">. class·href 순서 무관하게 매칭.
+    for (const m of html.matchAll(/<a\b[^>]*\bclass="cite"[^>]*>/g)) {
+      const hrefMatch = m[0].match(/href="#(ref-\d+)"/);
+      if (!hrefMatch) {
+        err(rel, `class="cite" 앵커에 href="#ref-N" 없음: ${m[0]}`);
+        continue;
+      }
+      if (!html.includes(`id="${hrefMatch[1]}"`))
+        err(rel, `인용 [${hrefMatch[1]}] 에 대응하는 참고문헌 항목 없음`);
     }
-  } else if (rel === "index.html") {
-    if (csp !== STRICT_CSP) err(rel, `메인 페이지 CSP 가 엄격값이 아님: ${csp}`);
+  } else if (rel.endsWith("index.html") || rel === "404.html") {
+    // 강의 노트 외 모든 페이지는 엄격 CSP 유지 (HeadMeta 회귀 방지)
+    if (csp !== STRICT_CSP)
+      err(rel, `엄격 CSP 여야 함\n  기대: ${STRICT_CSP}\n  실제: ${csp}`);
   }
 }
 
+// dist 레이아웃이 바뀌어 노트 페이지가 하나도 안 잡히면 (base 변경 등) → 조용한 통과 방지
+if (noteCount === 0)
+  err(
+    "(전역)",
+    "강의 노트 페이지를 하나도 찾지 못함 — dist 레이아웃/경로 규칙 확인",
+  );
+
 if (errors.length) {
-  console.error(`[check] 실패 (${errors.length}건):\n` + errors.map((e) => " - " + e).join("\n"));
+  console.error(
+    `[check] 실패 (${errors.length}건):\n` +
+      errors.map((e) => " - " + e).join("\n"),
+  );
   process.exit(1);
 }
-console.log("[check] 강의 노트 산출물 검사 통과");
+console.log(`[check] 강의 노트 산출물 검사 통과 (노트 ${noteCount}개)`);
