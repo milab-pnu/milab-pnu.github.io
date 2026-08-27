@@ -143,12 +143,27 @@ lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안
 고치고 `git push`. 그 repo 의 `.github/workflows/notify.yml` 이 메인 사이트 재배포를
 트리거 → 1~2분 뒤 반영. 로컬 미리보기는 이 repo 에서 `.\dev.ps1` (시작 시 sync 가 최신을 당겨옴).
 
-> 이 repo 의 `lectures/<slug>/` 폴더에서 직접 커밋하지 말 것 — sync 스크립트가
-> 덮어쓰는 빌드 입력물이다. 편집은 항상 강의 repo 를 따로 클론해서.
-
 `course.md` frontmatter: `title`, `titleEn?`, `term`("2026 Fall"), `semester`("2026-02",
-정렬용), `instructor?`, `schedule?`, `location?`, `credits?`, `summary`, `weeks?`
-(`[{ n, topic, date? }]` — 강의 계획 표). 본문(마크다운)은 Goals 등으로 표시, 수식 `$…$` 가능.
+정렬용), `instructor?`, `schedule?`, `location?`, `credits?`, `summary?`(검색엔진용 메타
+설명, 화면엔 안 보임), `weeks?`(`[{ n, topic, date? }]` — 강의 계획 표).
+본문(마크다운)은 Goals 등으로 표시, 수식 `$…$` 가능.
+
+#### 주의점
+
+- **이 repo 의 `lectures/<slug>/` 폴더에서 직접 커밋하지 말 것.** sync 스크립트가
+  매번 덮어쓰는(detached HEAD) 빌드 입력물이다. 편집은 항상 강의 repo 를 따로 클론해서.
+- 강의 repo 를 처음 클론하면 **git 이름/이메일을 그 repo 에 설정**해야 커밋된다
+  (이 PC 에 `--global` 설정이 없음):
+  ```sh
+  git config user.name  "jaehoonoh-pnu"
+  git config user.email "321630286+jaehoonoh-pnu@users.noreply.github.com"
+  ```
+- `MILAB_DEPLOY_TOKEN` PAT 이 **만료되면 자동 재배포가 조용히 멈춘다.** 그럴 땐
+  milab → Actions → deploy → "Run workflow" 로 수동 배포하거나 PAT 재발급(아래).
+- `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론될 폴더명 = URL
+  경로(`/lecture/<slug>`) 로 그대로 쓰인다.
+- 강의 repo 는 **public** 이어야 한다(빌드 시 토큰 없이 clone). private 로 하려면 sync
+  단계에 토큰이 추가로 필요하다.
 
 ### 새 강의 추가
 

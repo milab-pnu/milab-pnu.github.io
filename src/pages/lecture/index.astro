@@ -37,7 +37,7 @@ const groups = [...bySemester.entries()]
     groups.map((g) => (
       <section class="mb-8">
         <h2 class="mb-3 text-sm font-semibold text-slate-500">{g.label}</h2>
-        <ul class="space-y-3">
+        <ul class="space-y-2">
           {g.list.map((c) => (
             <li class="border-l-2 border-slate-200 pl-4">
               <a
@@ -51,9 +51,6 @@ const groups = [...bySemester.entries()]
                   </span>
                 )}
               </a>
-              {c.data.summary && (
-                <p class="mt-0.5 text-sm text-slate-600">{c.data.summary}</p>
-              )}
             </li>
           ))}
         </ul>

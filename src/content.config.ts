@@ -51,7 +51,7 @@ const courses = defineCollection({
     schedule: z.string().optional(), // "월/수 15:00–16:15"
     location: z.string().optional(),
     credits: z.number().optional(),
-    summary: z.string(), // 목록 페이지 한 줄 소개
+    summary: z.string().optional(), // <meta description> 용. 화면엔 표시 안 함
     // 강의 계획 표. 지금은 주제만, 나중에 주차 노트가 생기면 행에 slug 를 붙여 링크
     weeks: z
       .array(
