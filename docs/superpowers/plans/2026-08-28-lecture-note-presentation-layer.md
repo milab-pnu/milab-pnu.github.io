@@ -1291,68 +1291,141 @@ git commit -m "$(printf 'style(lecture): 통합 픽스처 육안 점검 반영 �
 
 ---
 
-### Task 11: 기존 강의 노트 4개를 .mdx 로 이행
+### Task 11: ADS 노트 2개 .mdx 이행 + ADL weeks/ 비우기
 
 표현 계층이 실제 콘텐츠 repo 에 적용됨을 확인한다. **콘텐츠 repo 작업 — 각 과목 폴더에서.**
+ADL 은 사용자 지시로 기존 뼈대 노트를 지우고 Task 12 에서 Transformers 노트를 새로 쓴다.
 
 **Files:**
-- `pnu/lectures/2026-02/advanced_deep_learning/weeks/01-intro.md` → `.mdx`
-- `pnu/lectures/2026-02/advanced_deep_learning/weeks/01b-setup.md` → `.mdx`
-- `pnu/lectures/2026-02/advanced_deep_learning/weeks/02-optimization.md` → `.mdx`
+- Delete: `pnu/lectures/2026-02/advanced_deep_learning/weeks/01-intro.md`
+- Delete: `pnu/lectures/2026-02/advanced_deep_learning/weeks/01b-setup.md`
+- Delete: `pnu/lectures/2026-02/advanced_deep_learning/weeks/02-optimization.md`
 - `pnu/lectures/2026-02/applied_data_science/weeks/01-overview.md` → `.mdx`
 - `pnu/lectures/2026-02/applied_data_science/weeks/02-eda.md` → `.mdx`
 
-- [ ] **Step 1: 각 파일 확장자 변경 + MDX 안전성 점검**
-
-각 `weeks/*.md` 를 `.mdx` 로 rename. 내용 중 MDX 파서를 깨는 요소 점검·수정:
-- `<` 뒤에 공백 없이 문자가 오는 표현 (예: `<0.5`) → `{"<0.5"}` 또는 `&lt;0.5`
-- 중괄호 `{ }` 를 그대로 쓴 곳 → `` `{ }` `` 코드로 감싸거나 `\{`
-현재 5개 노트는 단순 마크다운(수식·목록·표만)이라 대부분 무수정. `$...$`·`$$` 는 그대로 동작.
-
-- [ ] **Step 2: milab-pnu 에서 로컬 통합 빌드**
-
-`pnu/lectures.config.json`(= `milab-pnu/lectures.config.json`)은 그대로. 두 과목 repo 에 **아직 push 하지 않은** 상태이므로, 로컬 검증을 위해 `.mdx` 파일을 임시로 `milab-pnu/lectures/<slug>/weeks/` 에 복사한다 (sync 가 이미 clone 해둔 폴더; 다음 sync 때 덮어써지지만 지금 빌드엔 반영됨).
-
-Run:
-```bash
-cp pnu/lectures/2026-02/advanced_deep_learning/weeks/*.mdx milab-pnu/lectures/2026f-advanced-deep-learning/weeks/
-rm milab-pnu/lectures/2026f-advanced-deep-learning/weeks/*.md
-cp pnu/lectures/2026-02/applied_data_science/weeks/*.mdx milab-pnu/lectures/2026f-applied-data-science/weeks/
-rm milab-pnu/lectures/2026f-applied-data-science/weeks/*.md
-cd milab-pnu && npx astro build   # sync 건너뛰려면 prebuild 없이 astro 직접 호출
-```
-Expected: 빌드 성공, postbuild 통과. `dist/lecture/2026f-advanced-deep-learning/01-intro/index.html` 등이 새 레이아웃으로 렌더.
-
-- [ ] **Step 3: 커밋 (각 과목 repo)**
+- [ ] **Step 1: ADL weeks/ 노트 삭제**
 
 ```bash
 cd pnu/lectures/2026-02/advanced_deep_learning
-git add -A
-git commit -m "$(printf 'weeks: .md → .mdx (표현 계층 컴포넌트 사용 준비)\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>')"
+git rm weeks/01-intro.md weeks/01b-setup.md weeks/02-optimization.md
+```
+(`course.md` 의 `weeks:` 계획표는 그대로 둔다 — 노트만 지운다. Schedule 표의 "강의자료" 컬럼이 빈 칸이 되는 건 정상.)
+
+- [ ] **Step 2: ADS 노트 .mdx 이행 + MDX 안전성 점검**
+
+`pnu/lectures/2026-02/applied_data_science/weeks/*.md` 를 `.mdx` 로 rename. MDX 파서를 깨는 요소 점검·수정:
+- `<` 뒤에 공백 없이 문자가 오는 표현 (예: `<0.5`) → `{"<0.5"}` 또는 `&lt;0.5`
+- 중괄호 `{ }` 를 그대로 쓴 곳 → `` `{ }` `` 코드로 감싸거나 `\{`
+현재 두 노트는 단순 마크다운(수식·목록만)이라 대부분 무수정. `$...$`·`$$` 는 그대로 동작.
+
+- [ ] **Step 3: milab-pnu 에서 로컬 통합 빌드**
+
+`.mdx` 파일을 임시로 sync clone 폴더에 반영해 로컬 빌드 (다음 sync 때 덮어써짐):
+```bash
+cp pnu/lectures/2026-02/applied_data_science/weeks/*.mdx milab-pnu/lectures/2026f-applied-data-science/weeks/
+rm -f milab-pnu/lectures/2026f-applied-data-science/weeks/*.md
+rm -f milab-pnu/lectures/2026f-advanced-deep-learning/weeks/*.md
+cd milab-pnu && npx astro build   # prebuild(sync) 건너뛰려 astro 직접 호출
+```
+Expected: 빌드 성공, postbuild 통과. ADS 노트가 새 레이아웃으로 렌더. ADL 은 노트 0개.
+
+- [ ] **Step 4: 커밋 (각 과목 repo)**
+
+```bash
+cd pnu/lectures/2026-02/advanced_deep_learning
+git commit -m "$(printf 'weeks: 뼈대 노트 3개 삭제 (Transformers 노트로 교체 예정)\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>')"
 
 cd ../applied_data_science
 git add -A
 git commit -m "$(printf 'weeks: .md → .mdx (표현 계층 컴포넌트 사용 준비)\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>')"
 ```
 
-- [ ] **Step 4: push (이 태스크에 한해 필요 — 사용자에게 확인)**
-
-표현 계층을 라이브에서 검증하려면 두 과목 repo push + milab-pnu push 가 필요하다. **사용자에게 "지금 push 할까요?" 확인 후** 진행:
-```bash
-cd pnu/lectures/2026-02/advanced_deep_learning && git push
-cd ../applied_data_science && git push
-```
-1~2분 뒤 `https://jaehoonoh-pnu.github.io/milab/lecture/2026f-advanced-deep-learning/01-intro` 확인.
-
-- [ ] **Step 5: milab-pnu 변경분 push** (사용자 확인 후)
-
-```bash
-cd milab-pnu && git push
-```
+- [ ] **Step 5: push 는 Task 12 완료 후 일괄** — 이 태스크에서는 push 하지 않는다.
 
 ---
 
-### Task 12: 픽스처 정리 + 문서화
+### Task 12: Transformers 강의 노트 작성 — 전 컴포넌트 통합 테스트
+
+ADL 1주차(계획표상 "Introduction & Course Logistics" 이나, 사용자 지시로 Transformers 심화 노트로 대체) 노트를 **arXiv:1706.03762 "Attention Is All You Need"** 를 backbone 으로 **매우 자세히** 작성한다. 목적 둘: (1) 실제 강의 콘텐츠, (2) 추가한 8개 컴포넌트를 전부 사용해 빌드·렌더 에러가 없는지 확인.
+
+**이 태스크는 서브에이전트가 아니라 메인 세션(리뷰어)이 직접 수행한다** — 컴포넌트 계약·톤·자료조사 맥락이 메인 세션에 있음.
+
+**Files:**
+- Create: `pnu/lectures/2026-02/advanced_deep_learning/weeks/01-transformers.mdx`
+- (필요 시) Create: `pnu/lectures/2026-02/advanced_deep_learning/weeks/assets/` (자작 SVG 만; 외부 그림은 URL)
+
+**작성 요건:**
+- **자료조사**: arXiv:1706.03762 본문을 근거로. 저작권 텍스트를 재현하지 않고 **자기 표현으로 설명·요약**. 인용은 `<Cite>` + `<References>` 로, 서지정보 완전하게(섹션·수식 번호까지). 논문 그림은 재현 대신 자작 SVG 다이어그램 또는 출처 표기한 외부 이미지.
+- **흐름**: 읽는 것만으로 따라갈 수 있게. seq2seq/RNN 의 한계 → self-attention 동기 → scaled dot-product attention 수식 유도 → multi-head → positional encoding → encoder/decoder 블록 → 학습 설정 → 결과·영향. 각 수식에 직관과 예시.
+- **용어**: 영어 기본 (self-attention, query/key/value, ...).
+- **전 컴포넌트 1회 이상 사용**:
+  - `<Figure hero>` 1개 (전체 아키텍처 개요 — 자작 SVG 또는 출처 표기 외부 이미지)
+  - `<Figure>` (일반 + `wide`) 각 1회 이상
+  - `<Video>` 1개 이상 (예: 3Blue1Brown / 저자 강연 등 YouTube)
+  - `<Sidenote>` 여러 개 (용어 정의·보충)
+  - `<Callout>` 4가지 type 각 1회 (`intuition`/`warning`/`example`/`note`)
+  - `<Details>` 1개 이상 (긴 유도 — 예: softmax gradient, $\sqrt{d_k}$ 스케일 이유)
+  - `<Cite>` + `<References>` (최소 3개 항목: 원논문 + 관련 2편)
+  - 수식: 인라인 + 디스플레이 여러 개. GFM 표 1개 이상 (예: 복잡도 비교 self-attention vs recurrent vs convolutional).
+
+- [ ] **Step 1: 자료조사 메모**
+
+arXiv:1706.03762 의 핵심 구조·수식·수치를 섹션별로 정리 (scratchpad). 관련 후속 문헌 2편 선정 (예: BERT, GPT, "The Annotated Transformer", Vaswani 후속 등) — 서지정보 확정.
+
+- [ ] **Step 2: 노트 초안 작성**
+
+`weeks/01-transformers.mdx` frontmatter:
+```mdx
+---
+title: Transformers — Attention Is All You Need
+week: 1
+---
+```
+위 "작성 요건" 대로 본문 작성.
+
+- [ ] **Step 3: 자작 SVG 다이어그램** (필요한 만큼)
+
+인라인 `<svg>` (또는 `weeks/assets/*.svg`). CSP 준수: `style=`·`<style>` 금지, presentation 속성(`fill=`,`stroke=`)만. 최소: 아키텍처 개요, attention 계산 흐름.
+
+- [ ] **Step 4: 로컬 빌드 + 검사 + 육안**
+
+```bash
+cp pnu/lectures/2026-02/advanced_deep_learning/weeks/01-transformers.mdx milab-pnu/lectures/2026f-advanced-deep-learning/weeks/
+cp -r pnu/lectures/2026-02/advanced_deep_learning/weeks/assets milab-pnu/lectures/2026f-advanced-deep-learning/weeks/ 2>/dev/null || true
+cd milab-pnu && npx astro build
+```
+Expected: 빌드 성공, postbuild 통과 (CSP·인라인 style/script·인용 무결성).
+그다음 `npx astro preview` 또는 `./dev.ps1` 로 `/lecture/2026f-advanced-deep-learning/01-transformers` 육안:
+- [ ] 8개 컴포넌트 전부 정상 렌더
+- [ ] 목차가 모든 h2/h3 추적, 긴 노트에서 스크롤 강조 이동
+- [ ] 수식·표·SVG 정상, 반응형 3단계 정상, 가로 스크롤 없음
+- [ ] Video 재생, Cite→References 점프
+
+- [ ] **Step 5: 에러/경고 기록 및 수정**
+
+빌드 경고·렌더 깨짐이 있으면 원인이 (a) 컴포넌트 버그면 해당 컴포넌트 파일 수정 후 그 커밋에 반영, (b) 노트 작성 실수면 노트 수정. 어느 쪽이든 빌드·검사 재실행.
+
+- [ ] **Step 6: 커밋 (ADL repo)**
+
+```bash
+cd pnu/lectures/2026-02/advanced_deep_learning
+git add -A
+git commit -m "$(printf 'weeks: Transformers (Attention Is All You Need) 강의 노트\n\narXiv:1706.03762 기반 심화 노트. 표현 계층 컴포넌트 전종 사용.\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>')"
+```
+
+- [ ] **Step 7: 일괄 push (사용자 확인 후)**
+
+라이브 검증을 위해 push. **사용자에게 확인 후**:
+```bash
+cd pnu/lectures/2026-02/advanced_deep_learning && git push
+cd ../applied_data_science && git push
+cd ../../../milab-pnu && git push
+```
+1~2분 뒤 `https://jaehoonoh-pnu.github.io/milab/lecture/2026f-advanced-deep-learning/01-transformers` 확인.
+
+---
+
+### Task 13: 픽스처 정리 + 문서화
 
 **Files:**
 - Delete: `milab-pnu/lectures/_dev-fixture/` (gitignore 대상이라 git 작업 없음 — 파일 삭제만)
@@ -1414,12 +1487,12 @@ git commit -m "$(printf 'docs(lecture-authoring): 강의 노트 MDX 컴포넌트
 - astro.config (gfm, slug) → Task 2
 - `course.md` 손대지 않음 → 명시적 non-goal, 어떤 태스크도 수정 안 함 ✓
 - 다크모드 없음 → CSS 에 다크 규칙 없음 ✓
-- 콘텐츠 repo 계약 / 로컬 미리보기 함정 → Task 11 (이행), Task 12 (문서화)
-- 기존 노트 이행 → Task 11
-- 확인 필요 4가지: GFM(Task 2 Step 3), 컴포넌트 주입(Task 5 Step 6 + fallback), 상대경로 이미지 최적화(→ 외부 우선이라 non-goal 로 문서화, Task 12), 번들 스크립트 CSP(Task 4 Step 6) ✓
-- 테스트 목록 → Task 1 (검사 스크립트) + Task 7 Step 5 (Video 실패) + Task 9 Step 6 (Cite 무결성) + Task 10 (반응형/네비/폴백)
+- 콘텐츠 repo 계약 / 로컬 미리보기 함정 → Task 11 (이행), Task 13 (문서화)
+- ADS 노트 이행 → Task 11 · ADL weeks/ 비우기 → Task 11 · Transformers 노트(전 컴포넌트 통합 테스트) → Task 12
+- 확인 필요 4가지: GFM(Task 2 Step 3), 컴포넌트 주입(Task 5 Step 6 + fallback), 상대경로 이미지 최적화(→ 외부 우선이라 non-goal 로 문서화, Task 13), 번들 스크립트 CSP(Task 4 Step 6) ✓
+- 테스트 목록 → Task 1 (검사 스크립트) + Task 7 Step 5 (Video 실패) + Task 9 Step 6 (Cite 무결성) + Task 10 (반응형/네비/폴백) + Task 12 (전 컴포넌트 실사용)
 
-**Placeholder scan:** 코드 블록은 모두 실제 구현. Task 10/12 의 "더미 텍스트"·"필요 시 조정"은 육안 검증 태스크의 성격상 허용 범위 (구체적 체크리스트 제공). Task 5 의 fallback(remark autoimport)은 조건부 경로로 명시 — 해당 시 별도 판단.
+**Placeholder scan:** 코드 블록은 모두 실제 구현. Task 10/12 의 "더미 텍스트"·"작성 요건"·"필요 시 조정"은 콘텐츠·육안 검증 태스크의 성격상 허용 범위 (구체적 체크리스트·요건 목록 제공). Task 12 의 자료조사·문헌 선정은 메인 세션이 수행하며 Step 1 에서 확정. Task 5 의 fallback(remark autoimport)은 조건부 경로로 명시 — 해당 시 별도 판단.
 
 **Type consistency:**
 - `headings: { depth: number; slug: string; text: string }[]` — Task 4 (LectureNav, NoteLayout, [note].astro) 일관.
@@ -1431,9 +1504,6 @@ git commit -m "$(printf 'docs(lecture-authoring): 강의 노트 MDX 컴포넌트
 
 ## Execution Handoff
 
-계획을 `docs/superpowers/plans/2026-08-28-lecture-note-presentation-layer.md` 에 저장했습니다. 실행 방식 두 가지:
+**Subagent-Driven** 으로 실행한다 (사용자 지시). Task 1–11, 13 은 태스크당 새 서브에이전트 + 2단계 리뷰. **Task 12(Transformers 노트)는 메인 세션이 직접 수행** — 자료조사·톤·컴포넌트 계약 맥락이 메인에 있음.
 
-1. **Subagent-Driven (추천)** — 태스크마다 새 서브에이전트 디스패치, 태스크 간 리뷰, 빠른 반복
-2. **Inline Execution** — 이 세션에서 executing-plans 로 배치 실행, 체크포인트마다 리뷰
-
-어느 쪽으로 할까요?
+push 는 Task 12 Step 7 에서 사용자 확인 후 일괄 (ADL·ADS·milab-pnu).
