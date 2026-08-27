@@ -17,11 +17,9 @@ export const SITE = {
 export const NAV: { label: string; href: string }[] = [
   { label: "HOME", href: "/" },
   { label: "MEMBERS", href: "/members" },
-  { label: "RESEARCH", href: "/research" },
   { label: "PROJECT", href: "/project" },
   { label: "PUBLICATION", href: "/publication" },
   { label: "LECTURE", href: "/lecture" },
-  { label: "GALLERY", href: "/gallery" },
 ];
 
 /**

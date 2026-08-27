@@ -28,7 +28,7 @@ src/
 │   └── publications/      # 논문 — md 1개 = 1건
 ├── layouts/BaseLayout.astro
 ├── components/            # Nav, Footer, PageHeader
-└── pages/                 # index / members / research / project / publication / gallery / lecture
+└── pages/                 # index / members / project / publication / lecture
 ```
 
 ### 콘텐츠 수정 방법
@@ -37,7 +37,7 @@ src/
 - **구성원 추가**: `src/content/members/NN-name.md` 생성. `role`(professor/postdoc/phd/ms/undergrad/alumni),
   `order`(정렬), 선택적으로 `photo`(`public/members/xxx.jpg` 기준 경로).
 - **논문 추가**: `src/content/publications/YYYY-slug.md` 생성. `title/authors/venue/year/links`.
-- 페이지 본문(연구/과제/갤러리 소개 문구)은 해당 `src/pages/*.astro` 파일에서 직접 편집.
+- 페이지 본문(과제 소개 문구 등)은 해당 `src/pages/*.astro` 파일에서 직접 편집.
 - 사이트 이름·이메일·연구실 정보는 `src/consts.ts` 의 `SITE` 객체.
 
 ## 배포 (GitHub Pages)
