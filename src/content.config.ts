@@ -34,8 +34,8 @@ const members = defineCollection({
 });
 
 // 논문
-const publications = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/publications" }),
+const papers = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/papers" }),
   schema: z.object({
     title: z.string(),
     authors: z.string(),
@@ -48,4 +48,4 @@ const publications = defineCollection({
   }),
 });
 
-export const collections = { news, members, publications };
+export const collections = { news, members, papers };

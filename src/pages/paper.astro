@@ -3,15 +3,15 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 
-const pubs = (await getCollection("publications")).sort(
+const pubs = (await getCollection("papers")).sort(
   (a, b) => b.data.year - a.data.year || a.data.title.localeCompare(b.data.title),
 );
 
 const years = [...new Set(pubs.map((p) => p.data.year))].sort((a, b) => b - a);
 ---
 
-<BaseLayout title="Publication" description="MI Lab 논문 목록">
-  <PageHeader title="Publication" subtitle="논문" />
+<BaseLayout title="Paper" description="MI Lab 논문 목록">
+  <PageHeader title="Paper" />
 
   {
     years.map((year) => (

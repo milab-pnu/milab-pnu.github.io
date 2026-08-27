@@ -21,14 +21,14 @@ npm run preview   # 빌드 결과 미리보기
 ```
 src/
 ├── consts.ts              # 사이트 이름, 네비게이션, withBase() 링크 헬퍼
-├── content.config.ts      # 콘텐츠 컬렉션 스키마 (news / members / publications)
+├── content.config.ts      # 콘텐츠 컬렉션 스키마 (news / members / papers)
 ├── content/
 │   ├── news/              # 메인 "최신 뉴스" — md 1개 = 항목 1개
 │   ├── members/           # 구성원 — md 1개 = 1명 (frontmatter)
-│   └── publications/      # 논문 — md 1개 = 1건
+│   └── papers/            # 논문 — md 1개 = 1건
 ├── layouts/BaseLayout.astro
 ├── components/            # Nav, Footer, PageHeader
-└── pages/                 # index / members / project / publication / lecture
+└── pages/                 # index / members / project / paper / lecture
 ```
 
 ### 콘텐츠 수정 방법
@@ -36,7 +36,7 @@ src/
 - **뉴스 추가**: `src/content/news/2026-09-01-something.md` 생성, frontmatter에 `title`, `date`.
 - **구성원 추가**: `src/content/members/NN-name.md` 생성. `role`(professor/postdoc/phd/ms/undergrad/alumni),
   `order`(정렬), 선택적으로 `photo`(`public/members/xxx.jpg` 기준 경로).
-- **논문 추가**: `src/content/publications/YYYY-slug.md` 생성. `title/authors/venue/year/links`.
+- **논문 추가**: `src/content/papers/YYYY-slug.md` 생성. `title/authors/venue/year/links`.
 - 페이지 본문(과제 소개 문구 등)은 해당 `src/pages/*.astro` 파일에서 직접 편집.
 - 사이트 이름·이메일·연구실 정보는 `src/consts.ts` 의 `SITE` 객체.
 
