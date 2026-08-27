@@ -15,21 +15,23 @@
 
 - 주차별 강의노트 라우트 (`/lecture/<slug>/<week>`)
 - MDX 인터랙티브 컴포넌트 주입 / React 재도입
-- 강의 repo → 메인 재빌드 자동 트리거(`repository_dispatch`) — cron + 수동 버튼으로 시작
 - 에셋(PDF·이미지) 동기화 — 첫 페이지엔 불필요, 후속에서
 - 비공개 강의 repo — 전부 public 전제
-- 오래된 강의를 사이트에서 내리는 기능 — 교수님은 계속 공개 예정
+- 오래된 강의를 사이트에서 내리는 기능 — 계속 공개 예정
+- 강의 repo 템플릿(`gh repo create --template`) — 지금은 강의 2개뿐, 후속에서
 
 ## 저장소 구성
 
-### 강의 repo (신규, 콘텐츠 전용 — 빌드 도구 없음)
+### 강의 repo (신규, 콘텐츠 전용 — 빌드 도구 없음, 이름에 `milab-` 접두 없음)
 
 ```
-milab-2026f-advanced-deep-learning/     (GitHub: jaehoonoh-pnu/…, public)
-└── course.md
+2026f-advanced-deep-learning/     (GitHub: jaehoonoh-pnu/…, public)
+├── course.md
+└── .github/workflows/notify.yml  # push 시 milab repo 배포 트리거
 
-milab-2026f-applied-data-science/       (GitHub: jaehoonoh-pnu/…, public)
-└── course.md
+2026f-applied-data-science/       (GitHub: jaehoonoh-pnu/…, public)
+├── course.md
+└── .github/workflows/notify.yml
 ```
 
 ### 메인 repo 추가/변경분
@@ -56,12 +58,12 @@ milab-pnu/
 [
   {
     "slug": "2026f-advanced-deep-learning",
-    "repo": "https://github.com/jaehoonoh-pnu/milab-2026f-advanced-deep-learning.git",
+    "repo": "https://github.com/jaehoonoh-pnu/2026f-advanced-deep-learning.git",
     "ref": "main"
   },
   {
     "slug": "2026f-applied-data-science",
-    "repo": "https://github.com/jaehoonoh-pnu/milab-2026f-applied-data-science.git",
+    "repo": "https://github.com/jaehoonoh-pnu/2026f-applied-data-science.git",
     "ref": "main"
   }
 ]
@@ -91,6 +93,33 @@ package.json:
 
 `dev.ps1` 은 `npx astro dev` 를 직접 부르므로 npm predev 훅을 안 탄다 →
 `start`/`restart` 에서 `node scripts/sync-lectures.mjs` 를 먼저 실행하도록 수정.
+
+## 강의 자료 업데이트 / 재배포 흐름
+
+강의 repo에서 `git push` → 메인 사이트 재빌드. "언제 재빌드되나" 를 3중으로:
+
+1. **`notify.yml` (강의 repo, 주 경로)** — push 트리거로 `milab` repo 배포 워크플로 호출.
+   push 후 약 1분 내 라이브. 웹 UI·폰·다른 PC 어디서 push하든 동작.
+   ```yaml
+   name: notify milab
+   on: { push: { branches: [main] } }
+   jobs:
+     notify:
+       runs-on: ubuntu-latest
+       steps:
+         - run: |
+             gh workflow run deploy.yml -R jaehoonoh-pnu/milab
+           env:
+             GH_TOKEN: ${{ secrets.MILAB_DEPLOY_TOKEN }}
+   ```
+   - `MILAB_DEPLOY_TOKEN` = fine-grained PAT. 대상 repo = `jaehoonoh-pnu/milab` 하나,
+     권한 = **Actions: write** 하나. 각 강의 repo secret 에 저장.
+   - `deploy.yml` 의 `prebuild` 훅이 `sync-lectures` 를 돌리므로 최신 강의 콘텐츠가 반영됨.
+2. **수동 버튼** — GitHub → milab → Actions → deploy → "Run workflow". secret·설정 불필요 fallback.
+3. **nightly cron** — 트리거를 놓쳐도 다음날 03:00 KST 반영. 안전망.
+
+secret 이 꺼려지면 1번 대신 로컬 래퍼(`lecture.ps1`): 강의 repo에서 `git push` +
+`gh workflow run deploy.yml -R jaehoonoh-pnu/milab` 한 번에. (내 PC에서 push할 때만 동작)
 
 ## 콘텐츠 스키마 (`courses` 컬렉션, `src/content.config.ts`)
 
@@ -159,8 +188,8 @@ on:
 ```
 
 - `actions/checkout` 의 `submodules` 주석 줄 삭제(안 씀).
-- 공개 repo clone → 토큰 불필요.
-- cron 이 변경 없어도 매일 재배포 → 무해(정적·무료). 거슬리면 후속에서 `repository_dispatch` 로.
+- 공개 repo clone → 토큰 불필요. (강의 repo → milab 트리거용 PAT 는 위 "재배포 흐름" 참고)
+- cron 이 변경 없어도 매일 재배포 → 무해(정적·무료).
 
 ## 부트스트랩 순서 (구현)
 
@@ -169,9 +198,14 @@ on:
    `/lecture` 재작성, `[course].astro`, `deploy.yml`, `dev.ps1`.
    임시로 로컬에 `lectures/2026f-advanced-deep-learning/course.md` 등을 직접 만들어 빌드 스모크
    (매니페스트에 없는 로컬 폴더 → sync 가 건드리지 않음). 확인 후 삭제.
-2. **강의 repo 2개 생성** — `gh repo create`, 각각 `course.md` 초안 커밋·push.
-3. **연결** — 로컬 `lectures/` 비우고 `npm run lectures:sync` → clone 확인 → `npm run build`.
-4. **배포** — 메인 커밋·push → Actions → `/milab/lecture/2026f-advanced-deep-learning` 확인.
+2. **강의 repo 2개 생성** — `gh repo create … --public`, 각각 `course.md` 초안 +
+   `.github/workflows/notify.yml` 커밋·push.
+3. **PAT 발급** — fine-grained, repo = `jaehoonoh-pnu/milab`, 권한 = Actions: write.
+   두 강의 repo 에 `MILAB_DEPLOY_TOKEN` secret 으로 등록. (교수님이 발급 → 값 전달, 또는
+   `gh secret set` 로 등록만 대행)
+4. **연결** — 로컬 `lectures/` 비우고 `npm run lectures:sync` → clone 확인 → `npm run build`.
+5. **배포** — 메인 커밋·push → Actions → `/milab/lecture/2026f-advanced-deep-learning` 확인.
+6. **트리거 확인** — 강의 repo `course.md` 한 줄 고쳐 push → milab 배포 자동 실행 → 반영 확인.
 
 ## 검증
 
@@ -180,7 +214,7 @@ on:
 - 각 첫 페이지: 헤더/정보줄/Goals 본문/Schedule 표 렌더, 링크 안 깨짐.
 - `npm run build` 경고 0, `astro check` 0/0/0.
 - 배포 후 실제 URL 접속.
-- 강의 repo `course.md` 수정·push → Actions "Run workflow" → 사이트 반영.
+- 강의 repo `course.md` 수정·push → milab 배포 자동 실행(`notify.yml`) → 1~2분 내 사이트 반영.
 
 ## 후속 (이번 스펙 밖)
 
@@ -188,4 +222,5 @@ on:
   `weeks[]` 표 행에 `slug` 필드로 링크. 이전/다음 네비.
 - 인터랙티브 위젯: 메인 repo에 컴포넌트 구현 + `<Content components={…} />` 주입, React 재도입.
 - 에셋 동기화 스크립트(`lectures/<slug>/public/**` → `public/lectures/<slug>/**`).
-- 강의 repo 템플릿(`gh repo create --template`).
+- 강의 repo 템플릿(`notify.yml` + `course.md` 골격 포함, `gh repo create --template`).
+- cron 이 매일 재배포하는 게 거슬리면 제거(트리거 2중이면 충분).
