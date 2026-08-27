@@ -20,7 +20,7 @@ hooks (and `dev.ps1`). Not git submodules. Never edit under `lectures/` — work
 course's own clone at `pnu/lectures/<semester>/<course>/`.
 
 - **Authoring rules (canonical):** `docs/lecture-authoring.md` — frontmatter schemas,
-  math/image conventions, new-course flow, gotchas. New lessons get written there.
+  math/image conventions, new-course flow, gotchas. New rules get folded in there.
 - **Design:** `docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md`.
 
 ## Documentation
