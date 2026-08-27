@@ -143,10 +143,31 @@ lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안
 고치고 `git push`. 그 repo 의 `.github/workflows/notify.yml` 이 메인 사이트 재배포를
 트리거 → 1~2분 뒤 반영. 로컬 미리보기는 이 repo 에서 `.\dev.ps1` (시작 시 sync 가 최신을 당겨옴).
 
+강의 repo 구조:
+
+```
+<slug>/
+├── course.md          # 강의 첫 페이지 (개요 + Schedule 표)
+└── weeks/             # 주차별 강의노트 — 파일 1개 = 웹페이지 1개
+    ├── 01-intro.md
+    ├── 01b-setup.md   # 같은 주차에 여러 개 가능
+    └── 02-optim.md
+```
+
 `course.md` frontmatter: `title`, `titleEn?`, `term`("2026 Fall"), `semester`("2026-02",
 정렬용), `instructor?`, `schedule?`, `location?`, `credits?`, `summary?`(검색엔진용 메타
-설명, 화면엔 안 보임), `weeks?`(`[{ n, topic, date? }]` — 강의 계획 표).
+설명, 화면엔 안 보임), `weeks?` — 강의 계획 표. 각 항목:
+`{ n: 주차번호, topic: "주제", date?: "2026-09-01", discussion?: 3 }`.
+`discussion` = 그 강의 repo 의 GitHub Discussion 번호(주차별 토론 스레드).
 본문(마크다운)은 Goals 등으로 표시, 수식 `$…$` 가능.
+
+`weeks/*.md` frontmatter: `title`, `week`(숫자 — `course.md` 의 `n` 과 매칭), `order?`
+(같은 주차 내 정렬). 본문은 그 노트 페이지가 되고 Schedule 표 "강의자료" 컬럼에 링크된다.
+수식·코드블록 됨. **인터랙티브 위젯(JS)은 아직 안 됨** — 필요하면 React 재도입 + CSP 수정.
+
+주차별 토론: 강의 repo 의 **Discussions** 탭을 쓴다. 스레드를 하나 만들고
+(`gh discussion create -R jaehoonoh-pnu/<slug> --category "Q&A" --title "Week N — ..."`)
+그 번호를 `course.md` `weeks[].discussion` 에 적으면 표에 "토론 ↗" 링크가 생긴다.
 
 #### 주의점
 
@@ -163,9 +184,11 @@ lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안
 
 1. 강의 repo 생성: `gh repo create jaehoonoh-pnu/<slug> --public`
    (`slug` 예: `2027s-machine-learning` — 소문자·숫자·하이픈).
-2. `course.md` + 다른 강의 repo 의 `.github/workflows/notify.yml` 복사해서 커밋·push.
-3. 그 repo 에 secret `MILAB_DEPLOY_TOKEN` 등록 (아래 PAT).
-4. 이 repo `lectures.config.json` 에 `{ "slug", "repo", "ref": "main" }` 한 줄 추가 → push.
+2. `course.md` + `weeks/` + 다른 강의 repo 의 `.github/workflows/notify.yml` /
+   `.gitattributes` 복사해서 커밋·push.
+3. `gh repo edit jaehoonoh-pnu/<slug> --enable-discussions` (주차별 토론용).
+4. 그 repo 에 secret `MILAB_DEPLOY_TOKEN` 등록 (아래 PAT).
+5. 이 repo `lectures.config.json` 에 `{ "slug", "repo", "ref": "main" }` 한 줄 추가 → push.
 
 ### 재배포 트리거용 PAT (`MILAB_DEPLOY_TOKEN`)
 

@@ -11,6 +11,15 @@ E2E 검증됨: course.md 수정 → push → notify.yml(success) → milab 배�
 작업한다. 메인 repo 의 `lectures/<slug>/` 는 sync 스크립트가 detached HEAD 로 checkout 한
 빌드 입력물이라 여기서 커밋/push 하면 안 됨(다음 sync 때 덮어씀).
 
+**2차 추가 (2026-08-27):** 주차별 강의노트 + Schedule 표 강의자료/토론 컬럼.
+- `lectureNotes` 컬렉션 (`*/weeks/*.{md,mdx}`), 라우트 `/lecture/[course]/[note].astro`.
+  노트 frontmatter `{ title, week, order? }`. 한 주차에 노트 여러 개 가능.
+- `[course].astro` → `[course]/index.astro` 로 이동.
+- Schedule 표에 "강의자료"(주차 노트 링크) + "토론" 컬럼. 토론 = 강의 repo 의 GitHub
+  Discussions, `course.md` `weeks[].discussion` = 스레드 번호. 두 강의 repo 에
+  Discussions 활성화 + Q&A 카테고리에 주차별 스레드 생성해 둠 (ADL #1–4, ADS #1–3).
+- 인터랙티브 위젯은 여전히 미도입(React/CSP). 노트 이미지 = 아직 외부 URL 만.
+
 ## 목표
 
 강의 자료를 웹사이트 코드와 분리해 관리한다. **강의 하나 = 독립 GitHub repo (콘텐츠 전용).**
