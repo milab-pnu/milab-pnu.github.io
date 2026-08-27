@@ -1,0 +1,28 @@
+---
+// 강의 노트 좌측 목차. render() 가 준 heading 목록(h2/h3)으로 앵커 링크를 만든다.
+// 현재 섹션 강조는 public/lecture-nav.js 가 붙인다 (JS 꺼져도 앵커는 동작).
+import { withBase } from "../../consts";
+
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+const { headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  items.length > 0 && (
+    <nav class="lecture-nav" aria-label="목차">
+      <p class="lecture-nav__title">목차</p>
+      <ol>
+        {items.map((h) => (
+          <li class={`lecture-nav__item lecture-nav__item--h${h.depth}`}>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<script is:inline src={withBase("/lecture-nav.js")} defer></script>
