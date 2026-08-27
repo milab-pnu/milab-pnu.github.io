@@ -62,15 +62,15 @@ npm run dev:logs     # 로그
 ```
 src/
 ├── consts.ts              # 사이트 정보(SITE), 네비게이션, withBase()/iconFor() 헬퍼
-├── content.config.ts      # 콘텐츠 컬렉션 스키마 (news / members / courses)
+├── content.config.ts      # 콘텐츠 컬렉션 스키마 (news / members / courses / lectureNotes)
 ├── content/
 │   ├── news/              # 메인 "최신 뉴스" — md 1개 = 항목 1개
 │   └── members/           # 구성원 — md 1개 = 1명 (frontmatter)
 ├── data/                  # publications.bib / preprints.bib (Paper 페이지 소스)
 ├── lib/bibtex.ts          # .bib 파서 (파싱 실패 시 빌드를 세움)
-├── layouts/BaseLayout.astro
-├── components/            # Nav, Footer, PageHeader, MemberCard, MemberLinks,
-│                          #   ProfileList, PaperList, Icon
+├── layouts/               # BaseLayout(사이트 크롬) · NoteLayout(강의 노트, 크롬 없음)
+├── components/            # HeadMeta, Nav, Footer, PageHeader, MemberCard,
+│                          #   MemberLinks, ProfileList, PaperList, Icon
 └── pages/
     ├── index / members / alumni / project / paper / 404
     └── lecture/           # index(목록) · [course]/index(강의) · [course]/[note](주차 노트)
@@ -169,12 +169,18 @@ pnu/
 
 ```
 <slug>/
-├── course.md          # 강의 첫 페이지 (개요 + Schedule 표)
+├── course.md          # 강의 첫 페이지 (개요 + Schedule 표) — MI Lab 사이트 크롬 있음
 └── weeks/             # 주차별 강의노트 — 파일 1개 = 웹페이지 1개
     ├── 01-intro.md
     ├── 01b-setup.md   # 같은 주차에 여러 개 가능
-    └── 02-optim.md
+    ├── 02-optim.md
+    └── assets/        # 노트에 넣을 이미지 (상대경로로 참조)
+        └── diagram.png
 ```
+
+강의 노트 페이지(`/lecture/<slug>/<노트>`)는 **사이트 네비/푸터 없는 독립 문서**로 렌더된다
+(읽기 중심, 상·하단에 그 강의로 가는 작은 링크만). 강의 첫 페이지(`course.md`)는 사이트
+크롬 있음.
 
 `course.md` frontmatter: `title`, `titleEn?`, `term`("2026 Fall"), `semester`("2026-02",
 정렬용), `instructor?`, `schedule?`, `location?`, `credits?`, `summary?`(검색엔진용 메타
@@ -183,9 +189,15 @@ pnu/
 `discussion` = 그 강의 repo 의 GitHub Discussion 번호(주차별 토론 스레드).
 본문(마크다운)은 Goals 등으로 표시, 수식 `$…$` 가능.
 
-`weeks/*.md` frontmatter: `title`, `week`(숫자 — `course.md` 의 `n` 과 매칭), `order?`
-(같은 주차 내 정렬). 본문은 그 노트 페이지가 되고 Schedule 표 "강의자료" 컬럼에 링크된다.
-수식·코드블록 됨. **인터랙티브 위젯(JS)은 아직 안 됨** — 필요하면 React 재도입 + CSP 수정.
+`weeks/*.md` (또는 `.mdx`) frontmatter: `title`, `week`(숫자 — `course.md` 의 `n` 과 매칭),
+`order?`(같은 주차 내 정렬). 본문은 그 노트 페이지가 되고 Schedule 표 "강의자료" 컬럼에
+링크된다. 수식·코드블록 됨.
+
+**이미지 / 로딩**: `weeks/assets/` 에 이미지를 두고 `![설명](./assets/그림.png)` 로 참조하면
+빌드 때 자동으로 **WebP 변환 + 크기 지정 + `loading="lazy"`** 처리된다 (원본은 적당한
+해상도로, 수천 px 짜리는 미리 줄여서). 각 노트는 독립 정적 HTML 이라 방문할 때만 로드된다.
+슬라이드 PDF·데이터셋처럼 큰 파일은 페이지에 심지 말고 링크로.
+**인터랙티브 위젯(JS)** 은 아직 안 됨 — 필요하면 `.mdx` + React 재도입 + CSP 수정.
 
 주차별 토론: 강의 repo 의 **Discussions** 탭을 쓴다. 스레드를 하나 만들고
 (`gh discussion create -R jaehoonoh-pnu/<slug> --category "Q&A" --title "N주차 토론"`)

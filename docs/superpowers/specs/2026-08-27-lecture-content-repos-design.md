@@ -19,7 +19,15 @@ E2E 검증됨: course.md 수정 → push → notify.yml(success) → milab 배�
   Discussions, `course.md` `weeks[].discussion` = 스레드 번호. 두 강의 repo 에
   Discussions 활성화 + Q&A 카테고리에 주차별 스레드 생성해 둠 (ADL #1–4, ADS #1–3).
   스레드 제목 규칙 = `"N주차 토론"` (주제명 안 붙임).
-- 인터랙티브 위젯은 여전히 미도입(React/CSP). 노트 이미지 = 아직 외부 URL 만.
+- 인터랙티브 위젯은 여전히 미도입(React/CSP).
+
+**3차 (2026-08-28):**
+- 강의 노트 페이지 = `NoteLayout.astro` (사이트 Nav/Footer 없는 독립 문서, `.prose-lecture`
+  읽기 타이포, 상·하단에 강의로 가는 작은 링크만). `HeadMeta.astro` 로 `<head>` 공통부
+  (CSP 포함) 추출 → BaseLayout/NoteLayout 공유.
+- 강의 첫 페이지에서 "← Lecture" 뒤로가기 제거 (nav 에 LECTURE 있음).
+- 노트 이미지: `weeks/assets/` 상대경로 → Astro 이미지 파이프라인 자동 통과
+  (webp, width/height, `loading=lazy`). 외부 URL 불필요. 큰 파일(PDF/데이터셋)은 링크로.
 
 ## 목표
 
