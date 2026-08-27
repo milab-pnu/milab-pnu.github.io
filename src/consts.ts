@@ -1,12 +1,12 @@
 // 사이트 전역 설정 & 네비게이션
 export const SITE = {
   name: "MI Lab",
-  fullName: "Machine Intelligence Lab",
+  fullName: "Multimodal Intelligence Lab",
   org: "Pusan National University",
   orgKo: "부산대학교",
   description:
-    "부산대학교 Machine Intelligence Lab — 데이터 기반 인공지능 연구실",
-  email: "TODO@pusan.ac.kr",
+    "부산대학교 Multimodal Intelligence Lab — 멀티모달 인공지능 연구실",
+  email: "jaehoon.oh@pusan.ac.kr",
 } as const;
 
 export const NAV: { label: string; href: string }[] = [

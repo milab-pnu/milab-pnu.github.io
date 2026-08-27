@@ -1,6 +1,6 @@
 # milab-pnu
 
-부산대학교 **Machine Intelligence Lab (MI Lab)** 웹사이트.
+부산대학교 **Multimodal Intelligence Lab (MI Lab)** 웹사이트.
 
 - 프레임워크: [Astro](https://astro.build) (정적 빌드)
 - 스타일: Tailwind CSS v4
