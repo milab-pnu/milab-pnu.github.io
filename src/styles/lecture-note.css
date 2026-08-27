@@ -93,43 +93,38 @@
 }
 
 /* ── Figure / 대표 그림 ──
-   본문 텍스트는 왼쪽 정렬 그대로. 그림(figure)만 가운데로 모은다.
-   선택자는 global.css 의 `.prose-lecture figure` (0,1,1) 를 이기려고 `.prose-lecture` 로 스코프. */
+   그림 폭은 원본 이미지 해상도와 무관하게 고정된다. 딱 두 값뿐:
+     · 히어로(.lecture-hero)  → 40rem, 노트 최상단
+     · 그 외 모든 figure       → 32rem
+   전부 가운데 정렬, 본문 열 밖으로 삐져나가지 않는다. 본문 텍스트는 왼쪽 정렬 그대로.
+   `.lecture-figure--wide` 는 더 이상 특별 취급하지 않는다(같은 32rem).
+   선택자를 `.prose-lecture` 로 스코프한 건 global.css 의 `.prose-lecture figure`(0,1,1) 를 이기기 위함. */
+.prose-lecture .lecture-figure,
 .prose-lecture .lecture-hero {
-  margin: 0 -9.5rem 2.5rem -11.5rem;
-}
-.prose-lecture .lecture-figure {
-  /* 본문 폭을 가득 채우지 않는다 — 34rem 에서 캡하고 가운데 정렬 */
-  max-width: 34rem;
+  width: 100%;
+  max-width: 32rem;
   margin: 2.5rem auto;
 }
-.prose-lecture .lecture-hero img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 0.5rem;
+.prose-lecture .lecture-hero {
+  max-width: 40rem;
+  margin-top: 0;
 }
-.prose-lecture .lecture-figure img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  margin: 0 auto;
-  border-radius: 0.5rem;
-}
-/* 자작 인라인 SVG 다이어그램 — 캡 안에서 폭을 채운다 */
+/* 이미지·SVG 는 항상 figure 폭을 그대로 채운다 → 폭이 원본 해상도에 안 휘둘린다 */
+.prose-lecture .lecture-figure img,
 .prose-lecture .lecture-figure svg,
+.prose-lecture .lecture-hero img,
 .prose-lecture > svg {
   display: block;
   width: 100%;
   height: auto;
-  max-width: 100%;
   margin: 0 auto;
 }
-/* wide: 캡을 풀고 본문보다 살짝 넓게 (여전히 가운데) */
-.prose-lecture .lecture-figure--wide {
-  max-width: none;
-  margin-left: -4.5rem;
-  margin-right: -4.5rem;
+.prose-lecture .lecture-figure img,
+.prose-lecture .lecture-hero img {
+  border-radius: 0.5rem;
+}
+.prose-lecture > svg {
+  max-width: 32rem;
 }
 .prose-lecture .lecture-figure figcaption,
 .prose-lecture .lecture-hero figcaption {
@@ -326,13 +321,6 @@
   }
   .lecture-shell__main {
     padding-right: 0;
-  }
-  .prose-lecture .lecture-hero {
-    margin: 0 0 2.5rem;
-  }
-  .prose-lecture .lecture-figure--wide {
-    margin-left: auto;
-    margin-right: auto;
   }
   .sidenote {
     float: none;
