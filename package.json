@@ -16,6 +16,7 @@
     "dev:status": "astro dev status",
     "dev:logs": "astro dev logs",
     "build": "astro build",
+    "postbuild": "node scripts/check-lecture-notes.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
