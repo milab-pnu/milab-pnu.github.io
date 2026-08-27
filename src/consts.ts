@@ -33,6 +33,14 @@ export function withBase(path: string): string {
   return `${base}/${path.replace(/^\/+/, "")}`;
 }
 
+/** 외부 프로필 링크 url 로 아이콘 종류 판별 (Icon.astro 의 name) */
+export function iconFor(url: string): "scholar" | "linkedin" | "github" | "link" {
+  if (/scholar\.google\./.test(url)) return "scholar";
+  if (/linkedin\.com/.test(url)) return "linkedin";
+  if (/github\.com/.test(url)) return "github";
+  return "link";
+}
+
 /** 현재 경로가 nav 항목과 일치하는지(활성 표시용) */
 export function isActive(currentPath: string, href: string): boolean {
   const base = import.meta.env.BASE_URL.replace(/\/+$/, "");

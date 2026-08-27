@@ -1,7 +1,7 @@
 // 아주 작은 BibTeX 파서 — 이 사이트가 쓰는 단순한 .bib 형식만 지원.
 // (src/data/*.bib 를 빌드 타임에 ?raw 로 읽어서 사용)
 
-export interface BibEntry {
+interface BibEntry {
   type: string;
   key: string;
   fields: Record<string, string>;
@@ -20,13 +20,12 @@ export interface Paper {
   venue: string;
   year: number;
   url?: string;
-  hasEqual: boolean;
 }
 
 // 연구실 PI 이름 (\underline 없이 들어오는 경우 대비)
 const ME = /jaehoon\s+oh/i;
 
-export function parseBibtex(src: string): BibEntry[] {
+function parseBibtex(src: string): BibEntry[] {
   // % 주석 줄 제거
   const text = src
     .split("\n")
@@ -164,7 +163,6 @@ export function bibToPapers(src: string): Paper[] {
       venue,
       year: Number(e.fields.year) || 0,
       url: e.fields.url || venueUrl,
-      hasEqual: authors.some((a) => a.equal),
     } satisfies Paper;
   });
 

@@ -1,21 +1,13 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import Icon from "./Icon.astro";
-import { withBase } from "../consts";
+import { withBase, iconFor } from "../consts";
 
 interface Props {
   member: CollectionEntry<"members">;
 }
 const { member } = Astro.props;
 const m = member.data;
-
-/** 외부 링크 url 로 아이콘 종류 판별 */
-function iconFor(url: string): "scholar" | "linkedin" | "github" | "link" {
-  if (/scholar\.google\./.test(url)) return "scholar";
-  if (/linkedin\.com/.test(url)) return "linkedin";
-  if (/github\.com/.test(url)) return "github";
-  return "link";
-}
 ---
 
 <li class="rounded-xl border border-slate-200 p-4">

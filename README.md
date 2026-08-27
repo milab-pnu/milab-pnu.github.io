@@ -20,7 +20,7 @@ npm run preview   # 빌드 결과 미리보기
 
 ```
 src/
-├── consts.ts              # 사이트 이름, 네비게이션, withBase() 링크 헬퍼
+├── consts.ts              # 사이트 정보(SITE), 네비게이션, withBase()/iconFor() 헬퍼
 ├── content.config.ts      # 콘텐츠 컬렉션 스키마 (news / members)
 ├── content/
 │   ├── news/              # 메인 "최신 뉴스" — md 1개 = 항목 1개

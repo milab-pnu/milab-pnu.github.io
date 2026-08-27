@@ -1,5 +1,5 @@
 import { defineCollection } from "astro:content";
-import { z } from "astro:schema";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
 // 메인 사이트 "최신 뉴스"
@@ -28,9 +28,8 @@ const members = defineCollection({
     homepage: z.string().optional(),
     // 외부 프로필 링크. url 로 아이콘 자동 판별(scholar/linkedin/github), 그 외는 일반 링크.
     links: z
-      .array(z.object({ label: z.string(), url: z.string().url() }))
+      .array(z.object({ label: z.string(), url: z.url() }))
       .default([]),
-    interests: z.array(z.string()).default([]),
     // professor 상세용. 한 줄 = 한 항목 (예: "Ph.D. in CS, KAIST (2018–2022)")
     education: z.array(z.string()).default([]),
     workHistory: z.array(z.string()).default([]),

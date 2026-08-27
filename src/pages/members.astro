@@ -4,19 +4,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import MemberCard from "../components/MemberCard.astro";
 import Icon from "../components/Icon.astro";
-import { withBase } from "../consts";
+import { withBase, iconFor } from "../consts";
 
 const members = (await getCollection("members")).sort(
   (a, b) => a.data.order - b.data.order,
 );
-
-/** 외부 링크 url 로 아이콘 종류 판별 */
-function iconFor(url: string): "scholar" | "linkedin" | "github" | "link" {
-  if (/scholar\.google\./.test(url)) return "scholar";
-  if (/linkedin\.com/.test(url)) return "linkedin";
-  if (/github\.com/.test(url)) return "github";
-  return "link";
-}
 
 const professor = members.find((m) => m.data.role === "professor");
 // 본문(마크다운)이 실제로 있을 때만 렌더 — 빈 본문이면 구분선만 남아서 제외
