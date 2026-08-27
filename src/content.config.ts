@@ -8,6 +8,8 @@ const news = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
+    // 같은 날짜 내 정렬용 (클수록 위)
+    order: z.number().default(0),
   }),
 });
 

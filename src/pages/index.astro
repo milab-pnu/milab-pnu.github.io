@@ -4,7 +4,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE, withBase } from "../consts";
 
 const news = (await getCollection("news")).sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+  (a, b) =>
+    b.data.date.getTime() - a.data.date.getTime() ||
+    b.data.order - a.data.order,
 );
 
 const fmt = (d: Date) =>
@@ -35,8 +37,11 @@ const applyFormUrl = "https://forms.gle/";
     <h2 class="text-xl font-bold text-slate-900">구성원 모집</h2>
     <p class="mt-3 leading-relaxed text-slate-600">
       멀티모달 인공지능 연구에 관심있는 학부생과 대학원생의 지원을 환영합니다.
-      <a class="text-indigo-600 underline" href={labIntroUrl} target="_blank" rel="noopener">연구실 소개 자료</a>를
-      읽고 <a class="text-indigo-600 underline" href={applyFormUrl} target="_blank" rel="noopener">지원서</a>로 지원하세요.
+      <a class="text-indigo-600 underline" href={labIntroUrl} target="_blank" rel="noopener">[연구실 소개 자료]</a>
+      <a class="text-indigo-600 underline" href={applyFormUrl} target="_blank" rel="noopener">[지원서]</a>
+    </p>
+    <p class="mt-3 text-sm font-medium text-slate-500">
+      현재는 신규 구성원을 모집하고 있지 않습니다.
     </p>
   </section>
 
