@@ -1,4 +1,5 @@
 ---
+photo: "/members/professor.jpg"
 name: "오재훈"
 nameEn: "Jaehoon Oh"
 role: "professor"
