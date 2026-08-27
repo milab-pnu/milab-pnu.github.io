@@ -29,5 +29,8 @@ pnpm-debug.log*
 # local working handoff doc
 /HANDOFF.md
 
+# 브레인스토밍 컴패니언 목업 (superpowers)
+.superpowers/
+
 # 강의 콘텐츠 (별도 repo → scripts/sync-lectures.mjs 가 clone). lectures.config.json 만 커밋됨
 /lectures/
