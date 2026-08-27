@@ -128,7 +128,7 @@ JS 표현식으로 해석되니 주의 (인라인 `$...$` 수식 안의 `{}` 는
 
 | 컴포넌트 | 용법 | 비고 |
 |---|---|---|
-| `<Sidenote>…</Sidenote>` | 본문 옆 우측 여백 주석 | 자동 번호. 좁은 화면은 인라인. **설명 전용 — 인용은 `<Cite>`** |
+| `<Sidenote>…</Sidenote>` | 본문 옆 우측 여백 주석 | **문장 끝에 붙여 쓴다**(`…한다.<Sidenote>…</Sidenote>`) — 단독 줄에 두면 본문 위첨자 번호가 허공에 뜬다. 자동 번호. 좁은 화면은 인라인. 설명 전용 — 인용은 `<Cite>` |
 | `<Figure src alt caption? source? wide? hero? />` | 그림 + 캡션 + 출처 | `alt` 필수. `source` 로 출처 표기 필수. `wide`=본문보다 넓게, `hero`=최상단 전체 폭 |
 | `<Video src caption? />` | YouTube/Vimeo 임베드 | URL 파싱 → nocookie iframe. **그 외 URL 은 빌드 실패** |
 | `<Callout type="intuition"\|"warning"\|"example"\|"note">…</Callout>` | 강조 박스 | 라벨: 직관/주의/예시/노트 |
