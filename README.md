@@ -139,9 +139,12 @@ lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안
 
 ### 강의 자료 수정 (평소)
 
-강의 repo(예: `2026f-advanced-deep-learning`)를 클론해서 `course.md` 를 고치고 `git push`.
-그 repo 의 `.github/workflows/notify.yml` 이 메인 사이트 재배포를 트리거 → 1~2분 뒤 반영.
-로컬 미리보기는 `.\dev.ps1` (시작 시 sync 가 최신을 당겨옴).
+강의 repo(예: `2026f-advanced-deep-learning`)를 **일반 `git clone`** 해서 `course.md` 를
+고치고 `git push`. 그 repo 의 `.github/workflows/notify.yml` 이 메인 사이트 재배포를
+트리거 → 1~2분 뒤 반영. 로컬 미리보기는 이 repo 에서 `.\dev.ps1` (시작 시 sync 가 최신을 당겨옴).
+
+> 이 repo 의 `lectures/<slug>/` 폴더에서 직접 커밋하지 말 것 — sync 스크립트가
+> 덮어쓰는 빌드 입력물이다. 편집은 항상 강의 repo 를 따로 클론해서.
 
 `course.md` frontmatter: `title`, `titleEn?`, `term`("2026 Fall"), `semester`("2026-02",
 정렬용), `instructor?`, `schedule?`, `location?`, `credits?`, `summary`, `weeks?`

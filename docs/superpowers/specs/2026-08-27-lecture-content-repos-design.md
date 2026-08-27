@@ -2,10 +2,14 @@
 
 작성: 2026-08-27 · 관련: `~/.claude/plans/wise-roaming-stroustrup.md` (원래 계획, 서브모듈안 → 폐기)
 
-**구현 상태 (2026-08-27):** step 1·2·4 완료 — 스캐폴딩 + 강의 repo 2개 생성 +
-매니페스트 등록 + 배포. 라이브: `/milab/lecture/2026f-advanced-deep-learning`,
-`…/2026f-applied-data-science`. **남은 것: step 3 (PAT `MILAB_DEPLOY_TOKEN`)** — 없으면
-강의 repo push 시 자동 재배포가 안 됨(수동 버튼은 됨). 강의 repo notify.yml 은 이미 배치됨.
+**구현 상태 (2026-08-27):** 1차 전부 완료. 스캐폴딩 + 강의 repo 2개(public) +
+매니페스트 + PAT secret(`MILAB_DEPLOY_TOKEN`, 두 강의 repo에) + 배포.
+라이브: `/milab/lecture/2026f-advanced-deep-learning`, `…/2026f-applied-data-science`.
+E2E 검증됨: course.md 수정 → push → notify.yml(success) → milab 배포 → ~2분 뒤 반영.
+
+**편집 워크플로 주의:** 강의 자료를 고칠 땐 강의 repo 를 **일반 `git clone`** 해서
+작업한다. 메인 repo 의 `lectures/<slug>/` 는 sync 스크립트가 detached HEAD 로 checkout 한
+빌드 입력물이라 여기서 커밋/push 하면 안 됨(다음 sync 때 덮어씀).
 
 ## 목표
 
