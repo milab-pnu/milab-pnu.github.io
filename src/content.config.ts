@@ -29,6 +29,9 @@ const members = defineCollection({
       .array(z.object({ label: z.string(), url: z.string().url() }))
       .default([]),
     interests: z.array(z.string()).default([]),
+    // professor 상세용. 한 줄 = 한 항목 (예: "Ph.D. in CS, KAIST (2018–2022)")
+    education: z.array(z.string()).default([]),
+    workHistory: z.array(z.string()).default([]),
     order: z.number().default(99),
   }),
 });

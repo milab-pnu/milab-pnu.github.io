@@ -13,6 +13,12 @@ interests:
   - "머신러닝"
   - "최적화"
   - "신뢰 가능한 AI"
+education:
+  - "Ph.D. in ○○○, ○○ University (20XX–20XX)"
+  - "B.S. in ○○○, ○○ University (20XX–20XX)"
+workHistory:
+  - "Assistant Professor, Graduate School of Data Science, Pusan National University (2025–현재)"
+  - "○○○, ○○○ (20XX–20XX)"
 order: 0
 ---
 
