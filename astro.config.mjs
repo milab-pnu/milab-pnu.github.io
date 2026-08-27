@@ -28,6 +28,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   markdown: {
+    // 코드블록 하이라이팅 끔: Shiki 는 토큰마다 인라인 style= 로 색을 넣는데
+    // 엄격 CSP(style-src 'self') 가 그걸 막아 색이 조용히 죽는다(KaTeX 와 같은 문제).
+    // 무채색 사이트라 색 자체도 불필요 — 플레인 <pre><code> 로 두고 global.css 로 스타일.
+    syntaxHighlight: false,
     processor,
   },
 });

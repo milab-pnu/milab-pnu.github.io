@@ -146,7 +146,6 @@ cd pnu/milab-pnu
 - 강의 repo 커밋 트레일러:
   ```
   Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
-  Claude-Session: https://claude.ai/code/session_0175x6f7dc55oD22q3wcrynt
   ```
 
 ## 노하우 기록

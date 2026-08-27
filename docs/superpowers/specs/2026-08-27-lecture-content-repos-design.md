@@ -149,6 +149,9 @@ package.json:
 
 ## 콘텐츠 스키마 (`courses` 컬렉션, `src/content.config.ts`)
 
+> 아래는 1차 작성 시점 스냅샷이다. **최신·정본은 `src/content.config.ts`**
+> (이후 `summary` 선택화, `weeks[].discussion` 추가 등 변경됨).
+
 ```ts
 const courses = defineCollection({
   loader: glob({ pattern: "*/course.md", base: "./lectures" }),
