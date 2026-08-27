@@ -166,7 +166,7 @@ lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안
 수식·코드블록 됨. **인터랙티브 위젯(JS)은 아직 안 됨** — 필요하면 React 재도입 + CSP 수정.
 
 주차별 토론: 강의 repo 의 **Discussions** 탭을 쓴다. 스레드를 하나 만들고
-(`gh discussion create -R jaehoonoh-pnu/<slug> --category "Q&A" --title "Week N — ..."`)
+(`gh discussion create -R jaehoonoh-pnu/<slug> --category "Q&A" --title "N주차 토론"`)
 그 번호를 `course.md` `weeks[].discussion` 에 적으면 표에 "토론 ↗" 링크가 생긴다.
 
 #### 주의점
