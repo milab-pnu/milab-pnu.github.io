@@ -1,44 +1,58 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHeader from "../../components/PageHeader.astro";
+import { withBase } from "../../consts";
 
-// Phase 1: 정적 목록.
-// Phase 2 에서 `courses` 컬렉션(강의별 git submodule)으로 대체하고 각 강의를
-// /lecture/<slug> 페이지로 링크한다. 상세 설계는 plan 파일 참고.
-const semesters: {
-  label: string;
-  courses: { title: string; titleEn: string; href?: string }[];
-}[] = [
-  {
-    label: "2026 Fall",
-    courses: [
-      { title: "고급딥러닝", titleEn: "Advanced Deep Learning" },
-      { title: "데이터사이언스 응용", titleEn: "Applied Data Science" },
-    ],
-  },
-];
+// courses 컬렉션(강의별 git repo)을 학기 내림차순으로 그룹핑.
+// slug = 엔트리 id 의 첫 경로 세그먼트 (lectures/<slug>/course.md).
+const courses = (await getCollection("courses")).map((c) => ({
+  ...c,
+  slug: c.id.split("/")[0],
+}));
+
+const bySemester = new Map<string, typeof courses>();
+for (const c of courses) {
+  const arr = bySemester.get(c.data.semester) ?? [];
+  arr.push(c);
+  bySemester.set(c.data.semester, arr);
+}
+
+const groups = [...bySemester.entries()]
+  .sort((a, b) => b[0].localeCompare(a[0]))
+  .map(([semester, list]) => ({
+    label: list[0].data.term || semester,
+    list: [...list].sort((a, b) =>
+      a.data.title.localeCompare(b.data.title, "ko"),
+    ),
+  }));
 ---
 
 <BaseLayout title="Lecture" description="MI Lab 강의">
   <PageHeader title="Lecture" subtitle="Click a title to open the lecture." />
 
+  {groups.length === 0 && <p class="text-slate-500">준비 중입니다.</p>}
+
   {
-    semesters.map((s) => (
+    groups.map((g) => (
       <section class="mb-8">
-        <h2 class="mb-3 text-sm font-semibold text-slate-500">{s.label}</h2>
-        <ul class="space-y-2">
-          {s.courses.map((c) => (
+        <h2 class="mb-3 text-sm font-semibold text-slate-500">{g.label}</h2>
+        <ul class="space-y-3">
+          {g.list.map((c) => (
             <li class="border-l-2 border-slate-200 pl-4">
-              {c.href ? (
-                <a class="font-medium text-slate-900 hover:underline" href={c.href}>
-                  {c.title}
-                  <span class="ml-1.5 font-normal text-slate-500">{c.titleEn}</span>
-                </a>
-              ) : (
-                <span class="font-medium text-slate-900">
-                  {c.title}
-                  <span class="ml-1.5 font-normal text-slate-500">{c.titleEn}</span>
-                </span>
+              <a
+                class="font-medium text-slate-900 hover:underline"
+                href={withBase(`/lecture/${c.slug}`)}
+              >
+                {c.data.title}
+                {c.data.titleEn && (
+                  <span class="ml-1.5 font-normal text-slate-500">
+                    {c.data.titleEn}
+                  </span>
+                )}
+              </a>
+              {c.data.summary && (
+                <p class="mt-0.5 text-sm text-slate-600">{c.data.summary}</p>
               )}
             </li>
           ))}

@@ -21,15 +21,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        # Phase 2(강의 submodule) 도입 시 아래 주석 해제:
-        # with:
-        #   submodules: recursive
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
+      # npm run build 의 prebuild 훅이 scripts/sync-lectures.mjs 를 실행해
+      # lectures.config.json 의 강의 repo 들을 lectures/ 로 clone 한다 (공개 repo, 토큰 불필요).
       - run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

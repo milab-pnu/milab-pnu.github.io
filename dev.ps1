@@ -25,6 +25,7 @@ $url = 'http://localhost:4321/milab'
 
 switch ($Command) {
   'start' {
+    node scripts/sync-lectures.mjs
     npx astro dev --background
     Write-Host ""
     Write-Host "  개발 서버: $url" -ForegroundColor Green
@@ -41,6 +42,7 @@ switch ($Command) {
   }
   'restart' {
     npx astro dev stop
+    node scripts/sync-lectures.mjs
     npx astro dev --background
     Write-Host ""
     Write-Host "  개발 서버 재시작: $url" -ForegroundColor Green

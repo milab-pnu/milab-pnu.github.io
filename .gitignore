@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # local working handoff doc
 /HANDOFF.md
+
+# 강의 콘텐츠 (별도 repo → scripts/sync-lectures.mjs 가 clone). lectures.config.json 만 커밋됨
+/lectures/

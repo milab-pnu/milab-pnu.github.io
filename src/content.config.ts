@@ -37,6 +37,34 @@ const members = defineCollection({
   }),
 });
 
+// 강의 — 강의마다 별도 repo (콘텐츠 전용). scripts/sync-lectures.mjs 가
+// lectures.config.json 에 적힌 repo 들을 lectures/<slug>/ 로 clone 해두면 여기서 스캔.
+// lectures/ 가 비어 있어도(등록된 강의 0개) 빌드는 정상. 상세: docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md
+const courses = defineCollection({
+  loader: glob({ pattern: "*/course.md", base: "./lectures" }),
+  schema: z.object({
+    title: z.string(), // 고급딥러닝
+    titleEn: z.string().optional(), // Advanced Deep Learning
+    term: z.string(), // "2026 Fall" — 표시용
+    semester: z.string(), // "2026-02" — 정렬·그룹핑용 (YYYY-SS)
+    instructor: z.string().optional(),
+    schedule: z.string().optional(), // "월/수 15:00–16:15"
+    location: z.string().optional(),
+    credits: z.number().optional(),
+    summary: z.string(), // 목록 페이지 한 줄 소개
+    // 강의 계획 표. 지금은 주제만, 나중에 주차 노트가 생기면 행에 slug 를 붙여 링크
+    weeks: z
+      .array(
+        z.object({
+          n: z.number(),
+          topic: z.string(),
+          date: z.string().optional(),
+        }),
+      )
+      .default([]),
+  }),
+});
+
 // 논문은 content collection 대신 src/data/*.bib 를 빌드 타임에 파싱 (src/lib/bibtex.ts)
 
-export const collections = { news, members };
+export const collections = { news, members, courses };
