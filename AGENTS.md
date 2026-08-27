@@ -16,8 +16,12 @@ Convenience wrappers: `.\dev.ps1 [start|stop|status|logs|restart]` or the
 Lecture pages come from **separate GitHub repos** (one per course), not this repo.
 `lectures.config.json` lists them; `scripts/sync-lectures.mjs` clones each into
 `lectures/<slug>/` (gitignored) before every build/dev via the `prebuild`/`predev`
-hooks (and `dev.ps1`). Not git submodules. To edit a course, work in its own repo.
-Design: `docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md`.
+hooks (and `dev.ps1`). Not git submodules. Never edit under `lectures/` — work in the
+course's own clone at `pnu/lectures/<semester>/<course>/`.
+
+- **Authoring rules (canonical):** `docs/lecture-authoring.md` — frontmatter schemas,
+  math/image conventions, new-course flow, gotchas. New lessons get written there.
+- **Design:** `docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md`.
 
 ## Documentation
 

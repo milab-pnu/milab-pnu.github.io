@@ -81,7 +81,9 @@ scripts/
 ├── new-lecture.ps1        # 새 강의 repo 생성·클론·스캐폴드 자동화
 └── lecture-template/      # 새 강의 골격 파일
 lectures/                  # sync-lectures 가 clone 하는 곳 (.gitignore — 커밋 안 됨)
-docs/superpowers/specs/    # 설계 문서
+docs/
+├── lecture-authoring.md   # 강의 자료 작성 규칙 (정본)
+└── superpowers/specs/     # 설계 문서
 ```
 
 ### 콘텐츠 수정 방법
@@ -138,111 +140,25 @@ docs/superpowers/specs/    # 설계 문서
 
 ## 강의 페이지
 
-강의 하나 = **독립 GitHub repo** (콘텐츠 전용, 빌드 도구 없음). 메인 repo 는
-`lectures.config.json` 목록만 갖고, 빌드 전에 `scripts/sync-lectures.mjs` 가 각 repo 를
-`lectures/<slug>/` 로 `git clone` 한다. **git submodule 이 아니다** (편집마다 포인터
-커밋이 필요한 마찰을 피함). 상세: `docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md`.
-
-### 작업 위치 — `pnu/lectures/<학기>/<과목>/`
-
-각 강의는 그 폴더에 **미리 클론**되어 있다 (`origin` = 해당 GitHub repo).
-강의 자료는 **항상 여기서** 만지고 `git push` 한다. `milab-pnu` 안의 `lectures/` 폴더는
-자동 빌드용이라 건드리지 않는다.
+강의 하나 = **독립 GitHub repo** (콘텐츠 전용). 이 repo 는 `lectures.config.json` 목록만
+갖고, 빌드 전 `scripts/sync-lectures.mjs` 가 각 repo 를 `lectures/<slug>/` 로 `git clone`
+한다 (`.gitignore` 됨). **git submodule 이 아니다** — 편집마다 포인터 커밋이 필요한 마찰을 피함.
 
 ```
 pnu/
-├── milab-pnu/                        # 사이트 코드 (이 repo)
-│   └── lectures/                     # 자동 clone (건드리지 말 것)
-└── lectures/                         # ← 여기서 작업
-    └── 2026-02/
-        ├── advanced_deep_learning/   # = github.com/jaehoonoh-pnu/2026f-advanced-deep-learning
-        └── applied_data_science/     # = github.com/jaehoonoh-pnu/2026f-applied-data-science
+├── milab-pnu/            # 이 repo (사이트 코드·빌드·배포)
+│   └── lectures/         # 자동 clone — 손대지 않음
+└── lectures/             # 강의 자료 작업 공간 (repo 아님, 폴더)
+    └── 2026-02/<과목>/   # 각각 강의 repo 의 클론
 ```
 
-### 강의 자료 수정 (평소)
+**배포 트리거**: 각 강의 repo 의 `.github/workflows/notify.yml` 이 push 시
+`gh workflow run deploy.yml -R jaehoonoh-pnu/milab` 을 실행 (secret `MILAB_DEPLOY_TOKEN`).
+`on.schedule` 없음. 수동 재배포는 milab → Actions → deploy → "Run workflow".
 
-`pnu/lectures/2026-02/advanced_deep_learning/` 에서 `course.md` 나 `weeks/*.md` 를 고치고
-`git push`. 그 repo 의 `.github/workflows/notify.yml` 이 메인 사이트 재배포를 트리거
-→ 1~2분 뒤 반영. 로컬 미리보기는 `milab-pnu` 에서 `.\dev.ps1`.
-
-강의 repo 구조:
-
-```
-<slug>/
-├── course.md          # 강의 첫 페이지 (개요 + Schedule 표) — MI Lab 사이트 크롬 있음
-└── weeks/             # 주차별 강의노트 — 파일 1개 = 웹페이지 1개
-    ├── 01-intro.md
-    ├── 01b-setup.md   # 같은 주차에 여러 개 가능
-    ├── 02-optim.md
-    └── assets/        # 노트에 넣을 이미지 (상대경로로 참조)
-        └── diagram.png
-```
-
-강의 노트 페이지(`/lecture/<slug>/<노트>`)는 **사이트 네비/푸터 없는 독립 문서**로 렌더된다
-(읽기 중심, 맨 아래에 "← 전체 일정" 링크만). 강의 첫 페이지(`course.md`)는 사이트 크롬 있음.
-
-`course.md` frontmatter: `title`, `titleEn?`, `term`("2026 Fall"), `semester`("2026-02",
-정렬용), `instructor?`, `schedule?`, `location?`, `credits?`, `summary?`(검색엔진용 메타
-설명, 화면엔 안 보임), `weeks?` — 강의 계획 표. 각 항목:
-`{ n: 주차번호, topic: "주제", date?: "2026-09-01", discussion?: 3 }`.
-`discussion` = 그 강의 repo 의 GitHub Discussion 번호(주차별 토론 스레드).
-본문(마크다운)은 Goals 등으로 표시, 수식 `$…$` 가능.
-
-`weeks/*.md` (또는 `.mdx`) frontmatter: `title`, `week`(숫자 — `course.md` 의 `n` 과 매칭),
-`order?`(같은 주차 내 정렬). 본문은 그 노트 페이지가 되고 Schedule 표 "강의자료" 컬럼에
-링크된다. 코드블록·수식 됨.
-
-**수식**: 인라인 `$...$`, 디스플레이는 `$$` 를 **각각 별도 줄**에 둔다:
-```
-$$
-\int_0^1 x^2\,dx = \tfrac13
-$$
-```
-(한 줄에 `$$...$$` 로 쓰면 인라인으로 나옴 — remark-math 규칙). 빌드 때 MathML 로
-렌더되어 브라우저가 그린다(KaTeX JS·CSS 런타임 불필요).
-
-**이미지 / 로딩**: `weeks/assets/` 에 이미지를 두고 `![설명](./assets/그림.png)` 로 참조하면
-빌드 때 자동으로 **WebP 변환 + 크기 지정 + `loading="lazy"`** 처리된다 (원본은 적당한
-해상도로, 수천 px 짜리는 미리 줄여서). 각 노트는 독립 정적 HTML 이라 방문할 때만 로드된다.
-슬라이드 PDF·데이터셋처럼 큰 파일은 페이지에 심지 말고 링크로.
-**인터랙티브 위젯(JS)** 은 아직 안 됨 — 필요하면 `.mdx` + React 재도입 + CSP 수정.
-
-주차별 토론: 강의 repo 의 **Discussions** 탭을 쓴다. 스레드를 하나 만들고
-(`gh discussion create -R jaehoonoh-pnu/<slug> --category "Q&A" --title "N주차 토론"`)
-그 번호를 `course.md` `weeks[].discussion` 에 적으면 표에 "토론 ↗" 링크가 생긴다.
-
-#### 주의점
-
-- **`milab-pnu/lectures/` 폴더에서 직접 커밋하지 말 것.** sync 스크립트가 매번
-  덮어쓰는(detached HEAD) 빌드 입력물이다. 편집은 `pnu/lectures/<학기>/<과목>/` 에서.
-- `MILAB_DEPLOY_TOKEN` PAT 이 **만료되면 자동 재배포가 조용히 멈춘다.** 그럴 땐
-  milab → Actions → deploy → "Run workflow" 로 수동 배포하거나 PAT 재발급(아래).
-- 드물게 **자동 배포가 "성공"인데 사이트에 반영이 안 될 때**가 있다(GitHub Pages 퍼블리시
-  일시 실패). 같은 "Run workflow" 버튼으로 한 번 더 돌리면 된다.
-- `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론될 폴더명 = URL
-  경로(`/lecture/<slug>`) 로 그대로 쓰인다.
-- 강의 repo 는 **public** 이어야 한다(빌드 시 토큰 없이 clone). private 로 하려면 sync
-  단계에 토큰이 추가로 필요하다.
-
-### 새 강의 추가
-
-스크립트 하나로 repo 생성 · 작업 폴더 클론 · 스캐폴드 · Discussions · secret 을 처리한다:
-
-```powershell
-# milab-pnu 에서 실행
-.\scripts\new-lecture.ps1 -Slug 2027s-machine-learning `
-    -Path ..\lectures\2027-01\machine_learning `
-    -Pat github_pat_xxxxx          # 생략하면 secret 만 수동
-```
-
-그다음 스크립트가 안내하는 2가지만:
-
-1. `pnu/lectures/2027-01/machine_learning/course.md` 를 실제 내용으로 채우고 `git push`
-2. `milab-pnu/lectures.config.json` 에 스크립트가 출력한 한 줄 추가 → 커밋 · push
-
-수동으로 하려면: repo 생성(`gh repo create … --public`) → `scripts/lecture-template/` 파일
-복사(`notify.yml`, `.gitattributes`, `course.md`) → 커밋·push → `gh repo edit … --enable-discussions`
-→ `gh secret set MILAB_DEPLOY_TOKEN -R …` → `lectures.config.json` 에 항목 추가.
+> **강의 자료 작성 방법 · frontmatter 스키마 · 수식/이미지 규칙 · 새 강의 추가 · 함정**
+> → `docs/lecture-authoring.md` (강의 작성 규칙의 정본).
+> 상세 설계: `docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md`.
 
 ### 재배포 트리거용 PAT (`MILAB_DEPLOY_TOKEN`)
 
