@@ -1,0 +1,48 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+const pubs = (await getCollection("publications")).sort(
+  (a, b) => b.data.year - a.data.year || a.data.title.localeCompare(b.data.title),
+);
+
+const years = [...new Set(pubs.map((p) => p.data.year))].sort((a, b) => b - a);
+---
+
+<BaseLayout title="Publication" description="MI Lab 논문 목록">
+  <PageHeader title="Publication" subtitle="논문" />
+
+  {
+    years.map((year) => (
+      <section class="mb-10">
+        <h2 class="mb-3 text-lg font-bold text-slate-900">{year}</h2>
+        <ul class="space-y-4">
+          {pubs
+            .filter((p) => p.data.year === year)
+            .map((p) => (
+              <li class="border-l-2 border-slate-200 pl-4">
+                <p class="font-medium text-slate-900">{p.data.title}</p>
+                <p class="mt-0.5 text-sm text-slate-600">{p.data.authors}</p>
+                <p class="mt-0.5 text-sm italic text-slate-500">{p.data.venue}</p>
+                {p.data.links.length > 0 && (
+                  <p class="mt-1 flex flex-wrap gap-3 text-xs">
+                    {p.data.links.map((l) => (
+                      <a
+                        class="text-indigo-600 underline"
+                        href={l.url}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        {l.label}
+                      </a>
+                    ))}
+                  </p>
+                )}
+              </li>
+            ))}
+        </ul>
+      </section>
+    ))
+  }
+</BaseLayout>

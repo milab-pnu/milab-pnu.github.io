@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+// TODO: 실제 수행 과제로 교체. (필요하면 content collection 으로 분리)
+const projects = [
+  {
+    title: "예시 과제 1",
+    agency: "한국연구재단",
+    period: "2025.03 – 2028.02",
+    role: "주관",
+  },
+  {
+    title: "예시 과제 2",
+    agency: "정보통신기획평가원",
+    period: "2024.06 – 2026.05",
+    role: "공동",
+  },
+];
+---
+
+<BaseLayout title="Project" description="MI Lab 연구 과제">
+  <PageHeader title="Project" subtitle="연구 과제" />
+
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[36rem] border-collapse text-sm">
+      <thead>
+        <tr class="border-b border-slate-300 text-left text-slate-500">
+          <th class="py-2 pr-4 font-medium">과제명</th>
+          <th class="py-2 pr-4 font-medium">지원기관</th>
+          <th class="py-2 pr-4 font-medium">기간</th>
+          <th class="py-2 font-medium">구분</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          projects.map((p) => (
+            <tr class="border-b border-slate-200">
+              <td class="py-3 pr-4 text-slate-800">{p.title}</td>
+              <td class="py-3 pr-4 text-slate-600">{p.agency}</td>
+              <td class="py-3 pr-4 tabular-nums text-slate-600">{p.period}</td>
+              <td class="py-3 text-slate-600">{p.role}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</BaseLayout>

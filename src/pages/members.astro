@@ -1,0 +1,88 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import { withBase } from "../consts";
+
+const members = (await getCollection("members")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const GROUPS: { key: string; label: string; roles: string[] }[] = [
+  { key: "faculty", label: "지도교수", roles: ["professor"] },
+  { key: "researcher", label: "연구원", roles: ["postdoc"] },
+  { key: "grad", label: "대학원생", roles: ["phd", "ms"] },
+  { key: "undergrad", label: "학부생", roles: ["undergrad"] },
+  { key: "alumni", label: "졸업생", roles: ["alumni"] },
+];
+---
+
+<BaseLayout title="Members" description="MI Lab 구성원">
+  <PageHeader title="Members" subtitle="연구실 구성원" />
+
+  {
+    GROUPS.map((group) => {
+      const list = members.filter((m) => group.roles.includes(m.data.role));
+      if (list.length === 0) return null;
+      return (
+        <section class="mb-12">
+          <h2 class="mb-4 text-lg font-bold text-slate-900">{group.label}</h2>
+          <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((m) => (
+              <li class="rounded-xl border border-slate-200 p-4">
+                <div class="flex items-start gap-3">
+                  {m.data.photo ? (
+                    <img
+                      src={withBase(m.data.photo)}
+                      alt={m.data.name}
+                      class="h-14 w-14 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                      <span class="text-lg font-bold">{m.data.name.at(0)}</span>
+                    </div>
+                  )}
+                  <div class="min-w-0">
+                    <p class="font-semibold text-slate-900">
+                      {m.data.name}
+                      {m.data.nameEn && (
+                        <span class="ml-1 text-sm font-normal text-slate-400">
+                          {m.data.nameEn}
+                        </span>
+                      )}
+                    </p>
+                    {m.data.title && (
+                      <p class="text-sm text-slate-500">{m.data.title}</p>
+                    )}
+                    {m.data.interests.length > 0 && (
+                      <p class="mt-1 text-xs text-slate-500">
+                        {m.data.interests.join(" · ")}
+                      </p>
+                    )}
+                    <div class="mt-1 flex gap-2 text-xs">
+                      {m.data.email && (
+                        <a class="text-indigo-600 underline" href={`mailto:${m.data.email}`}>
+                          email
+                        </a>
+                      )}
+                      {m.data.homepage && (
+                        <a
+                          class="text-indigo-600 underline"
+                          href={m.data.homepage}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          homepage
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    })
+  }
+</BaseLayout>

@@ -1,0 +1,81 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE, withBase } from "../consts";
+
+const news = (await getCollection("news")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const fmt = (d: Date) =>
+  `${d.getFullYear()}. ${String(d.getMonth() + 1).padStart(2, "0")}. ${String(
+    d.getDate(),
+  ).padStart(2, "0")}`;
+---
+
+<BaseLayout>
+  <!-- Hero / Welcome -->
+  <section class="mb-16">
+    <p class="text-sm font-semibold uppercase tracking-wider text-indigo-600">
+      {SITE.org}
+    </p>
+    <h1 class="mt-2 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+      {SITE.fullName}
+    </h1>
+    <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
+      우리 연구실은 데이터 기반의 통찰을 바탕으로 <strong>신뢰 가능하고(trustworthy),
+      효율적이며(efficient), 강건한(robust)</strong> 인공지능 모델을 연구합니다.
+      <span class="text-slate-400">(소개 문구 예시 — 실제 내용으로 교체하세요.)</span>
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a
+        href={withBase("/research")}
+        class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"
+      >
+        연구 소개
+      </a>
+      <a
+        href={withBase("/publication")}
+        class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+      >
+        논문 보기
+      </a>
+    </div>
+  </section>
+
+  <!-- Recruitment -->
+  <section class="mb-16 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8">
+    <h2 class="text-xl font-bold text-slate-900">구성원 모집</h2>
+    <p class="mt-3 leading-relaxed text-slate-600">
+      인공지능/머신러닝 연구에 관심 있는 학부생과 대학원생의 지원을 환영합니다.
+      연구실 소개 자료와 지원서 링크를 이곳에 배치하세요. (모집 안내 예시)
+    </p>
+    <ul class="mt-4 space-y-1 text-sm text-slate-600">
+      <li>· 대학원생(석사/박사): 상시 모집</li>
+      <li>· 학부 인턴: 학기별 모집</li>
+      <li>· 문의: <a class="text-indigo-600 underline" href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+    </ul>
+  </section>
+
+  <!-- Latest News -->
+  <section>
+    <div class="mb-4 flex items-baseline justify-between">
+      <h2 class="text-xl font-bold text-slate-900">최신 뉴스</h2>
+    </div>
+    <ul class="divide-y divide-slate-200 border-y border-slate-200">
+      {
+        news.map((item) => (
+          <li class="flex flex-col gap-1 py-3 sm:flex-row sm:items-baseline sm:gap-4">
+            <time
+              datetime={item.data.date.toISOString()}
+              class="shrink-0 text-sm tabular-nums text-slate-400"
+            >
+              {fmt(item.data.date)}
+            </time>
+            <span class="text-slate-800">{item.data.title}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

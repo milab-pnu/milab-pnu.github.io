@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+
+// Phase 1: placeholder.
+// Phase 2 에서 `courses` 컬렉션(강의별 git submodule)을 학기 기준으로 그룹핑하여
+// 각 강의 페이지(/lecture/<slug>)로 링크한다. 상세 설계는 plan 파일 참고.
+---
+
+<BaseLayout title="Lecture" description="MI Lab 강의">
+  <PageHeader title="Lecture" subtitle="강의" />
+
+  <div class="prose-basic max-w-none">
+    <p>
+      학기별 강의 목록이 이곳에 표시됩니다. 강의를 클릭하면 해당 강의의 개요·공지·
+      주차별 자료·과제 페이지로 이동합니다.
+    </p>
+  </div>
+
+  <p class="mt-8 rounded-xl border border-dashed border-slate-300 p-10 text-center text-slate-400">
+    강의 페이지 준비 중입니다.
+  </p>
+</BaseLayout>
