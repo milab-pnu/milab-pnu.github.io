@@ -34,83 +34,81 @@ const GROUPS: { label: string; roles: string[] }[] = [
 
   {
     professor && (
-      <section class="mb-16">
+      <section class="mb-12">
         <h2 class="mb-4 text-lg font-bold text-slate-900">Professor</h2>
-        <div class="rounded-2xl border border-slate-200 p-6 sm:p-8">
-          <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
+        <div class="rounded-xl border border-slate-200 p-5 sm:p-6">
+          <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
             {professor.data.photo ? (
               <img
                 src={withBase(professor.data.photo)}
                 alt={professor.data.name}
-                class="h-32 w-32 shrink-0 rounded-2xl object-cover"
+                class="h-24 w-24 shrink-0 rounded-xl object-cover"
               />
             ) : (
-              <div class="flex h-32 w-32 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
-                <span class="text-3xl font-bold">{professor.data.name.at(0)}</span>
+              <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-400">
+                <span class="text-2xl font-bold">{professor.data.name.at(0)}</span>
               </div>
             )}
             <div class="min-w-0 flex-1">
-              <p class="text-2xl font-bold text-slate-900">
+              <p class="text-xl font-bold text-slate-900">
                 {professor.data.name}
                 {professor.data.nameEn && (
-                  <span class="ml-2 text-lg font-normal text-slate-400">
+                  <span class="ml-2 text-base font-normal text-slate-400">
                     {professor.data.nameEn}
                   </span>
                 )}
               </p>
               {professor.data.title && (
-                <p class="mt-1 text-slate-600">{professor.data.title}</p>
+                <p class="mt-1 text-sm text-slate-600">{professor.data.title}</p>
               )}
-              {professor.data.interests.length > 0 && (
-                <p class="mt-2 text-sm text-slate-500">
-                  {professor.data.interests.join(" · ")}
+              {professor.data.email && (
+                <p class="mt-1 text-sm">
+                  <a
+                    class="text-indigo-600 hover:underline"
+                    href={`mailto:${professor.data.email}`}
+                  >
+                    {professor.data.email}
+                  </a>
                 </p>
               )}
-              <div class="mt-3 flex items-center gap-3 text-slate-400">
-                {professor.data.email && (
-                  <a
-                    class="hover:text-indigo-600"
-                    href={`mailto:${professor.data.email}`}
-                    aria-label={`${professor.data.name} 이메일`}
-                  >
-                    <Icon name="mail" class="h-5 w-5" />
-                  </a>
-                )}
-                {professor.data.homepage && (
-                  <a
-                    class="hover:text-indigo-600"
-                    href={professor.data.homepage}
-                    target="_blank"
-                    rel="noopener"
-                    aria-label={`${professor.data.name} 홈페이지`}
-                  >
-                    <Icon name="link" class="h-5 w-5" />
-                  </a>
-                )}
-                {professor.data.links.map((l) => (
-                  <a
-                    class="hover:text-indigo-600"
-                    href={l.url}
-                    target="_blank"
-                    rel="noopener"
-                    aria-label={`${professor.data.name} ${l.label}`}
-                    title={l.label}
-                  >
-                    <Icon name={iconFor(l.url)} class="h-5 w-5" />
-                  </a>
-                ))}
-              </div>
+              {(professor.data.homepage || professor.data.links.length > 0) && (
+                <div class="mt-2 flex items-center gap-2.5 text-slate-400">
+                  {professor.data.homepage && (
+                    <a
+                      class="hover:text-indigo-600"
+                      href={professor.data.homepage}
+                      target="_blank"
+                      rel="noopener"
+                      aria-label={`${professor.data.name} 홈페이지`}
+                    >
+                      <Icon name="link" />
+                    </a>
+                  )}
+                  {professor.data.links.map((l) => (
+                    <a
+                      class="hover:text-indigo-600"
+                      href={l.url}
+                      target="_blank"
+                      rel="noopener"
+                      aria-label={`${professor.data.name} ${l.label}`}
+                      title={l.label}
+                    >
+                      <Icon name={iconFor(l.url)} />
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
           {ProfBody && (
-            <div class="prose-basic mt-6 max-w-none border-t border-slate-200 pt-6 text-slate-700">
+            <div class="prose-basic mt-5 max-w-none border-t border-slate-200 pt-5 text-slate-700">
               <ProfBody />
             </div>
           )}
 
           {professor.data.education.length > 0 && (
-            <div class="mt-6 border-t border-slate-200 pt-6">
+            <div class="mt-5 border-t border-slate-200 pt-5">
               <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500">
                 Education
               </h3>
@@ -123,7 +121,7 @@ const GROUPS: { label: string; roles: string[] }[] = [
           )}
 
           {professor.data.workHistory.length > 0 && (
-            <div class="mt-6 border-t border-slate-200 pt-6">
+            <div class="mt-5 border-t border-slate-200 pt-5">
               <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500">
                 Work History
               </h3>
@@ -142,15 +140,18 @@ const GROUPS: { label: string; roles: string[] }[] = [
   {
     GROUPS.map((group) => {
       const list = current.filter((m) => group.roles.includes(m.data.role));
-      if (list.length === 0) return null;
       return (
         <section class="mb-12">
           <h2 class="mb-4 text-lg font-bold text-slate-900">{group.label}</h2>
-          <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {list.map((m) => (
-              <MemberCard member={m} />
-            ))}
-          </ul>
+          {list.length > 0 ? (
+            <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {list.map((m) => (
+                <MemberCard member={m} />
+              ))}
+            </ul>
+          ) : (
+            <p class="text-sm text-slate-400">—</p>
+          )}
         </section>
       );
     })
