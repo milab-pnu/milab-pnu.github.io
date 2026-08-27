@@ -1,6 +1,25 @@
 ---
 import { getCollection, render } from "astro:content";
 import NoteLayout from "../../../layouts/NoteLayout.astro";
+import Sidenote from "../../../components/lecture/Sidenote.astro";
+import Figure from "../../../components/lecture/Figure.astro";
+import Video from "../../../components/lecture/Video.astro";
+import Callout from "../../../components/lecture/Callout.astro";
+import Details from "../../../components/lecture/Details.astro";
+import References from "../../../components/lecture/References.astro";
+import Cite from "../../../components/lecture/Cite.astro";
+
+// weeks/*.mdx 에서 import 없이 쓰는 컴포넌트 — 여기서 주입한다.
+// (계약: docs/lecture-authoring.md 의 "강의 노트 컴포넌트" 목록과 일치)
+const mdxComponents = {
+  Sidenote,
+  Figure,
+  Video,
+  Callout,
+  Details,
+  References,
+  Cite,
+};
 
 export async function getStaticPaths() {
   const [notes, courses] = await Promise.all([
@@ -24,7 +43,7 @@ export async function getStaticPaths() {
 }
 
 const { note, courseSlug, courseTitle } = Astro.props;
-const { Content } = await render(note);
+const { Content, headings } = await render(note);
 ---
 
 <NoteLayout
@@ -32,6 +51,7 @@ const { Content } = await render(note);
   courseTitle={courseTitle}
   courseSlug={courseSlug}
   week={note.data.week}
+  headings={headings}
 >
-  <Content />
+  <Content components={mdxComponents} />
 </NoteLayout>

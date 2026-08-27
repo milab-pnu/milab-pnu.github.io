@@ -1,8 +1,11 @@
 ---
-// 주차별 강의 노트 전용 레이아웃 — 사이트 네비/푸터 없음(강의 자료는 MI Lab 크롬 없이
-// 읽기 중심의 독립 문서로). 맨 아래에 강의 일정으로 돌아가는 작은 링크만.
+// 주차별 강의 노트 전용 레이아웃 — 사이트 네비/푸터 없음(읽기 중심 독립 문서).
+// 3구역: 좌측 스크롤 추적 목차 · 고정 폭 본문 · 우측 사이드노트 여백.
+// 강의 노트 경로에만 완화 CSP 를 적용한다 (외부 이미지·YouTube/Vimeo·번들 스크립트).
 import "../styles/global.css";
+import "../styles/lecture-note.css";
 import HeadMeta from "../components/HeadMeta.astro";
+import LectureNav from "../components/lecture/LectureNav.astro";
 import { withBase } from "../consts";
 
 interface Props {
@@ -10,10 +13,19 @@ interface Props {
   courseTitle: string;
   courseSlug: string;
   week: number;
+  headings: { depth: number; slug: string; text: string }[];
   description?: string;
 }
-const { title, courseTitle, courseSlug, week, description } = Astro.props;
+const { title, courseTitle, courseSlug, week, headings, description } =
+  Astro.props;
 const courseHref = withBase(`/lecture/${courseSlug}`);
+
+const NOTE_CSP =
+  "default-src 'self'; script-src 'self'; style-src 'self'; " +
+  "img-src 'self' https: data:; " +
+  "frame-src https://www.youtube-nocookie.com https://player.vimeo.com; " +
+  "media-src 'self' https:; font-src 'self' data:; " +
+  "base-uri 'none'; form-action 'none'; object-src 'none'";
 ---
 
 <!doctype html>
@@ -22,33 +34,24 @@ const courseHref = withBase(`/lecture/${courseSlug}`);
     <HeadMeta
       title={`${title} · ${courseTitle}`}
       description={description ?? `${courseTitle} — ${title}`}
+      csp={NOTE_CSP}
     />
   </head>
   <body class="bg-white text-slate-800">
-    <article class="mx-auto max-w-2xl px-6 py-14 sm:py-20">
-      <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">
-        Week {week}
-      </p>
-      <h1
-        class="mt-2 text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900"
-      >
-        {title}
-      </h1>
-
-      <div class="prose-lecture mt-10">
-        <slot />
+    <div class="lecture-shell">
+      <div class="lecture-shell__nav">
+        <LectureNav headings={headings} />
       </div>
-    </article>
-
-    <footer class="mx-auto max-w-2xl px-6 pb-20">
-      <div class="border-t border-slate-100 pt-6">
-        <a
-          class="text-sm text-slate-500 transition-colors hover:text-slate-900"
-          href={courseHref}
-        >
-          ← 전체 일정
-        </a>
-      </div>
-    </footer>
+      <article class="lecture-shell__main">
+        <p class="lecture-shell__kicker">Week {week}</p>
+        <h1 class="lecture-shell__title">{title}</h1>
+        <div class="prose-lecture">
+          <slot />
+        </div>
+        <footer class="lecture-shell__footer">
+          <a href={courseHref}>← 전체 일정</a>
+        </footer>
+      </article>
+    </div>
   </body>
 </html>

@@ -1,0 +1,31 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  source?: string;
+  wide?: boolean;
+  hero?: boolean;
+}
+const { src, alt, caption, source, wide = false, hero = false } = Astro.props;
+if (!src) throw new Error("<Figure>: src 필수");
+if (alt === undefined) throw new Error(`<Figure>: alt 필수 (src=${src})`);
+
+const cls = hero
+  ? "lecture-hero"
+  : wide
+    ? "lecture-figure lecture-figure--wide"
+    : "lecture-figure";
+---
+
+<figure class={cls}>
+  <img src={src} alt={alt} loading="lazy" decoding="async" />
+  {
+    (caption || source) && (
+      <figcaption>
+        {caption}
+        {source && <span class="lecture-figure__source"> (출처: {source})</span>}
+      </figcaption>
+    )
+  }
+</figure>

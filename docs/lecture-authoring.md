@@ -74,13 +74,17 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
 
 본문(마크다운)은 Goals / Prerequisites / Grading 등으로 표시된다.
 
-### `weeks/*.md` (또는 `.mdx`)
+### `weeks/*.md` 또는 `.mdx`
 
 | 키 | 필수 | 설명 |
 |---|---|---|
 | `title` | ✓ | 노트 제목 |
 | `week` | ✓ | 숫자. `course.md` 의 `weeks[].n` 과 매칭 → 계획표 "강의자료" 컬럼에 링크됨 |
 | `order` |  | 같은 주차 내 정렬 (기본 0) |
+
+컴포넌트(`<Figure>` 등, 아래 "강의 노트 컴포넌트")를 쓰려면 `.mdx`. 순수 마크다운이면
+`.md` 로 둬도 새 레이아웃(3구역·목차)은 그대로 적용된다. `.mdx` 에서는 텍스트의 `{` 가
+JS 표현식으로 해석되니 주의 (인라인 `$...$` 수식 안의 `{}` 는 무방).
 
 ## 수식
 
@@ -103,12 +107,38 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
 
 ## 이미지 / 로딩
 
-- `weeks/assets/` 에 두고 `![설명](./assets/그림.png)` 상대경로로 참조.
-- 빌드 때 자동으로 **WebP 변환 + width/height + `loading="lazy"`**.
-- 원본은 적당한 해상도로 (수천 px 짜리는 미리 줄여서).
+- **외부 이미지가 기본 수단이다.** `<Figure src="https://…" />` 로 논문·블로그의 그림을
+  직접 참조한다. 강의 노트 경로는 완화 CSP(`img-src https:`)라 외부 https 이미지가 뜬다.
+  `source` prop 으로 **출처를 반드시 표기**한다.
+- 상대경로 로컬 이미지(`./assets/그림.png`, `<Figure src="./assets/…" />`)도 쓸 수 있다.
+  Astro 콘텐츠 컬렉션의 상대경로 이미지는 자동 최적화(webp·크기·lazy)를 거친다.
+  **외부 URL 이미지는 최적화 없이 그대로 나간다** — 원본을 적당한 해상도로.
+- 설명·외부 그림으로 부족하면 **인라인 `<svg>` 다이어그램**을 직접 그린다(최후 수단).
+  CSP 상 `style=`·`<style>` 불가 → presentation 속성(`fill=`, `stroke=`, `font-size=`)만.
+  `01-transformers.mdx` 에 예시가 있다.
 - 슬라이드 PDF·데이터셋 등 **큰 파일은 페이지에 심지 말고 링크로**.
 - 각 노트는 독립 정적 HTML → 방문할 때만 로드. 페이지 하나가 너무 커지면 주차 노트를 쪼갠다.
-- **인터랙티브 위젯(JS)** 은 불가 (이유는 아래 "설계 배경").
+
+## 강의 노트 컴포넌트 (MDX)
+
+`weeks/*.mdx` (`.mdx` 확장자) 에서 **import 없이** 아래 컴포넌트를 태그로 쓴다.
+`src/pages/lecture/[course]/[note].astro` 가 `<Content components={…}>` 로 주입한다.
+`.mdx` 는 **`milab-pnu` 빌드를 통해서만** 제대로 렌더된다(단독으로 열면 안 됨).
+컴포넌트는 전부 `milab-pnu/src/components/lecture/` 에 있다.
+
+| 컴포넌트 | 용법 | 비고 |
+|---|---|---|
+| `<Sidenote>…</Sidenote>` | 본문 옆 우측 여백 주석 | 자동 번호. 좁은 화면은 인라인. **설명 전용 — 인용은 `<Cite>`** |
+| `<Figure src alt caption? source? wide? hero? />` | 그림 + 캡션 + 출처 | `alt` 필수. `source` 로 출처 표기 필수. `wide`=본문보다 넓게, `hero`=최상단 전체 폭 |
+| `<Video src caption? />` | YouTube/Vimeo 임베드 | URL 파싱 → nocookie iframe. **그 외 URL 은 빌드 실패** |
+| `<Callout type="intuition"\|"warning"\|"example"\|"note">…</Callout>` | 강조 박스 | 라벨: 직관/주의/예시/노트 |
+| `<Details summary="…">…</Details>` | 접이식 블록 | 긴 유도·보충. 네이티브 `<details>` |
+| `<Cite n={N} />` | 본문 인용 위첨자 `[N]` | 클릭 → 하단 참고문헌. **`items` 에 없는 N 은 빌드 검사 실패** |
+| `<References items={[{ id, text }]} />` | 노트 하단 참고문헌 목록 | 서지정보 완전하게. 지정된 절·페이지 명시 |
+
+- 좌측 목차는 `##`/`###` 마크다운 heading 에서 자동 생성된다. **heading 에 `$수식$`
+  을 넣지 않는다**(목차 텍스트가 깨짐) — 유니코드로.
+- 컴포넌트 목록을 바꾸면 `[note].astro` 의 주입 객체와 이 표를 함께 갱신한다.
 
 ## 주차별 토론
 
@@ -161,12 +191,21 @@ cd pnu/milab-pnu
 
 ## 건드리기 전에 알아야 할 설계 배경
 
-사이트가 **엄격 CSP**(`style-src 'self'`, `script-src 'none'`)로 돌아서, 인라인
-`style=` 이나 런타임 JS 를 쓰는 렌더링은 조용히 깨진다. 아래는 그 때문에 내려진 결정이라
-되돌리면 안 된다:
+사이트 대부분이 **엄격 CSP**(`style-src 'self'`, `script-src 'none'`, `img-src 'self'`)로
+돌아서, 인라인 `style=` 이나 런타임 JS·외부 자원을 쓰는 렌더링은 조용히 깨진다. 아래는
+그 때문에 내려진 결정이라 되돌리면 안 된다:
 
 - **수식 → MathML** (`astro.config.mjs`, `rehype-katex { output: 'mathml' }`). KaTeX 의
   기본 HTML 출력은 인라인 style 범벅이라 CSP 에 막힌다. HTML 출력으로 되돌리면 수식이 깨짐.
 - **코드블록 하이라이팅 꺼짐** (`markdown.syntaxHighlight: false`). Shiki 가 토큰마다
   인라인 `style=` 로 색을 넣어 CSP 에 막힌다 + 사이트는 무채색 방침. 켜지 않는다.
-- **인터랙티브 위젯(JS) 불가** — `script-src 'none'`. 필요하면 사이트 쪽 CSP·React 작업 선행.
+- **강의 노트 페이지(`/lecture/<course>/<note>`)만 완화 CSP.** `NoteLayout` 이
+  `HeadMeta` 의 `csp` prop 으로 넘긴다: `script-src 'self'`(번들 아닌 정적 파일
+  `public/lecture-nav.js` 목차 추적 스크립트 1개), `img-src https:`(외부 이미지),
+  `frame-src` = YouTube-nocookie·Vimeo(영상 임베드). 인라인 `<script>`·CDN 은 여전히
+  차단 — Astro 가 작은 모듈 스크립트를 HTML 에 인라인해버리므로 노트용 JS 는 `public/`
+  정적 파일로 두고 `<script is:inline src>` 로 부른다. 그 외 모든 페이지는 엄격 CSP.
+  설계: `docs/superpowers/specs/2026-08-28-lecture-note-presentation-layer-design.md`.
+- **빌드 검사** `scripts/check-lecture-notes.mjs` 가 `postbuild` 로 돌며 산출물에서
+  노트 페이지의 CSP·인라인 `style=`/`<script>`·인용 무결성을, 그 외 페이지의 엄격 CSP
+  유지를 확인한다. 테스트 프레임워크는 없다.

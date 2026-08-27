@@ -1,0 +1,18 @@
+---
+type CalloutType = "intuition" | "warning" | "example" | "note";
+interface Props {
+  type?: CalloutType;
+}
+const { type = "note" } = Astro.props;
+const LABELS: Record<CalloutType, string> = {
+  intuition: "직관",
+  warning: "주의",
+  example: "예시",
+  note: "노트",
+};
+---
+
+<div class={`callout callout--${type}`}>
+  <p class="callout__label">{LABELS[type]}</p>
+  <div class="callout__body"><slot /></div>
+</div>

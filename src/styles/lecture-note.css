@@ -1,0 +1,311 @@
+/* 강의 노트 전용 표현 계층. global.css 의 .prose-lecture 를 이 파일에서 확장한다.
+   인라인 style 금지(CSP) — 모든 규칙은 여기 또는 컴포넌트 <style>. */
+
+.lecture-shell {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 42rem);
+  gap: 3.5rem;
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 6rem;
+}
+.lecture-shell__nav {
+  position: relative;
+}
+.lecture-shell__main {
+  min-width: 0;
+  /* 우측 사이드노트 여백 */
+  padding-right: 13rem;
+}
+.lecture-shell__kicker {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #94a3b8;
+}
+.lecture-shell__title {
+  margin-top: 0.5rem;
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+}
+.lecture-shell .prose-lecture {
+  margin-top: 2.5rem;
+}
+.lecture-shell__footer {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f1f5f9;
+}
+.lecture-shell__footer a {
+  font-size: 0.875rem;
+  color: #64748b;
+  text-decoration: none;
+}
+.lecture-shell__footer a:hover {
+  color: #0f172a;
+}
+
+/* ── 좌측 네비게이터 ── */
+.lecture-nav {
+  position: sticky;
+  top: 3.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.lecture-nav__title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+.lecture-nav ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.lecture-nav__item {
+  margin: 0.35rem 0;
+}
+.lecture-nav__item--h3 {
+  padding-left: 0.75rem;
+}
+.lecture-nav a {
+  color: #64748b;
+  text-decoration: none;
+  display: block;
+  border-left: 2px solid transparent;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+}
+.lecture-nav a:hover {
+  color: #0f172a;
+}
+.lecture-nav a[aria-current="true"] {
+  color: #0f172a;
+  font-weight: 600;
+  border-left-color: #0f172a;
+}
+
+/* ── Figure / 대표 그림 ── */
+.lecture-hero {
+  margin: 0 -13rem 2.5rem -15.5rem;
+}
+.lecture-figure {
+  margin: 2.5rem 0;
+}
+.lecture-figure img,
+.lecture-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+/* 자작 인라인 SVG 다이어그램 */
+.lecture-figure svg,
+.prose-lecture > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.lecture-figure--wide {
+  margin-left: -6rem;
+  margin-right: -6rem;
+}
+.lecture-figure figcaption,
+.lecture-hero figcaption {
+  margin-top: 0.6rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+.lecture-figure__source {
+  color: #94a3b8;
+}
+
+/* ── Video ── */
+.lecture-video {
+  margin: 2.5rem 0;
+}
+.lecture-video__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #0f172a;
+}
+.lecture-video__frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.lecture-video figcaption {
+  margin-top: 0.6rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* ── Sidenote ── */
+.prose-lecture {
+  counter-reset: sidenote;
+}
+.sidenote {
+  float: right;
+  clear: right;
+  width: 11rem;
+  margin-right: -13rem;
+  margin-bottom: 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: #64748b;
+  border-left: 1px solid #e2e8f0;
+  padding-left: 0.75rem;
+}
+.sidenote::before {
+  counter-increment: sidenote;
+  content: counter(sidenote) ". ";
+  font-weight: 700;
+  color: #0f172a;
+}
+.sidenote > :first-child {
+  display: inline;
+  margin: 0;
+}
+.sidenote > :last-child {
+  margin-bottom: 0;
+}
+
+/* ── Callout ── */
+.callout {
+  margin: 1.75rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 3px solid #cbd5e1;
+  background: #f8fafc;
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+.callout__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin: 0 0 0.35rem;
+}
+.callout__body > :first-child {
+  margin-top: 0;
+}
+.callout__body > :last-child {
+  margin-bottom: 0;
+}
+.callout--warning {
+  border-left-color: #64748b;
+  background: #f1f5f9;
+}
+.callout--intuition {
+  border-left-color: #0f172a;
+}
+
+/* ── Details ── */
+.lecture-details {
+  margin: 1.75rem 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+.lecture-details > summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #334155;
+  padding: 0.4rem 0;
+}
+.lecture-details__body {
+  padding: 0.25rem 0 0.75rem;
+}
+.lecture-details__body > :first-child {
+  margin-top: 0;
+}
+
+/* ── Cite / References ── */
+.cite {
+  text-decoration: none;
+  color: #64748b;
+}
+.cite:hover {
+  color: #0f172a;
+}
+.cite sup {
+  font-size: 0.7em;
+}
+.lecture-refs-section {
+  margin-top: 3.5rem;
+}
+.lecture-refs {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #475569;
+  padding-left: 1.4rem;
+}
+.lecture-refs li {
+  margin: 0.5rem 0;
+  scroll-margin-top: 4rem;
+}
+.lecture-refs li:target {
+  background: #f1f5f9;
+  border-radius: 0.25rem;
+}
+
+/* ── 반응형 ── */
+@media (max-width: 1100px) {
+  .lecture-shell {
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 2.5rem;
+    max-width: 46rem;
+  }
+  .lecture-shell__main {
+    padding-right: 0;
+  }
+  .lecture-hero {
+    margin: 0 0 2.5rem;
+  }
+  .lecture-figure--wide {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .sidenote {
+    float: none;
+    width: auto;
+    margin: 1rem 0;
+    padding: 0.75rem 0 0.75rem 0.85rem;
+    border-left: 2px solid #cbd5e1;
+    background: #f8fafc;
+    border-radius: 0 0.25rem 0.25rem 0;
+  }
+  .sidenote > :first-child {
+    display: block;
+  }
+}
+@media (max-width: 768px) {
+  .lecture-shell {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 2rem;
+  }
+  .lecture-nav {
+    position: static;
+    margin-bottom: 2rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+}
