@@ -11,6 +11,14 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 Convenience wrappers: `.\dev.ps1 [start|stop|status|logs|restart]` or the
 `npm run dev:bg` / `dev:stop` / `dev:status` / `dev:logs` scripts. Dev server: http://localhost:4321/milab
 
+## Lecture content
+
+Lecture pages come from **separate GitHub repos** (one per course), not this repo.
+`lectures.config.json` lists them; `scripts/sync-lectures.mjs` clones each into
+`lectures/<slug>/` (gitignored) before every build/dev via the `prebuild`/`predev`
+hooks (and `dev.ps1`). Not git submodules. To edit a course, work in its own repo.
+Design: `docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md`.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

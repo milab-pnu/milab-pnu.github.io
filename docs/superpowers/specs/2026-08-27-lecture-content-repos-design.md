@@ -2,6 +2,11 @@
 
 작성: 2026-08-27 · 관련: `~/.claude/plans/wise-roaming-stroustrup.md` (원래 계획, 서브모듈안 → 폐기)
 
+**구현 상태 (2026-08-27):** step 1·2·4 완료 — 스캐폴딩 + 강의 repo 2개 생성 +
+매니페스트 등록 + 배포. 라이브: `/milab/lecture/2026f-advanced-deep-learning`,
+`…/2026f-applied-data-science`. **남은 것: step 3 (PAT `MILAB_DEPLOY_TOKEN`)** — 없으면
+강의 repo push 시 자동 재배포가 안 됨(수동 버튼은 됨). 강의 repo notify.yml 은 이미 배치됨.
+
 ## 목표
 
 강의 자료를 웹사이트 코드와 분리해 관리한다. **강의 하나 = 독립 GitHub repo (콘텐츠 전용).**

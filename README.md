@@ -62,7 +62,7 @@ npm run dev:logs     # 로그
 ```
 src/
 ├── consts.ts              # 사이트 정보(SITE), 네비게이션, withBase()/iconFor() 헬퍼
-├── content.config.ts      # 콘텐츠 컬렉션 스키마 (news / members)
+├── content.config.ts      # 콘텐츠 컬렉션 스키마 (news / members / courses)
 ├── content/
 │   ├── news/              # 메인 "최신 뉴스" — md 1개 = 항목 1개
 │   └── members/           # 구성원 — md 1개 = 1명 (frontmatter)
@@ -72,6 +72,10 @@ src/
 ├── components/            # Nav, Footer, PageHeader, MemberCard, MemberLinks,
 │                          #   ProfileList, PaperList, Icon
 └── pages/                 # index / members / alumni / project / paper / lecture / 404
+
+lectures.config.json       # 강의 repo 목록 [{ slug, repo, ref }]
+scripts/sync-lectures.mjs  # 위 목록의 repo 를 lectures/<slug>/ 로 clone (빌드 전 자동)
+lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안 됨)
 ```
 
 ### 콘텐츠 수정 방법
@@ -90,6 +94,7 @@ src/
   venue 는 `booktitle`(publication) / `journal`(preprint, `arXiv:xxxx` 또는 URL) 사용.
   - **링크**: 항목에 `url = {https://...}` 필드를 추가하면 제목이 그 주소로 링크됨
     (모든 항목 공통). 없으면 preprint 는 arXiv/OpenReview 주소를 자동 인식.
+- **강의**: 이 repo 가 아니라 강의별 repo 의 `course.md` 를 고친다 (아래 "강의 페이지").
 - 페이지 본문(과제 소개 문구 등)은 해당 `src/pages/*.astro` 파일에서 직접 편집.
 - 사이트 이름·이메일·연구실 정보는 `src/consts.ts` 의 `SITE` 객체.
 
@@ -125,8 +130,45 @@ src/
 필요한 것 요약: **① 서브도메인/DNS (학교 전산팀), ② nginx/Apache, ③ HTTPS 인증서,
 ④ (자동배포 시) 서버 SSH 접근**.
 
-## 강의 페이지 (Phase 2, 예정)
+## 강의 페이지
 
-강의별로 **별도 git 저장소**를 만들어 `lectures/<강의>` 에 git submodule 로 연결하고,
-이 저장소에서 한 번에 빌드·배포한다. `/lecture` 는 현재 placeholder.
-상세 설계는 계획 문서 참고.
+강의 하나 = **독립 GitHub repo** (콘텐츠 전용, 빌드 도구 없음). 메인 repo 는
+`lectures.config.json` 목록만 갖고, 빌드 전에 `scripts/sync-lectures.mjs` 가 각 repo 를
+`lectures/<slug>/` 로 `git clone` 한다. **git submodule 이 아니다** (편집마다 포인터
+커밋이 필요한 마찰을 피함). 상세: `docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md`.
+
+### 강의 자료 수정 (평소)
+
+강의 repo(예: `2026f-advanced-deep-learning`)를 클론해서 `course.md` 를 고치고 `git push`.
+그 repo 의 `.github/workflows/notify.yml` 이 메인 사이트 재배포를 트리거 → 1~2분 뒤 반영.
+로컬 미리보기는 `.\dev.ps1` (시작 시 sync 가 최신을 당겨옴).
+
+`course.md` frontmatter: `title`, `titleEn?`, `term`("2026 Fall"), `semester`("2026-02",
+정렬용), `instructor?`, `schedule?`, `location?`, `credits?`, `summary`, `weeks?`
+(`[{ n, topic, date? }]` — 강의 계획 표). 본문(마크다운)은 Goals 등으로 표시, 수식 `$…$` 가능.
+
+### 새 강의 추가
+
+1. 강의 repo 생성: `gh repo create jaehoonoh-pnu/<slug> --public`
+   (`slug` 예: `2027s-machine-learning` — 소문자·숫자·하이픈).
+2. `course.md` + 다른 강의 repo 의 `.github/workflows/notify.yml` 복사해서 커밋·push.
+3. 그 repo 에 secret `MILAB_DEPLOY_TOKEN` 등록 (아래 PAT).
+4. 이 repo `lectures.config.json` 에 `{ "slug", "repo", "ref": "main" }` 한 줄 추가 → push.
+
+### 재배포 트리거용 PAT (`MILAB_DEPLOY_TOKEN`)
+
+강의 repo 의 Action 이 이 repo 의 배포를 실행하려면 토큰이 필요하다.
+GitHub → Settings → Developer settings → **Fine-grained tokens** → Generate:
+
+- Repository access: **`milab` 만**
+- Permissions: **Actions → Read and write** (그 외 전부 No access)
+- 만료되면 트리거가 조용히 멈추므로 갱신 필요 (또는 무기한). 유출 시 피해 = 사이트 재빌드 실행뿐.
+
+발급한 `github_pat_…` 을 각 강의 repo 의 `MILAB_DEPLOY_TOKEN` secret 으로 등록
+(`gh secret set MILAB_DEPLOY_TOKEN -R jaehoonoh-pnu/<slug>`).
+
+### 오래된 강의
+
+`lectures.config.json` 항목은 그대로 두면 페이지도 유지된다. 콘텐츠를 고정하려면
+`"ref"` 를 `"main"` 대신 태그나 커밋 SHA 로 바꾼다. 목록에서 빼면 사이트에서 사라진다
+(repo 와 히스토리는 남음).
