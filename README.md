@@ -42,6 +42,21 @@ npm run dev:logs     # 로그
 > `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` 또는
 > `powershell -ExecutionPolicy Bypass -File .\dev.ps1 start`
 
+### 로컬 개발 서버 vs 공개 사이트
+
+이 둘은 완전히 별개다.
+
+| | 주소 | 누가 보나 | 언제 갱신 | 켜고 끄기 |
+|---|---|---|---|---|
+| **로컬 개발 서버** | `http://localhost:4321/milab` | 내 컴퓨터에서만 | 파일 저장 즉시 | 내가 `dev.ps1` 로 |
+| **공개 사이트** | `https://jaehoonoh-pnu.github.io/milab/` | 누구나 | `main` 에 push 시 자동 (~1분) | 안 함 — GitHub 가 계속 호스팅 |
+
+- 로컬 개발 서버는 **수정하면서 미리 보는 용도**다. 외부에서는 접속 못 한다.
+  안 켜도 공개 사이트는 정상 동작한다.
+- 공개 사이트는 GitHub Pages 가 **항상 켜 둔다**(무료, 관리 불필요). `git push` 하면
+  서버를 껐다 켜는 게 아니라 `.github/workflows/deploy.yml` 이 새로 빌드해 **파일만 교체**한다.
+- 나중에 학교 서버로 옮기면 그때는 그 서버가 항상 떠 있어야 한다(아래 "학교/연구실 서버로 이전").
+
 ## 구조
 
 ```
