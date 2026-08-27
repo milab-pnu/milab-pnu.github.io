@@ -2,11 +2,48 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHeader from "../../components/PageHeader.astro";
 
-// Phase 1: placeholder.
-// Phase 2 에서 `courses` 컬렉션(강의별 git submodule)을 학기 기준으로 그룹핑하여
-// 각 강의 페이지(/lecture/<slug>)로 링크한다. 상세 설계는 plan 파일 참고.
+// Phase 1: 정적 목록.
+// Phase 2 에서 `courses` 컬렉션(강의별 git submodule)으로 대체하고 각 강의를
+// /lecture/<slug> 페이지로 링크한다. 상세 설계는 plan 파일 참고.
+const semesters: {
+  label: string;
+  courses: { title: string; titleEn: string; href?: string }[];
+}[] = [
+  {
+    label: "2026-02",
+    courses: [
+      { title: "고급딥러닝", titleEn: "Advanced Deep Learning" },
+      { title: "데이터사이언스 응용", titleEn: "Applied Data Science" },
+    ],
+  },
+];
 ---
 
 <BaseLayout title="Lecture" description="MI Lab 강의">
   <PageHeader title="Lecture" subtitle="Click a title to open the lecture." />
+
+  {
+    semesters.map((s) => (
+      <section class="mb-8">
+        <h2 class="mb-3 text-sm font-semibold text-slate-400">{s.label}</h2>
+        <ul class="space-y-2">
+          {s.courses.map((c) => (
+            <li class="border-l-2 border-slate-200 pl-4">
+              {c.href ? (
+                <a class="font-medium text-slate-900 hover:underline" href={c.href}>
+                  {c.title}
+                  <span class="ml-1.5 font-normal text-slate-400">{c.titleEn}</span>
+                </a>
+              ) : (
+                <span class="font-medium text-slate-900">
+                  {c.title}
+                  <span class="ml-1.5 font-normal text-slate-400">{c.titleEn}</span>
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
 </BaseLayout>
