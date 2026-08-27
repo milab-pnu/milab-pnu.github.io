@@ -1,8 +1,9 @@
 ---
 import "../styles/global.css";
+import HeadMeta from "../components/HeadMeta.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
-import { SITE, withBase } from "../consts";
+import { SITE } from "../consts";
 
 interface Props {
   title?: string;
@@ -11,37 +12,12 @@ interface Props {
 
 const { title, description = SITE.description } = Astro.props;
 const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} — ${SITE.fullName}`;
-
-// 정규 URL (Astro.site + 현재 경로). site 미설정 시 생략.
-const canonical = Astro.site
-  ? new URL(Astro.url.pathname, Astro.site).href
-  : undefined;
 ---
 
 <!doctype html>
 <html lang="ko">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {/* 이 사이트는 런타임 JS·인라인 스타일이 전혀 없음 → 엄격 CSP.
-        GitHub Pages 는 HTTP 헤더를 못 넣어 meta 로 건다. 학교 nginx 로
-        옮기면 실제 헤더 + frame-ancestors 로 강화할 것. Phase 2 에서 JS 를
-        넣게 되면 script-src 를 수정. */}
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'"
-    />
-    <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
-    <link rel="icon" href={withBase("/favicon.ico")} sizes="any" />
-    <title>{pageTitle}</title>
-    <meta name="description" content={description} />
-    {canonical && <link rel="canonical" href={canonical} />}
-    <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    {canonical && <meta property="og:url" content={canonical} />}
+    <HeadMeta title={pageTitle} description={description} />
   </head>
   <body class="flex min-h-screen flex-col">
     <Nav />

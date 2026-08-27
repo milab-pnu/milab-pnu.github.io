@@ -82,6 +82,98 @@ a {
   margin: 1rem 0;
 }
 
+/* 강의 노트 본문 — 읽기 중심(블로그 글 형태). NoteLayout 전용, prose-basic 보다 크고 넉넉 */
+.prose-lecture {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #1e293b;
+}
+.prose-lecture > :first-child {
+  margin-top: 0;
+}
+.prose-lecture h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 2.75rem 0 0.75rem;
+}
+.prose-lecture h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 2rem 0 0.5rem;
+}
+.prose-lecture p {
+  margin: 1.15rem 0;
+}
+.prose-lecture ul,
+.prose-lecture ol {
+  margin: 1.15rem 0;
+  padding-left: 1.4rem;
+}
+.prose-lecture ul {
+  list-style: disc;
+}
+.prose-lecture ol {
+  list-style: decimal;
+}
+.prose-lecture li {
+  margin: 0.4rem 0;
+}
+.prose-lecture a {
+  color: #4f46e5;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.prose-lecture img {
+  display: block;
+  margin: 2rem auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+.prose-lecture figure {
+  margin: 2.5rem 0;
+}
+.prose-lecture figcaption {
+  margin-top: 0.6rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+.prose-lecture blockquote {
+  border-left: 3px solid #cbd5e1;
+  padding-left: 1.1rem;
+  color: #475569;
+  margin: 1.5rem 0;
+}
+.prose-lecture code {
+  background: #f1f5f9;
+  padding: 0.1em 0.35em;
+  border-radius: 0.25rem;
+  font-size: 0.88em;
+}
+.prose-lecture pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 1.1rem 1.25rem;
+  border-radius: 0.6rem;
+  overflow-x: auto;
+  margin: 1.75rem 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.prose-lecture pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+}
+.prose-lecture hr {
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+  margin: 2.75rem 0;
+}
+
 /* 수식이 가로로 넘칠 때 스크롤 */
 .katex-display {
   overflow-x: auto;

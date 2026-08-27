@@ -1,0 +1,35 @@
+---
+// <head> 공통 메타 — BaseLayout(사이트 크롬 있음)과 NoteLayout(강의 노트, 크롬 없음)이 공유.
+// CSP 는 여기 한 곳에서만 관리한다.
+import { withBase, SITE } from "../consts";
+
+interface Props {
+  title: string; // <title> 에 그대로 들어감
+  description?: string;
+}
+const { title, description = SITE.description } = Astro.props;
+
+const canonical = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : undefined;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+{/* 런타임 JS·인라인 스타일 전혀 없음 → 엄격 CSP. GitHub Pages 는 HTTP 헤더 불가 →
+    meta 로. nginx 이전 시 실제 헤더 + frame-ancestors 로 강화. JS 도입 시 script-src 수정. */}
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'"
+/>
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<meta name="generator" content={Astro.generator} />
+<link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+<link rel="icon" href={withBase("/favicon.ico")} sizes="any" />
+<title>{title}</title>
+<meta name="description" content={description} />
+{canonical && <link rel="canonical" href={canonical} />}
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+{canonical && <meta property="og:url" content={canonical} />}
