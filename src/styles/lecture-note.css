@@ -106,6 +106,15 @@
   height: auto;
   border-radius: 0.5rem;
 }
+/* 자작 인라인 SVG 다이어그램 */
+.lecture-figure svg,
+.prose-lecture > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
 .lecture-figure--wide {
   margin-left: -6rem;
   margin-right: -6rem;
