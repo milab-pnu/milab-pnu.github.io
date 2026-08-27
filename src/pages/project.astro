@@ -2,19 +2,22 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 
-// TODO: 실제 수행 과제로 교체. (필요하면 content collection 으로 분리)
-const projects = [
+// TODO: 실제 수행 과제로 교체. (과제가 늘어나면 content collection 으로 분리)
+//  - title:  과제명
+//  - period: 수행 기간
+//  - host:   주체 (지원기관 / 주관기관 등)
+//  - desc:   설명
+const projects: {
+  title: string;
+  period: string;
+  host: string;
+  desc: string;
+}[] = [
   {
-    title: "예시 과제 1",
-    agency: "한국연구재단",
-    period: "2025.03 – 2028.02",
-    role: "주관",
-  },
-  {
-    title: "예시 과제 2",
-    agency: "정보통신기획평가원",
-    period: "2024.06 – 2026.05",
-    role: "공동",
+    title: "멀티모달 파운데이션 모델의 신뢰성 향상을 위한 학습 기법 연구 (예시)",
+    period: "2026.09 – 2029.08",
+    host: "한국연구재단 (개인기초연구)",
+    desc: "이미지·텍스트·음성을 함께 다루는 멀티모달 파운데이션 모델이 편향되거나 잘못된 출력을 내지 않도록, 데이터 이질성과 분포 변화에 강건한 사전학습·정렬 기법을 연구한다. (예시 과제이며 실제 내용으로 교체 예정)",
   },
 ];
 ---
@@ -22,28 +25,26 @@ const projects = [
 <BaseLayout title="Project" description="MI Lab 연구 과제">
   <PageHeader title="Project" />
 
-  <div class="overflow-x-auto">
-    <table class="w-full min-w-[36rem] border-collapse text-sm">
-      <thead>
-        <tr class="border-b border-slate-300 text-left text-slate-500">
-          <th class="py-2 pr-4 font-medium">과제명</th>
-          <th class="py-2 pr-4 font-medium">지원기관</th>
-          <th class="py-2 pr-4 font-medium">기간</th>
-          <th class="py-2 font-medium">구분</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          projects.map((p) => (
-            <tr class="border-b border-slate-200">
-              <td class="py-3 pr-4 text-slate-800">{p.title}</td>
-              <td class="py-3 pr-4 text-slate-600">{p.agency}</td>
-              <td class="py-3 pr-4 tabular-nums text-slate-600">{p.period}</td>
-              <td class="py-3 text-slate-600">{p.role}</td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
-  </div>
+  <ul class="space-y-5">
+    {
+      projects.map((p) => (
+        <li class="rounded-xl border border-slate-200 p-5 sm:p-6">
+          <h2 class="text-base font-bold text-slate-900">{p.title}</h2>
+          <dl class="mt-3 space-y-1 text-sm">
+            <div class="flex gap-2">
+              <dt class="w-14 shrink-0 font-medium text-slate-500">기간</dt>
+              <dd class="tabular-nums text-slate-700">{p.period}</dd>
+            </div>
+            <div class="flex gap-2">
+              <dt class="w-14 shrink-0 font-medium text-slate-500">주체</dt>
+              <dd class="text-slate-700">{p.host}</dd>
+            </div>
+          </dl>
+          <p class="mt-3 border-t border-slate-100 pt-3 text-sm leading-relaxed text-slate-600">
+            {p.desc}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
 </BaseLayout>
