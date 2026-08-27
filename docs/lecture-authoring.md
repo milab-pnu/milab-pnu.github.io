@@ -27,9 +27,14 @@ pnu/
 
 ```sh
 cd pnu/lectures/2026-02/advanced_deep_learning
-# course.md 또는 weeks/*.md 수정
-git add -A && git commit -m "..." && git push
+# course.md 또는 weeks/*.md 수정 → 빌드·검사 통과 확인 → 커밋
+git add -A && git commit -m "..."
+# push 는 사용자에게 "푸쉬할까요?" 물어보고 승인받은 뒤
+git push
 ```
+
+**push 는 매번 확인받는다** (과목 repo·`milab-pnu` 둘 다). 커밋은 자유롭게 쌓고,
+push 만 사용자 승인 게이트. 여러 커밋을 모아 한 번에 물어봐도 된다.
 
 push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 트리거 → **1~2분 뒤 반영**.
 로컬 미리보기: `cd pnu/milab-pnu && ./dev.ps1` → http://localhost:4321/milab

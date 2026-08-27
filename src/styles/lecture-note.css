@@ -137,6 +137,22 @@
   color: #94a3b8;
 }
 
+/* ── 디스플레이 수식 ($$…$$) ──
+   rehype-katex(mathml) 는 블록 수식을 <span class="katex"><math display="block">…
+   으로 내보내고, <p> 로 감싸지 않는다. 그래서 global.css 의 p:has(...) 가운데 정렬
+   규칙이 안 먹는다 → 여기서 span.katex 자체를 블록·가운데로. */
+.prose-lecture .katex:has(> math[display="block"]) {
+  display: block;
+  text-align: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 1.4rem 0;
+}
+.prose-lecture math[display="block"] {
+  display: inline-block;
+  text-align: left; /* 수식 내부 정렬은 기본값 유지 */
+}
+
 /* ── Video ── */
 .lecture-video {
   margin: 2.5rem 0;
