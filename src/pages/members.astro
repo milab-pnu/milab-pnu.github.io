@@ -113,9 +113,14 @@ const GROUPS: { label: string; roles: string[] }[] = [
                 Education
               </h3>
               <ul class="mt-2 space-y-1 text-sm text-slate-700">
-                {professor.data.education.map((e) => (
-                  <li>{e}</li>
-                ))}
+                {professor.data.education.map((e) => {
+                  const depth = e.length - e.trimStart().length;
+                  return (
+                    <li style={depth ? `margin-left:${depth * 0.75}em` : undefined}>
+                      {e.trimStart()}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}
@@ -126,9 +131,14 @@ const GROUPS: { label: string; roles: string[] }[] = [
                 Work History
               </h3>
               <ul class="mt-2 space-y-1 text-sm text-slate-700">
-                {professor.data.workHistory.map((w) => (
-                  <li>{w}</li>
-                ))}
+                {professor.data.workHistory.map((w) => {
+                  const depth = w.length - w.trimStart().length;
+                  return (
+                    <li style={depth ? `margin-left:${depth * 0.75}em` : undefined}>
+                      {w.trimStart()}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}
