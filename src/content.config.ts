@@ -52,20 +52,32 @@ const courses = defineCollection({
     location: z.string().optional(),
     credits: z.number().optional(),
     summary: z.string().optional(), // <meta description> 용. 화면엔 표시 안 함
-    // 강의 계획 표. url 은 그 주차 강의자료 링크 (슬라이드 PDF·노션 등 외부 주소)
+    // 강의 계획 표. 강의자료(웹 노트)는 weeks/*.md 가 각자 week 번호로 연결됨.
+    // discussion 은 그 강의 repo 의 GitHub Discussion 번호 (주차별 토론 스레드).
     weeks: z
       .array(
         z.object({
           n: z.number(),
           topic: z.string(),
           date: z.string().optional(),
-          url: z.string().optional(),
+          discussion: z.number().optional(),
         }),
       )
       .default([]),
   }),
 });
 
+// 주차별 강의 노트 — 각 강의 repo 의 weeks/*.md(x). 빌드되어 /lecture/<slug>/<noteSlug> 페이지가 됨.
+// frontmatter 의 week 번호로 course.md 의 Schedule 표 행에 연결된다.
+const lectureNotes = defineCollection({
+  loader: glob({ pattern: "*/weeks/*.{md,mdx}", base: "./lectures" }),
+  schema: z.object({
+    title: z.string(),
+    week: z.number(),
+    order: z.number().default(0), // 같은 주차에 노트 여러 개일 때 정렬
+  }),
+});
+
 // 논문은 content collection 대신 src/data/*.bib 를 빌드 타임에 파싱 (src/lib/bibtex.ts)
 
-export const collections = { news, members, courses };
+export const collections = { news, members, courses, lectureNotes };

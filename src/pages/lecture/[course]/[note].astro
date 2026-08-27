@@ -1,0 +1,56 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { withBase } from "../../../consts";
+
+export async function getStaticPaths() {
+  const [notes, courses] = await Promise.all([
+    getCollection("lectureNotes"),
+    getCollection("courses"),
+  ]);
+  return notes.map((note) => {
+    const parts = note.id.split("/");
+    const courseSlug = parts[0];
+    const noteSlug = parts.slice(2).join("/");
+    const course = courses.find((c) => c.id.split("/")[0] === courseSlug);
+    return {
+      params: { course: courseSlug, note: noteSlug },
+      props: {
+        note,
+        courseSlug,
+        courseTitle: course?.data.title ?? courseSlug,
+      },
+    };
+  });
+}
+
+const { note, courseSlug, courseTitle } = Astro.props;
+const { Content } = await render(note);
+---
+
+<BaseLayout
+  title={`${note.data.title} · ${courseTitle}`}
+  description={`${courseTitle} — ${note.data.title}`}
+>
+  <div class="mb-8">
+    <a
+      class="text-sm text-indigo-600 hover:underline"
+      href={withBase(`/lecture/${courseSlug}`)}
+    >
+      ← {courseTitle}
+    </a>
+  </div>
+
+  <header class="mb-8 border-b border-slate-200 pb-5">
+    <p class="text-sm font-semibold uppercase tracking-wider text-slate-500">
+      Week {note.data.week}
+    </p>
+    <h1 class="mt-1 text-3xl font-extrabold tracking-tight text-slate-900">
+      {note.data.title}
+    </h1>
+  </header>
+
+  <div class="prose-basic max-w-none text-slate-700">
+    <Content />
+  </div>
+</BaseLayout>

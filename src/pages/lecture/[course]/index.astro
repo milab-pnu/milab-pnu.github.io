@@ -1,0 +1,180 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { withBase } from "../../../consts";
+import lecturesConfig from "../../../../lectures.config.json";
+
+export async function getStaticPaths() {
+  const courses = await getCollection("courses");
+  return courses.map((entry) => ({
+    params: { course: entry.id.split("/")[0] },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+const slug = entry.id.split("/")[0];
+const { Content } = await render(entry);
+const hasBody = (entry.body?.trim().length ?? 0) > 0;
+
+// 헤더 개요 줄 — 있는 값만
+const meta = [
+  d.term,
+  d.credits != null ? `${d.credits}학점` : null,
+  d.instructor,
+].filter(Boolean);
+
+const weeks = [...d.weeks].sort((a, b) => a.n - b.n);
+const showDate = weeks.some((w) => w.date);
+
+// 이 강의의 주차 노트 → week 번호별로 묶기
+const notes = (await getCollection("lectureNotes")).filter(
+  (n) => n.id.split("/")[0] === slug,
+);
+const notesByWeek = new Map<number, typeof notes>();
+for (const n of notes.sort(
+  (a, b) => a.data.week - b.data.week || a.data.order - b.data.order,
+)) {
+  const arr = notesByWeek.get(n.data.week) ?? [];
+  arr.push(n);
+  notesByWeek.set(n.data.week, arr);
+}
+const noteSlugOf = (id: string) => id.split("/").slice(2).join("/");
+
+// 토론 링크 베이스 = 강의 repo 의 GitHub Discussions
+const repoUrl = lecturesConfig.find((c) => c.slug === slug)?.repo ?? "";
+const discussionsBase = repoUrl
+  ? `${repoUrl.replace(/\.git$/, "")}/discussions`
+  : null;
+const showLinks = notes.length > 0 || weeks.some((w) => w.discussion != null);
+---
+
+<BaseLayout title={d.title} description={d.summary || `${d.title} 강의`}>
+  <div class="mb-8">
+    <a class="text-sm text-indigo-600 hover:underline" href={withBase("/lecture")}>
+      ← Lecture
+    </a>
+  </div>
+
+  <header class="mb-8 border-b border-slate-200 pb-5">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+      {d.titleEn || d.title}
+    </h1>
+    {d.titleEn && <p class="mt-1 text-lg text-slate-500">{d.title}</p>}
+
+    <dl class="mt-4 space-y-1 text-base text-slate-600">
+      {
+        meta.length > 0 && (
+          <div class="flex gap-2">
+            <dt class="sr-only">개요</dt>
+            <dd>{meta.join(" · ")}</dd>
+          </div>
+        )
+      }
+      {
+        d.schedule && (
+          <div class="flex gap-2">
+            <dt class="w-12 shrink-0 font-medium text-slate-500">시간</dt>
+            <dd>{d.schedule}</dd>
+          </div>
+        )
+      }
+      {
+        d.location && (
+          <div class="flex gap-2">
+            <dt class="w-12 shrink-0 font-medium text-slate-500">장소</dt>
+            <dd>{d.location}</dd>
+          </div>
+        )
+      }
+    </dl>
+  </header>
+
+  {
+    hasBody && (
+      <div class="prose-basic max-w-none text-slate-700">
+        <Content />
+      </div>
+    )
+  }
+
+  {
+    weeks.length > 0 && (
+      <section class="mt-8">
+        <h2 class="mb-3 text-[1.375rem] font-bold text-slate-700">Schedule</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-base">
+            <thead>
+              <tr class="border-b border-slate-300 text-sm text-slate-500">
+                <th class="py-2.5 pr-4 font-semibold">주차</th>
+                {showDate && <th class="py-2.5 pr-4 font-semibold">날짜</th>}
+                <th class="py-2.5 pr-4 font-semibold">주제</th>
+                {showLinks && (
+                  <th class="py-2.5 pr-4 font-semibold">강의자료</th>
+                )}
+                {showLinks && discussionsBase && (
+                  <th class="py-2.5 font-semibold">토론</th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {weeks.map((w) => {
+                const wkNotes = notesByWeek.get(w.n) ?? [];
+                return (
+                  <tr class="border-b border-slate-100 align-top">
+                    <td class="py-2.5 pr-4 tabular-nums text-slate-500">{w.n}</td>
+                    {showDate && (
+                      <td class="py-2.5 pr-4 tabular-nums text-slate-500">
+                        {w.date ?? ""}
+                      </td>
+                    )}
+                    <td class="py-2.5 pr-4 text-slate-800">{w.topic}</td>
+                    {showLinks && (
+                      <td class="py-2.5 pr-4">
+                        {wkNotes.length > 0 ? (
+                          <ul class="space-y-1">
+                            {wkNotes.map((note) => (
+                              <li>
+                                <a
+                                  class="text-indigo-600 hover:underline"
+                                  href={withBase(
+                                    `/lecture/${slug}/${noteSlugOf(note.id)}`,
+                                  )}
+                                >
+                                  {note.data.title}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span class="text-slate-300">—</span>
+                        )}
+                      </td>
+                    )}
+                    {showLinks && discussionsBase && (
+                      <td class="py-2.5">
+                        {w.discussion != null ? (
+                          <a
+                            class="text-indigo-600 hover:underline"
+                            href={`${discussionsBase}/${w.discussion}`}
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            토론 ↗
+                          </a>
+                        ) : (
+                          <span class="text-slate-300">—</span>
+                        )}
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
