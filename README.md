@@ -137,11 +137,27 @@ lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안
 `lectures/<slug>/` 로 `git clone` 한다. **git submodule 이 아니다** (편집마다 포인터
 커밋이 필요한 마찰을 피함). 상세: `docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md`.
 
+### 작업 위치 — `pnu/lectures/<학기>/<과목>/`
+
+각 강의는 그 폴더에 **미리 클론**되어 있다 (`origin` = 해당 GitHub repo).
+강의 자료는 **항상 여기서** 만지고 `git push` 한다. `milab-pnu` 안의 `lectures/` 폴더는
+자동 빌드용이라 건드리지 않는다.
+
+```
+pnu/
+├── milab-pnu/                        # 사이트 코드 (이 repo)
+│   └── lectures/                     # 자동 clone (건드리지 말 것)
+└── lectures/                         # ← 여기서 작업
+    └── 2026-02/
+        ├── advanced_deep_learning/   # = github.com/jaehoonoh-pnu/2026f-advanced-deep-learning
+        └── applied_data_science/     # = github.com/jaehoonoh-pnu/2026f-applied-data-science
+```
+
 ### 강의 자료 수정 (평소)
 
-강의 repo(예: `2026f-advanced-deep-learning`)를 **일반 `git clone`** 해서 `course.md` 를
-고치고 `git push`. 그 repo 의 `.github/workflows/notify.yml` 이 메인 사이트 재배포를
-트리거 → 1~2분 뒤 반영. 로컬 미리보기는 이 repo 에서 `.\dev.ps1` (시작 시 sync 가 최신을 당겨옴).
+`pnu/lectures/2026-02/advanced_deep_learning/` 에서 `course.md` 나 `weeks/*.md` 를 고치고
+`git push`. 그 repo 의 `.github/workflows/notify.yml` 이 메인 사이트 재배포를 트리거
+→ 1~2분 뒤 반영. 로컬 미리보기는 `milab-pnu` 에서 `.\dev.ps1`.
 
 강의 repo 구조:
 
@@ -171,8 +187,8 @@ lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안
 
 #### 주의점
 
-- **이 repo 의 `lectures/<slug>/` 폴더에서 직접 커밋하지 말 것.** sync 스크립트가
-  매번 덮어쓰는(detached HEAD) 빌드 입력물이다. 편집은 항상 강의 repo 를 따로 클론해서.
+- **`milab-pnu/lectures/` 폴더에서 직접 커밋하지 말 것.** sync 스크립트가 매번
+  덮어쓰는(detached HEAD) 빌드 입력물이다. 편집은 `pnu/lectures/<학기>/<과목>/` 에서.
 - `MILAB_DEPLOY_TOKEN` PAT 이 **만료되면 자동 재배포가 조용히 멈춘다.** 그럴 땐
   milab → Actions → deploy → "Run workflow" 로 수동 배포하거나 PAT 재발급(아래).
 - `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론될 폴더명 = URL
@@ -182,13 +198,23 @@ lectures/                  # ↑ 가 clone 하는 곳 (.gitignore — 커밋 안
 
 ### 새 강의 추가
 
-1. 강의 repo 생성: `gh repo create jaehoonoh-pnu/<slug> --public`
-   (`slug` 예: `2027s-machine-learning` — 소문자·숫자·하이픈).
-2. `course.md` + `weeks/` + 다른 강의 repo 의 `.github/workflows/notify.yml` /
-   `.gitattributes` 복사해서 커밋·push.
-3. `gh repo edit jaehoonoh-pnu/<slug> --enable-discussions` (주차별 토론용).
-4. 그 repo 에 secret `MILAB_DEPLOY_TOKEN` 등록 (아래 PAT).
-5. 이 repo `lectures.config.json` 에 `{ "slug", "repo", "ref": "main" }` 한 줄 추가 → push.
+스크립트 하나로 repo 생성 · 작업 폴더 클론 · 스캐폴드 · Discussions · secret 을 처리한다:
+
+```powershell
+# milab-pnu 에서 실행
+.\scripts\new-lecture.ps1 -Slug 2027s-machine-learning `
+    -Path ..\lectures\2027-01\machine_learning `
+    -Pat github_pat_xxxxx          # 생략하면 secret 만 수동
+```
+
+그다음 스크립트가 안내하는 2가지만:
+
+1. `pnu/lectures/2027-01/machine_learning/course.md` 를 실제 내용으로 채우고 `git push`
+2. `milab-pnu/lectures.config.json` 에 스크립트가 출력한 한 줄 추가 → 커밋 · push
+
+수동으로 하려면: repo 생성(`gh repo create … --public`) → `scripts/lecture-template/` 파일
+복사(`notify.yml`, `.gitattributes`, `course.md`) → 커밋·push → `gh repo edit … --enable-discussions`
+→ `gh secret set MILAB_DEPLOY_TOKEN -R …` → `lectures.config.json` 에 항목 추가.
 
 ### 재배포 트리거용 PAT (`MILAB_DEPLOY_TOKEN`)
 
