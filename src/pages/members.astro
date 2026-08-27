@@ -19,7 +19,11 @@ function iconFor(url: string): "scholar" | "linkedin" | "github" | "link" {
 }
 
 const professor = members.find((m) => m.data.role === "professor");
-const ProfBody = professor ? (await render(professor)).Content : null;
+// 본문(마크다운)이 실제로 있을 때만 렌더 — 빈 본문이면 구분선만 남아서 제외
+const ProfBody =
+  professor && professor.body?.trim()
+    ? (await render(professor)).Content
+    : null;
 
 const current = members.filter((m) => !m.data.alumni);
 const GROUPS: { label: string; roles: string[] }[] = [
@@ -35,7 +39,7 @@ const GROUPS: { label: string; roles: string[] }[] = [
   {
     professor && (
       <section class="mb-12">
-        <h2 class="mb-4 text-lg font-bold text-slate-900">Professor</h2>
+        <h2 class="mb-4 text-lg font-bold text-slate-900">Supervisor</h2>
         <div class="rounded-xl border border-slate-200 p-5 sm:p-6">
           <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
             {professor.data.photo ? (
@@ -109,7 +113,7 @@ const GROUPS: { label: string; roles: string[] }[] = [
 
           {professor.data.education.length > 0 && (
             <div class="mt-5 border-t border-slate-200 pt-5">
-              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-600">
                 Education
               </h3>
               <ul class="mt-2 space-y-1 text-sm text-slate-700">
@@ -127,7 +131,7 @@ const GROUPS: { label: string; roles: string[] }[] = [
 
           {professor.data.workHistory.length > 0 && (
             <div class="mt-5 border-t border-slate-200 pt-5">
-              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-600">
                 Work History
               </h3>
               <ul class="mt-2 space-y-1 text-sm text-slate-700">
