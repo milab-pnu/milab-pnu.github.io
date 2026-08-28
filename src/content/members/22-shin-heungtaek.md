@@ -1,4 +1,5 @@
 ---
+photo: "/members/shin-heungtaek.jpg"
 name: "신흥택"
 nameEn: "Heungtaek Shin"
 role: "ms"
