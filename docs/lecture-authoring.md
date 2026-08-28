@@ -195,6 +195,12 @@ gh discussion create -R jaehoonoh-pnu/<slug> --category "Q&A" --title "N주차 �
 — 그 번호를 `course.md` `weeks[].discussion` 에 적으면 계획표에 "토론 ↗" 링크가 생긴다.
 제목 규칙: `"N주차 토론"` (주제명 안 붙임).
 
+> **한 번에 몰아서 만들지 않는다.** `gh discussion create` 를 루프로 십수 개씩,
+> 더구나 여러 repo 에 걸쳐 몇 분 안에 돌리면 GitHub 어뷰징 탐지에 걸려 **계정이
+> 정지**된다(실제로 겪음 — 복구에 며칠, 그동안 push·Pages·gh 전부 차단). 스레드는
+> 필요할 때 1~2개씩, 몰아서 해야 하면 **웹 UI 에서 수동으로**, 또는 최소 수십 초
+> 간격을 두고 소량씩. 16주치를 미리 다 만들 필요도 없다 — 해당 주차 즈음에 만들면 된다.
+
 ## 새 강의 추가
 
 ```powershell
@@ -216,6 +222,8 @@ cd pnu/milab-pnu
 ## 주의점
 
 - **`milab-pnu/lectures/` 에서 커밋하지 않는다.** sync 가 매번 덮어쓰는 빌드 입력물이다.
+- **GitHub 쓰기 API 를 몰아서 호출하지 않는다** (예: `gh discussion create` 루프). 계정
+  정지로 이어진다 — "주차별 토론" 절 참고.
 - 배포가 "성공" 인데 사이트 반영이 안 되면 (드묾): milab → Actions → deploy → "Run workflow".
 - `MILAB_DEPLOY_TOKEN` PAT 만료 시 자동 배포가 조용히 멈춘다 → 수동 버튼 or 재발급.
 - `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론 폴더명 = URL 경로.
