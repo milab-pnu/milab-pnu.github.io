@@ -4,8 +4,7 @@
 강의 작성 관련 규칙의 정본이다.** 새로 알게 된 규칙·함정은 해당 절에 반영하고 커밋한다
 (맨 아래 "이 문서 관리" 참고).
 
-시스템이 어떻게 도는지(sync·CI·배포 메커니즘)는 `../README.md` 의 "강의 페이지" 절과
-`superpowers/specs/2026-08-27-lecture-content-repos-design.md` 참고.
+시스템이 어떻게 도는지(sync·CI·배포 메커니즘)는 `../README.md` 의 "강의 페이지" 절 참고.
 
 ## 작업 위치
 
@@ -241,7 +240,6 @@ cd pnu/milab-pnu
   `frame-src` = YouTube-nocookie·Vimeo(영상 임베드). 인라인 `<script>`·CDN 은 여전히
   차단 — Astro 가 작은 모듈 스크립트를 HTML 에 인라인해버리므로 노트용 JS 는 `public/`
   정적 파일로 두고 `<script is:inline src>` 로 부른다. 그 외 모든 페이지는 엄격 CSP.
-  설계: `docs/superpowers/specs/2026-08-28-lecture-note-presentation-layer-design.md`.
 - **빌드 검사** `scripts/check-lecture-notes.mjs` 가 `postbuild` 로 돌며 산출물에서
   노트 페이지의 CSP·인라인 `style=`/`<script>`·인용 무결성을, 그 외 페이지의 엄격 CSP
   유지를 확인한다. 테스트 프레임워크는 없다.

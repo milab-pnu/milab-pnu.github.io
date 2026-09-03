@@ -39,7 +39,7 @@ const members = defineCollection({
 
 // 강의 — 강의마다 별도 repo (콘텐츠 전용). scripts/sync-lectures.mjs 가
 // lectures.config.json 에 적힌 repo 들을 lectures/<slug>/ 로 clone 해두면 여기서 스캔.
-// lectures/ 가 비어 있어도(등록된 강의 0개) 빌드는 정상. 상세: docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md
+// lectures/ 가 비어 있어도(등록된 강의 0개) 빌드는 정상.
 const courses = defineCollection({
   loader: glob({ pattern: "*/course.md", base: "./lectures" }),
   schema: z.object({

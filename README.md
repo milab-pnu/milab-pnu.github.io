@@ -82,8 +82,7 @@ scripts/
 └── lecture-template/      # 새 강의 골격 파일
 lectures/                  # sync-lectures 가 clone 하는 곳 (.gitignore — 커밋 안 됨)
 docs/
-├── lecture-authoring.md   # 강의 자료 작성 규칙 (정본)
-└── superpowers/specs/     # 설계 문서
+└── lecture-authoring.md   # 강의 자료 작성 규칙 (정본)
 ```
 
 ### 콘텐츠 수정 방법
@@ -158,7 +157,6 @@ pnu/
 
 > **강의 자료 작성 방법 · frontmatter 스키마 · 수식/이미지 규칙 · 새 강의 추가 · 함정**
 > → `docs/lecture-authoring.md` (강의 작성 규칙의 정본).
-> 상세 설계: `docs/superpowers/specs/2026-08-27-lecture-content-repos-design.md`.
 
 ### 재배포 트리거용 PAT (`MILAB_DEPLOY_TOKEN`)
 
