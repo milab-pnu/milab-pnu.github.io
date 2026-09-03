@@ -2,7 +2,7 @@ name: notify milab
 
 # 이 repo 에 push 되면 메인 사이트(milab)의 배포를 트리거한다.
 # milab 이 빌드하면서 이 repo 의 최신 course.md / weeks/ 를 다시 clone 해 반영한다.
-# 필요한 secret: MILAB_DEPLOY_TOKEN (fine-grained PAT, repo=jaehoonoh-pnu/milab, Actions: read+write)
+# 필요한 secret: MILAB_DEPLOY_TOKEN (fine-grained PAT, repo=milab-pnu/milab-pnu.github.io, Actions: read+write)
 
 on:
   push:
@@ -12,6 +12,6 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - run: gh workflow run deploy.yml -R jaehoonoh-pnu/milab
+      - run: gh workflow run deploy.yml -R milab-pnu/milab-pnu.github.io
         env:
           GH_TOKEN: ${{ secrets.MILAB_DEPLOY_TOKEN }}

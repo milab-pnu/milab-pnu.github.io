@@ -43,7 +43,7 @@
 ## 콘텐츠 repo ↔ 사이트 계약
 
 - 편집·커밋·push 는 **과목 repo** 에서 한다: 작업 클론 `pnu/lectures/2026-02/<folder>/`
-  (GitHub `jaehoonoh-pnu/<slug>`, `lectures.config.json`). 예: folder `advanced_deep_learning`
+  (GitHub `milab-pnu/<slug>`, `lectures.config.json`). 예: folder `advanced_deep_learning`
   ↔ slug `2026f-advanced-deep-learning`.
 - 빌드 때 `sync-lectures.mjs` 가 각 repo 를 `milab-pnu/lectures/<slug>/` 로 `--depth 1`
   clone(detached HEAD) → 컬렉션이 `./lectures/*/weeks/*.{md,mdx}` 로 스캔 → 라우트

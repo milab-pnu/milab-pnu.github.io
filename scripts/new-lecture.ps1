@@ -20,7 +20,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
-$owner = 'jaehoonoh-pnu'
+$owner = 'milab-pnu'
 $repo = "$owner/$Slug"
 $root = Split-Path $PSScriptRoot -Parent            # milab-pnu/
 $tpl = Join-Path $PSScriptRoot 'lecture-template'
@@ -46,7 +46,7 @@ Copy-Item (Join-Path $tpl 'notify.yml')     (Join-Path $work '.github\workflows\
 Copy-Item (Join-Path $tpl '.gitattributes') (Join-Path $work '.gitattributes')
 Copy-Item (Join-Path $tpl 'course.md')      (Join-Path $work 'course.md')
 Copy-Item (Join-Path $tpl 'week-note.md')   (Join-Path $work 'weeks\01-intro.md')
-"# $Slug`n`nMI Lab 강의 콘텐츠. course.md / weeks/*.md 수정 후 ``git push`` 하면 사이트 자동 반영.`nhttps://jaehoonoh-pnu.github.io/milab/lecture/$Slug`n" |
+"# $Slug`n`nMI Lab 강의 콘텐츠. course.md / weeks/*.md 수정 후 ``git push`` 하면 사이트 자동 반영.`nhttps://milab-pnu.github.io/lecture/$Slug`n" |
   Set-Content -Encoding utf8 (Join-Path $work 'README.md')
 
 Push-Location $work

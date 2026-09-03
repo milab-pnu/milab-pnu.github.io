@@ -9,7 +9,7 @@ astro dev --background
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
 Convenience wrappers: `.\dev.ps1 [start|stop|status|logs|restart]` or the
-`npm run dev:bg` / `dev:stop` / `dev:status` / `dev:logs` scripts. Dev server: http://localhost:4321/milab
+`npm run dev:bg` / `dev:stop` / `dev:status` / `dev:logs` scripts. Dev server: http://localhost:4321/
 
 ## Lecture content
 

@@ -21,7 +21,7 @@ param(
 # 이 스크립트 위치를 기준으로 실행 (어디서 호출하든 동작)
 Set-Location -LiteralPath $PSScriptRoot
 
-$url = 'http://localhost:4321/milab'
+$url = 'http://localhost:4321/'
 
 switch ($Command) {
   'start' {
