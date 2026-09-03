@@ -2,7 +2,6 @@
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { withBase } from "../../../consts";
-import lecturesConfig from "../../../../lectures.config.json";
 
 export async function getStaticPaths() {
   const courses = await getCollection("courses");
@@ -42,12 +41,7 @@ for (const n of notes.sort(
 }
 const noteSlugOf = (id: string) => id.split("/").slice(2).join("/");
 
-// 토론 링크 베이스 = 강의 repo 의 GitHub Discussions
-const repoUrl = lecturesConfig.find((c) => c.slug === slug)?.repo ?? "";
-const discussionsBase = repoUrl
-  ? `${repoUrl.replace(/\.git$/, "")}/discussions`
-  : null;
-const showLinks = notes.length > 0 || weeks.some((w) => w.discussion != null);
+const showLinks = notes.length > 0;
 ---
 
 <BaseLayout title={d.title} description={d.summary || `${d.title} 강의`}>
@@ -107,9 +101,6 @@ const showLinks = notes.length > 0 || weeks.some((w) => w.discussion != null);
                 {showLinks && (
                   <th class="py-2.5 pr-4 font-semibold">강의자료</th>
                 )}
-                {showLinks && discussionsBase && (
-                  <th class="py-2.5 font-semibold">토론</th>
-                )}
               </tr>
             </thead>
             <tbody>
@@ -141,22 +132,6 @@ const showLinks = notes.length > 0 || weeks.some((w) => w.discussion != null);
                               </li>
                             ))}
                           </ul>
-                        ) : (
-                          <span class="text-slate-300">—</span>
-                        )}
-                      </td>
-                    )}
-                    {showLinks && discussionsBase && (
-                      <td class="py-2.5">
-                        {w.discussion != null ? (
-                          <a
-                            class="text-slate-900 underline decoration-slate-300 underline-offset-2 hover:decoration-slate-900"
-                            href={`${discussionsBase}/${w.discussion}`}
-                            target="_blank"
-                            rel="noopener"
-                          >
-                            토론 ↗
-                          </a>
                         ) : (
                           <span class="text-slate-300">—</span>
                         )}

@@ -53,14 +53,12 @@ const courses = defineCollection({
     credits: z.number().optional(),
     summary: z.string().optional(), // <meta description> 용. 화면엔 표시 안 함
     // 강의 계획 표. 강의자료(웹 노트)는 weeks/*.md 가 각자 week 번호로 연결됨.
-    // discussion 은 그 강의 repo 의 GitHub Discussion 번호 (주차별 토론 스레드).
     weeks: z
       .array(
         z.object({
           n: z.number(),
           topic: z.string(),
           date: z.string().optional(),
-          discussion: z.number().optional(),
         }),
       )
       .default([]),

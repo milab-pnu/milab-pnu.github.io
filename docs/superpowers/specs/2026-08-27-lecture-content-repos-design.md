@@ -4,7 +4,7 @@
 
 **구현 상태 (2026-08-27):** 1차 전부 완료. 스캐폴딩 + 강의 repo 2개(public) +
 매니페스트 + PAT secret(`MILAB_DEPLOY_TOKEN`, 두 강의 repo에) + 배포.
-라이브: `/milab/lecture/2026f-advanced-deep-learning`, `…/2026f-applied-data-science`.
+라이브: `/lecture/2026f-advanced-deep-learning`, `…/2026f-applied-data-science`.
 E2E 검증됨: course.md 수정 → push → notify.yml(success) → milab 배포 → ~2분 뒤 반영.
 
 **편집 워크플로 주의:** 강의 자료를 고칠 땐 강의 repo 를 **일반 `git clone`** 해서
@@ -52,11 +52,11 @@ E2E 검증됨: course.md 수정 → push → notify.yml(success) → milab 배�
 ### 강의 repo (신규, 콘텐츠 전용 — 빌드 도구 없음, 이름에 `milab-` 접두 없음)
 
 ```
-2026f-advanced-deep-learning/     (GitHub: jaehoonoh-pnu/…, public)
+2026f-advanced-deep-learning/     (GitHub: milab-pnu/…, public)
 ├── course.md
 └── .github/workflows/notify.yml  # push 시 milab repo 배포 트리거
 
-2026f-applied-data-science/       (GitHub: jaehoonoh-pnu/…, public)
+2026f-applied-data-science/       (GitHub: milab-pnu/…, public)
 ├── course.md
 └── .github/workflows/notify.yml
 ```
@@ -85,12 +85,12 @@ milab-pnu/
 [
   {
     "slug": "2026f-advanced-deep-learning",
-    "repo": "https://github.com/jaehoonoh-pnu/2026f-advanced-deep-learning.git",
+    "repo": "https://github.com/milab-pnu/2026f-advanced-deep-learning.git",
     "ref": "main"
   },
   {
     "slug": "2026f-applied-data-science",
-    "repo": "https://github.com/jaehoonoh-pnu/2026f-applied-data-science.git",
+    "repo": "https://github.com/milab-pnu/2026f-applied-data-science.git",
     "ref": "main"
   }
 ]
@@ -134,12 +134,12 @@ package.json:
      notify:
        runs-on: ubuntu-latest
        steps:
-         - run: gh workflow run deploy.yml -R jaehoonoh-pnu/milab
+         - run: gh workflow run deploy.yml -R milab-pnu/milab-pnu.github.io
            env:
              GH_TOKEN: ${{ secrets.MILAB_DEPLOY_TOKEN }}
    ```
    - `MILAB_DEPLOY_TOKEN` = fine-grained PAT.
-     - Resource owner: `jaehoonoh-pnu`, Repository access: **`milab` 하나만**
+     - Resource owner: `milab-pnu`, Repository access: **`milab-pnu.github.io` 하나만**
      - Permissions: **Actions → Read and write** 하나만 (그 외 전부 No access)
      - 만료: 1년 권장(달력에 갱신 알림) 또는 무기한. 유출 시 피해 = "정적 사이트 재빌드 실행"뿐.
      - 두 강의 repo 각각에 `MILAB_DEPLOY_TOKEN` 이름으로 secret 등록 (`gh secret set`).
@@ -227,11 +227,11 @@ on:
    (매니페스트에 없는 로컬 폴더 → sync 가 건드리지 않음). 확인 후 삭제.
 2. **강의 repo 2개 생성** — `gh repo create … --public`, 각각 `course.md` 초안 +
    `.github/workflows/notify.yml` 커밋·push.
-3. **PAT 발급** — fine-grained, repo = `jaehoonoh-pnu/milab`, 권한 = Actions: write.
+3. **PAT 발급** — fine-grained, repo = `milab-pnu/milab-pnu.github.io`, 권한 = Actions: write.
    두 강의 repo 에 `MILAB_DEPLOY_TOKEN` secret 으로 등록. (교수님이 발급 → 값 전달, 또는
    `gh secret set` 로 등록만 대행)
 4. **연결** — 로컬 `lectures/` 비우고 `npm run lectures:sync` → clone 확인 → `npm run build`.
-5. **배포** — 메인 커밋·push → Actions → `/milab/lecture/2026f-advanced-deep-learning` 확인.
+5. **배포** — 메인 커밋·push → Actions → `/lecture/2026f-advanced-deep-learning` 확인.
 6. **트리거 확인** — 강의 repo `course.md` 한 줄 고쳐 push → milab 배포 자동 실행 → 반영 확인.
 
 ## 검증

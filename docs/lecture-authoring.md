@@ -19,8 +19,8 @@ pnu/
 └── lectures/                         # ← 작업 공간
     ├── CLAUDE.md                     # 얇은 요약 (이 문서를 가리킴)
     └── 2026-02/
-        ├── advanced_deep_learning/   # = github.com/jaehoonoh-pnu/2026f-advanced-deep-learning
-        └── applied_data_science/     # = github.com/jaehoonoh-pnu/2026f-applied-data-science
+        ├── advanced_deep_learning/   # = github.com/milab-pnu/2026f-advanced-deep-learning
+        └── applied_data_science/     # = github.com/milab-pnu/2026f-applied-data-science
 ```
 
 ## 평소 수정 흐름
@@ -37,7 +37,7 @@ git push
 push 만 사용자 승인 게이트. 여러 커밋을 모아 한 번에 물어봐도 된다.
 
 push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 트리거 → **1~2분 뒤 반영**.
-로컬 미리보기: `cd pnu/milab-pnu && ./dev.ps1` → http://localhost:4321/milab
+로컬 미리보기: `cd pnu/milab-pnu && ./dev.ps1` → http://localhost:4321/
 (dev 서버는 시작할 때 GitHub 에서 최신 강의 콘텐츠를 당겨온다 → **push 안 한 로컬 커밋은
 미리보기에 안 뜬다.** 바로 보려면 push 가 확실).
 
@@ -108,7 +108,7 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
 | `location` |  | |
 | `credits` |  | 숫자 |
 | `summary` |  | 검색엔진용 한 줄. 화면엔 안 보임 |
-| `weeks` |  | 계획표. 항목: `{ n: 1, topic: "주제", date?: "2026-09-01", discussion?: 3 }` |
+| `weeks` |  | 계획표. 항목: `{ n: 1, topic: "주제", date?: "2026-09-01" }` |
 
 본문(마크다운)은 Goals / Prerequisites / Grading 등으로 표시된다.
 
@@ -184,23 +184,6 @@ JS 표현식으로 해석되니 주의 (인라인 `$...$` 수식 안의 `{}` 는
   을 넣지 않는다**(목차 텍스트가 깨짐) — 유니코드로.
 - 컴포넌트 목록을 바꾸면 `[note].astro` 의 주입 객체와 이 표를 함께 갱신한다.
 
-## 주차별 토론
-
-강의 repo 의 **Discussions** 탭. 스레드 하나 만들고 —
-
-```sh
-gh discussion create -R jaehoonoh-pnu/<slug> --category "Q&A" --title "N주차 토론"
-```
-
-— 그 번호를 `course.md` `weeks[].discussion` 에 적으면 계획표에 "토론 ↗" 링크가 생긴다.
-제목 규칙: `"N주차 토론"` (주제명 안 붙임).
-
-> **한 번에 몰아서 만들지 않는다.** `gh discussion create` 를 루프로 십수 개씩,
-> 더구나 여러 repo 에 걸쳐 몇 분 안에 돌리면 GitHub 어뷰징 탐지에 걸려 **계정이
-> 정지**된다(실제로 겪음 — 복구에 며칠, 그동안 push·Pages·gh 전부 차단). 스레드는
-> 필요할 때 1~2개씩, 몰아서 해야 하면 **웹 UI 에서 수동으로**, 또는 최소 수십 초
-> 간격을 두고 소량씩. 16주치를 미리 다 만들 필요도 없다 — 해당 주차 즈음에 만들면 된다.
-
 ## 새 강의 추가
 
 ```powershell
@@ -211,19 +194,20 @@ cd pnu/milab-pnu
 ```
 
 스크립트가: GitHub repo 생성 → 작업 폴더 클론 → 골격 복사(`scripts/lecture-template/`)
-→ Discussions 활성화 → `MILAB_DEPLOY_TOKEN` secret 등록. 그다음 직접:
+→ `MILAB_DEPLOY_TOKEN` secret 등록. 그다음 직접:
 
 1. `course.md` 를 실제 내용으로 채우고 `git push`
 2. `../lectures.config.json` 에 스크립트가 출력한 한 줄 추가 → 커밋 · push
 
-`-Pat` 생략 시 secret 만 수동: `gh secret set MILAB_DEPLOY_TOKEN -R jaehoonoh-pnu/<slug>`
+`-Pat` 생략 시 secret 만 수동: `gh secret set MILAB_DEPLOY_TOKEN -R milab-pnu/<slug>`
 (PAT 발급 방법은 `../README.md` "재배포 트리거용 PAT").
 
 ## 주의점
 
 - **`milab-pnu/lectures/` 에서 커밋하지 않는다.** sync 가 매번 덮어쓰는 빌드 입력물이다.
-- **GitHub 쓰기 API 를 몰아서 호출하지 않는다** (예: `gh discussion create` 루프). 계정
-  정지로 이어진다 — "주차별 토론" 절 참고.
+- **GitHub 쓰기 API 를 몰아서 호출하지 않는다** (예: `gh` 를 짧은 시간에 루프로 십수 번,
+  더구나 여러 repo 에 걸쳐). 어뷰징 탐지에 걸려 **계정이 정지**된다 (실제로 겪음 — 복구에
+  며칠, 그동안 push·Pages·gh 전부 차단). write 작업은 소량씩 간격을 두고.
 - 배포가 "성공" 인데 사이트 반영이 안 되면 (드묾): milab → Actions → deploy → "Run workflow".
 - `MILAB_DEPLOY_TOKEN` PAT 만료 시 자동 배포가 조용히 멈춘다 → 수동 버튼 or 재발급.
 - `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론 폴더명 = URL 경로.

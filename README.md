@@ -1,4 +1,4 @@
-# milab
+# milab-pnu.github.io
 
 부산대학교 **Multimodal Intelligence Lab (MI Lab)** 웹사이트.
 
@@ -11,7 +11,7 @@
 
 ```sh
 npm install
-npm run dev       # 개발 서버 (포그라운드) — http://localhost:4321/milab
+npm run dev       # 개발 서버 (포그라운드) — http://localhost:4321/
 npm run build     # dist/ 로 정적 빌드
 npm run preview   # 빌드 결과 미리보기
 ```
@@ -48,8 +48,8 @@ npm run dev:logs     # 로그
 
 | | 주소 | 누가 보나 | 언제 갱신 | 켜고 끄기 |
 |---|---|---|---|---|
-| **로컬 개발 서버** | `http://localhost:4321/milab` | 내 컴퓨터에서만 | 파일 저장 즉시 | 내가 `dev.ps1` 로 |
-| **공개 사이트** | `https://jaehoonoh-pnu.github.io/milab/` | 누구나 | `main` 에 push 시 자동 (~1분) | 안 함 — GitHub 가 계속 호스팅 |
+| **로컬 개발 서버** | `http://localhost:4321/` | 내 컴퓨터에서만 | 파일 저장 즉시 | 내가 `dev.ps1` 로 |
+| **공개 사이트** | `https://milab-pnu.github.io/` | 누구나 | `main` 에 push 시 자동 (~1분) | 안 함 — GitHub 가 계속 호스팅 |
 
 - 로컬 개발 서버는 **수정하면서 미리 보는 용도**다. 외부에서는 접속 못 한다.
   안 켜도 공개 사이트는 정상 동작한다.
@@ -108,12 +108,12 @@ docs/
 
 ## 배포 (GitHub Pages)
 
-1. 이 저장소를 GitHub 에 push (`main` 브랜치).
-2. 저장소 **Settings → Pages → Build and deployment → Source** 를 **GitHub Actions** 로 설정.
-3. `astro.config.mjs` 의 `site` 를 실제 값으로 수정:
-   - project pages: `site: 'https://<GitHub사용자명>.github.io'`, `base: '/milab'` (현재 기본값)
-   - 사용자/조직 pages 또는 커스텀 도메인: `base` 를 `'/'` 로.
-4. `main` 에 push 하면 `.github/workflows/deploy.yml` 이 자동 빌드·배포.
+organization pages (`milab-pnu/milab-pnu.github.io`) 로 루트 서빙 중.
+
+1. 저장소 **Settings → Pages → Build and deployment → Source** = **GitHub Actions**.
+2. `astro.config.mjs`: `site: 'https://milab-pnu.github.io'`, `base` 없음 (루트).
+3. `main` 에 push 하면 `.github/workflows/deploy.yml` 이 자동 빌드·배포.
+4. 커스텀 도메인/학교 서버로 옮기면 `site` 만 그 도메인으로 (base 는 계속 없음).
 
 ## 학교/연구실 서버로 이전
 
@@ -153,7 +153,7 @@ pnu/
 ```
 
 **배포 트리거**: 각 강의 repo 의 `.github/workflows/notify.yml` 이 push 시
-`gh workflow run deploy.yml -R jaehoonoh-pnu/milab` 을 실행 (secret `MILAB_DEPLOY_TOKEN`).
+`gh workflow run deploy.yml -R milab-pnu/milab-pnu.github.io` 을 실행 (secret `MILAB_DEPLOY_TOKEN`).
 `on.schedule` 없음. 수동 재배포는 milab → Actions → deploy → "Run workflow".
 
 > **강의 자료 작성 방법 · frontmatter 스키마 · 수식/이미지 규칙 · 새 강의 추가 · 함정**
@@ -165,12 +165,12 @@ pnu/
 강의 repo 의 Action 이 이 repo 의 배포를 실행하려면 토큰이 필요하다.
 GitHub → Settings → Developer settings → **Fine-grained tokens** → Generate:
 
-- Repository access: **`milab` 만**
+- Repository access: **`milab-pnu.github.io` 만**
 - Permissions: **Actions → Read and write** (그 외 전부 No access)
 - 만료되면 트리거가 조용히 멈추므로 갱신 필요 (또는 무기한). 유출 시 피해 = 사이트 재빌드 실행뿐.
 
 발급한 `github_pat_…` 을 각 강의 repo 의 `MILAB_DEPLOY_TOKEN` secret 으로 등록
-(`gh secret set MILAB_DEPLOY_TOKEN -R jaehoonoh-pnu/<slug>`).
+(`gh secret set MILAB_DEPLOY_TOKEN -R milab-pnu/<slug>`).
 
 ### 오래된 강의
 

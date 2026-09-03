@@ -1,5 +1,5 @@
 ﻿#!/usr/bin/env pwsh
-# new-lecture.ps1 - 새 강의: GitHub repo 생성 + 작업 폴더 클론 + 스캐폴드 + Discussions + secret
+# new-lecture.ps1 - 새 강의: GitHub repo 생성 + 작업 폴더 클론 + 스캐폴드 + secret
 #
 #   .\scripts\new-lecture.ps1 -Slug 2027s-machine-learning `
 #       -Path ..\lectures\2027-01\machine_learning
@@ -20,7 +20,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
-$owner = 'jaehoonoh-pnu'
+$owner = 'milab-pnu'
 $repo = "$owner/$Slug"
 $root = Split-Path $PSScriptRoot -Parent            # milab-pnu/
 $tpl = Join-Path $PSScriptRoot 'lecture-template'
@@ -46,7 +46,7 @@ Copy-Item (Join-Path $tpl 'notify.yml')     (Join-Path $work '.github\workflows\
 Copy-Item (Join-Path $tpl '.gitattributes') (Join-Path $work '.gitattributes')
 Copy-Item (Join-Path $tpl 'course.md')      (Join-Path $work 'course.md')
 Copy-Item (Join-Path $tpl 'week-note.md')   (Join-Path $work 'weeks\01-intro.md')
-"# $Slug`n`nMI Lab 강의 콘텐츠. course.md / weeks/*.md 수정 후 ``git push`` 하면 사이트 자동 반영.`nhttps://jaehoonoh-pnu.github.io/milab/lecture/$Slug`n" |
+"# $Slug`n`nMI Lab 강의 콘텐츠. course.md / weeks/*.md 수정 후 ``git push`` 하면 사이트 자동 반영.`nhttps://milab-pnu.github.io/lecture/$Slug`n" |
   Set-Content -Encoding utf8 (Join-Path $work 'README.md')
 
 Push-Location $work
@@ -55,10 +55,7 @@ git commit -q -m "초기 스캐폴드 (new-lecture.ps1)"
 git push -q origin main
 Pop-Location
 
-Write-Host "4) Discussions 활성화" -ForegroundColor Cyan
-gh repo edit $repo --enable-discussions
-
-Write-Host "5) MILAB_DEPLOY_TOKEN secret" -ForegroundColor Cyan
+Write-Host "4) MILAB_DEPLOY_TOKEN secret" -ForegroundColor Cyan
 if ($Pat) {
   $Pat | gh secret set MILAB_DEPLOY_TOKEN -R $repo
   Write-Host "   등록 완료" -ForegroundColor Green
