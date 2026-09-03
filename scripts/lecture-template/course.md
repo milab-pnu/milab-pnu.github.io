@@ -10,7 +10,7 @@ credits: 3
 summary: 한 줄 소개 (검색엔진용, 화면엔 안 보임)
 weeks:
   - { n: 1, topic: "Introduction" }
-  # - { n: 2, topic: "...", date: "2027-03-10", discussion: 1 }
+  # - { n: 2, topic: "...", date: "2027-03-10" }
 ---
 
 ## Goals

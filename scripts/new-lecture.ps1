@@ -1,5 +1,5 @@
 ﻿#!/usr/bin/env pwsh
-# new-lecture.ps1 - 새 강의: GitHub repo 생성 + 작업 폴더 클론 + 스캐폴드 + Discussions + secret
+# new-lecture.ps1 - 새 강의: GitHub repo 생성 + 작업 폴더 클론 + 스캐폴드 + secret
 #
 #   .\scripts\new-lecture.ps1 -Slug 2027s-machine-learning `
 #       -Path ..\lectures\2027-01\machine_learning
@@ -55,10 +55,7 @@ git commit -q -m "초기 스캐폴드 (new-lecture.ps1)"
 git push -q origin main
 Pop-Location
 
-Write-Host "4) Discussions 활성화" -ForegroundColor Cyan
-gh repo edit $repo --enable-discussions
-
-Write-Host "5) MILAB_DEPLOY_TOKEN secret" -ForegroundColor Cyan
+Write-Host "4) MILAB_DEPLOY_TOKEN secret" -ForegroundColor Cyan
 if ($Pat) {
   $Pat | gh secret set MILAB_DEPLOY_TOKEN -R $repo
   Write-Host "   등록 완료" -ForegroundColor Green
