@@ -269,36 +269,7 @@
   margin-top: 0;
 }
 
-/* ── Cite / References ── */
-.cite {
-  text-decoration: none;
-  color: #64748b;
-}
-.cite:hover {
-  color: #0f172a;
-}
-.cite sup {
-  font-size: 0.7em;
-}
-.lecture-refs-section {
-  margin-top: 3.5rem;
-}
-.lecture-refs {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: #475569;
-  padding-left: 1.4rem;
-}
-.lecture-refs li {
-  margin: 0.5rem 0;
-  scroll-margin-top: 4rem;
-}
-.lecture-refs li:target {
-  background: #f1f5f9;
-  border-radius: 0.25rem;
-}
-
-/* ── 참고문헌 (GFM 각주) — <Cite>/<References> 대체 ──
+/* ── 참고문헌 (GFM 각주) ──
    `본문[^키]` + `[^키]: 서지정보` 로 쓴다. remark-gfm 이 등장 순서로 번호를
    매기고 하단에 자동 수집한다. 아래는 그 출력(section.footnotes)의 스타일. */
 .prose-lecture .footnotes {

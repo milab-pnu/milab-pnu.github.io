@@ -49,14 +49,14 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
    정확히 지정한다. 과목마다 강조점이 다르므로(이론 깊이 / 구현 / 응용 등) 그 지시도
    여기서 받는다 — 이 문서에 과목별 규칙을 적지 않는다.
 2. **자료조사를 꼼꼼히 한다.**
-   - **1차 출처(원논문)** 로 사실·수식·수치를 확정한다. reference 는
+   - **1차 출처(원논문)** 로 사실·수식·수치를 확정한다. 서지정보는
      저자·연도·학회/저널·페이지·arXiv 번호까지 정확하게, 인용한 절·그림 번호를
-     `<References>` 항목 안에 명시한다 (`01-transformers.mdx` 참고).
+     각주 항목(`[^키]: …`, 아래 "각주로 인용" 절) 안에 명시한다.
    - **잘 정리된 해설 블로그·튜토리얼·강의를 적극적으로 찾는다.** 원논문만으로는
      설명이 건조하다 — 그 주제를 가장 잘 풀어낸 2차 자료(예: Transformers 라면
      "The Illustrated Transformer", "The Annotated Transformer", Lilian Weng,
      3Blue1Brown)를 찾아 **설명 방식·비유·그림을 참고**하고, 쓸 만하면 출처를 달아
-     `<Figure>`·`<Video>` 로 넣거나 `<References>` 에 함께 싣는다.
+     `<Figure>`·`<Video>` 로 넣거나 각주로 함께 싣는다.
    - 여러 자료가 엇갈리면 원논문을 따르고, 흔한 오해는 `<Callout type="warning">` 로 짚는다.
 3. **작성한다.**
    - 흐름이 끊기지 않게. 이해 안 된 채 넘어가는 문장이 없어야 한다.
@@ -68,7 +68,7 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
    - 곁가지 설명은 `<Sidenote>`, 강조/직관/주의/예시는 `<Callout>`.
    - 직관 설명이 막히면 `eli5` 스킬을 쓴다.
    - 톤·구성 참고: <https://thinkingmachines.ai/blog/interaction-models/>
-4. **검토한다.** 수식 기호 일관성, `<Cite>` ↔ `<References>` 매칭, 용어 통일,
+4. **검토한다.** 수식 기호 일관성, 각주 참조(`[^키]`) ↔ 정의(`[^키]:`) 매칭, 용어 통일,
    heading 에 수식 없음, 문단 간 논리 연결을 확인한다. `npm run build` 로
    `check-lecture-notes.mjs` 를 통과시킨다.
 5. **push 한다.** 과목 폴더에서 커밋 → push → 1~2분 뒤 라이브.
@@ -137,6 +137,27 @@ JS 표현식으로 해석되니 주의 (인라인 `$...$` 수식 안의 `{}` 는
   한 줄로 `$$...$$` 쓰면 인라인 취급된다 (remark-math 규칙).
 - 빌드 때 **MathML** 로 렌더 (KaTeX JS·CSS 런타임 불필요). 이유는 아래 "설계 배경".
 
+## 각주로 인용
+
+인용은 컴포넌트가 아니라 **GFM 각주**를 쓴다 (`remark-gfm` 이 빌드 파이프라인에 켜져 있음).
+
+```
+softmax 가 포화되지 않는다.[^aiayn]
+...
+[^aiayn]: Vaswani, A., et al. (2017). Attention Is All You Need. NeurIPS 2017.
+  [arXiv:1706.03762](https://arxiv.org/abs/1706.03762). — §3.1–3.3 (attention), Table 2 (BLEU).
+```
+
+- **키는 의미 있는 슬러그**(`aiayn`, `leakage`, `vds` …), 숫자 아님. 번호는 remark 가
+  **등장 순서로 자동** 매긴다 — 중간에 새 인용을 끼워도 전부 자동 재번호.
+- 같은 `[^키]` 를 여러 번 쓰면 **항목 1개 + 위치별 backlink**. 중복 관리 불필요.
+- 정의(`[^키]: …`)는 어디 둬도 되지만 **노트 맨 끝에 모아** 둔다 (기존 참고문헌 목록 위치).
+  빌드가 하단에 "참고문헌" 절로 자동 수집한다.
+- 정의 본문은 **마크다운** — `[제목](url)` 링크·`*이탤릭*`·`$수식$` 다 된다.
+  서지정보는 저자·연도·매체·arXiv 까지, 인용한 절·표·그림 번호를 ` — ` 뒤에 적는다.
+- `<Sidenote>` 안에서도 `[^키]` 를 쓸 수 있다.
+- 정의 안 된 `[^키]` 는 본문에 리터럴로 남고 `check-lecture-notes.mjs` 가 잡는다.
+
 ## 코드블록
 
 ` ```python ` 처럼 언어를 붙여도 된다. 단 **syntax highlighting 은 꺼져 있어**
@@ -171,13 +192,13 @@ JS 표현식으로 해석되니 주의 (인라인 `$...$` 수식 안의 `{}` 는
 
 | 컴포넌트 | 용법 | 비고 |
 |---|---|---|
-| `<Sidenote>…</Sidenote>` | 본문 옆 우측 여백 주석 | **문장 끝에 붙여 쓴다**(`…한다.<Sidenote>…</Sidenote>`) — 단독 줄에 두면 본문 위첨자 번호가 허공에 뜬다. 자동 번호. 좁은 화면은 인라인. 설명 전용 — 인용은 `<Cite>` |
+| `<Sidenote>…</Sidenote>` | 본문 옆 우측 여백 주석 | **문장 끝에 붙여 쓴다**(`…한다.<Sidenote>…</Sidenote>`) — 단독 줄에 두면 본문 위첨자 번호가 허공에 뜬다. 자동 번호. 좁은 화면은 인라인. 설명 전용 — 서지 인용은 각주(`[^키]`) |
 | `<Figure src alt caption? source? wide? hero? />` | 그림 + 캡션 + 출처 | `alt` 필수. `source` 로 출처 표기 필수. `wide`=본문보다 넓게, `hero`=최상단 전체 폭 |
 | `<Video src caption? />` | YouTube/Vimeo 임베드 | URL 파싱 → nocookie iframe. **그 외 URL 은 빌드 실패** |
 | `<Callout type="intuition"\|"warning"\|"example"\|"note">…</Callout>` | 강조 박스 | 라벨: 직관/주의/예시/노트 |
 | `<Details summary="…">…</Details>` | 접이식 블록 | 긴 유도·보충. 네이티브 `<details>` |
-| `<Cite n={N} />` | 본문 인용 위첨자 `[N]` | 클릭 → 하단 참고문헌. **`items` 에 없는 N 은 빌드 검사 실패** |
-| `<References items={[{ id, text }]} />` | 노트 하단 참고문헌 목록 | 서지정보 완전하게. 지정된 절·페이지 명시 |
+
+인용은 컴포넌트가 아니라 GFM 각주(`[^키]`)를 쓴다 — 위 "각주로 인용" 절.
 
 - 좌측 목차는 `##`/`###` 마크다운 heading 에서 자동 생성된다. **heading 에 `$수식$`
   을 넣지 않는다**(목차 텍스트가 깨짐) — 유니코드로.
@@ -241,9 +262,9 @@ cd pnu/milab-pnu
   차단 — Astro 가 작은 모듈 스크립트를 HTML 에 인라인해버리므로 노트용 JS 는 `public/`
   정적 파일로 두고 `<script is:inline src>` 로 부른다. 그 외 모든 페이지는 엄격 CSP.
 - **빌드 검사** `scripts/check-lecture-notes.mjs` 가 `postbuild` 로 돌며 산출물에서
-  노트 페이지의 CSP·인라인 `style=`/`<script>`·인용 무결성을, 그 외 페이지의 엄격 CSP
-  유지를 확인한다. 테스트 프레임워크는 없다.
-- **`lectures/_dev-fixture/`** (`.gitignore` 됨, 로컬 전용): 8개 컴포넌트를 전부 쓰는
-  회귀 픽스처. 표현 계층을 고칠 때 강의 repo sync 없이 `npm run build` 로 렌더·검사를
+  노트 페이지의 CSP·인라인 `style=`/`<script>`·해석 안 된 각주(`[^키]`)를, 그 외
+  페이지의 엄격 CSP 유지를 확인한다. 테스트 프레임워크는 없다.
+- **`lectures/_dev-fixture/`** (`.gitignore` 됨, 로컬 전용): 노트 컴포넌트와 각주 인용을
+  전부 쓰는 회귀 픽스처. 표현 계층을 고칠 때 강의 repo sync 없이 `npm run build` 로 렌더·검사를
   확인하려고 둔다. CI 에는 없으므로 배포에 영향 없다. `sync-lectures.mjs` 가 "미등록
   폴더" 경고를 내지만 무시해도 된다.

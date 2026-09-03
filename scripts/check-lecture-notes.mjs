@@ -67,19 +67,8 @@ for (const file of htmlFiles(dist)) {
       if (body && !hasSrc && !nonExecType)
         err(rel, "인라인 <script> 본문 발견");
     }
-    // <Cite> → <References> 참조 무결성.
-    // 계약: <a class="cite" ... href="#ref-N">. class·href 순서 무관하게 매칭.
-    for (const m of html.matchAll(/<a\b[^>]*\bclass="cite"[^>]*>/g)) {
-      const hrefMatch = m[0].match(/href="#(ref-\d+)"/);
-      if (!hrefMatch) {
-        err(rel, `class="cite" 앵커에 href="#ref-N" 없음: ${m[0]}`);
-        continue;
-      }
-      if (!html.includes(`id="${hrefMatch[1]}"`))
-        err(rel, `인용 [${hrefMatch[1]}] 에 대응하는 참고문헌 항목 없음`);
-    }
-    // GFM 각주(<Cite> 대체): 정의 안 된 `[^키]` 는 remark 가 링크로 못 바꾸고
-    // 본문에 리터럴로 남는다 → 코드/수식 밖에서 발견되면 오타로 간주.
+    // 인용 = GFM 각주(`본문[^키]` + `[^키]: …`). 정의 안 된 `[^키]` 는 remark 가
+    // 링크로 못 바꾸고 본문에 리터럴로 남는다 → 코드 밖에서 발견되면 오타로 간주.
     const prose = html
       .replace(/<pre\b[\s\S]*?<\/pre>/g, "")
       .replace(/<code\b[\s\S]*?<\/code>/g, "");
