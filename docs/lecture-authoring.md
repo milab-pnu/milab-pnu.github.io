@@ -243,8 +243,14 @@ softmax 가 포화되지 않는다.[^aiayn]
 ## 이미지 / 로딩
 
 - **외부 이미지가 기본 수단이다.** `<Figure src="https://…" />` 로 논문·블로그의 그림을
-  직접 참조한다. 강의 노트 경로는 완화 CSP(`img-src https:`)라 외부 https 이미지가 뜬다.
+  직접 참조한다. 강의 노트 경로는 완화 CSP(`img-src 'self' https: data:`)라 외부 https 이미지가 뜬다.
   `source` 로 출처 표기 필수. **라이선스는 넣기 전에 확인** — "남의 저작물 재사용" 절.
+- **외부 동영상(mp4·webm)도 심을 수 있다.** 노트 CSP 에 `media-src 'self' https:` 가 있어
+  raw `<figure><video src="https://…" autoplay loop muted playsinline controls width="100%"
+  aria-label="…"></video><figcaption>…</figcaption></figure>` 가 그대로 동작한다(예:
+  `01a-transformer.mdx` 의 Alammar seq2seq 클립). `<Figure>` 는 이미지 전용, `<Video>` 는
+  YouTube/Vimeo 전용이라 이 경우엔 둘 다 안 쓴다. `<figcaption>` 안에서는 마크다운·각주가
+  안 먹으니 `[^키]` 는 본문 산문에 둔다. 라이선스 확인은 이미지와 동일.
 - 상대경로 로컬 이미지(`./assets/그림.png`, `<Figure src="./assets/…" />`)도 쓸 수 있다.
   Astro 콘텐츠 컬렉션의 상대경로 이미지는 자동 최적화(webp·크기·lazy)를 거친다.
   **외부 URL 이미지는 최적화 없이 그대로 나간다** — 원본을 적당한 해상도로.
@@ -334,7 +340,8 @@ cd pnu/milab-pnu
   인라인 `style=` 로 색을 넣어 CSP 에 막힌다 + 사이트는 무채색 방침. 켜지 않는다.
 - **강의 노트 페이지(`/lecture/<course>/<note>`)만 완화 CSP.** `NoteLayout` 이
   `HeadMeta` 의 `csp` prop 으로 넘긴다: `script-src 'self'`(번들 아닌 정적 파일
-  `public/lecture-nav.js` 목차 추적 스크립트 1개), `img-src https:`(외부 이미지),
+  `public/lecture-nav.js` 목차 추적 스크립트 1개), `img-src 'self' https: data:`(외부 이미지),
+  `media-src 'self' https:`(외부 동영상·오디오 — raw `<video>` 로 mp4 임베드 가능),
   `frame-src` = YouTube-nocookie·Vimeo(영상 임베드). 인라인 `<script>`·CDN 은 여전히
   차단 — Astro 가 작은 모듈 스크립트를 HTML 에 인라인해버리므로 노트용 JS 는 `public/`
   정적 파일로 두고 `<script is:inline src>` 로 부른다. 그 외 모든 페이지는 엄격 CSP.
