@@ -189,7 +189,7 @@ JS 표현식으로 해석되니 주의 (인라인 `$...$` 수식 안의 `{}` 는
 cd pnu/milab-pnu
 ./scripts/new-lecture.ps1 -Slug 2027s-machine-learning `
     -Path ..\lectures\2027-01\machine_learning `
-    -Pat github_pat_xxxxx        # milab repo Actions:write fine-grained PAT (아래 참고)
+    -Pat github_pat_xxxxx        # milab-pnu.github.io Actions:write PAT — 기존 MILAB_DEPLOY_TOKEN 재사용 가능 (아래 참고)
 ```
 
 스크립트가: GitHub repo 생성 → 작업 폴더 클론 → 골격 복사(`scripts/lecture-template/`)
