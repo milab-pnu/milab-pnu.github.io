@@ -116,6 +116,13 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
 └── .gitattributes                 # 손대지 않음
 ```
 
+**`weeks/` 안에는 강의 노트(`.md`/`.mdx`)와 `assets/` 만 둔다.** `lectureNotes` 컬렉션은
+`glob({ pattern: "*/weeks/*.{md,mdx}" })` 로 로드하는데, 이 로더는 **`_` 접두사 파일도
+무시하지 않는다** (그건 구 `src/content/` 컬렉션 API 의 동작). 검수 체크리스트·작업 메모
+같은 노트 아닌 `.md` 를 `weeks/` 에 두면 `title`/`week` frontmatter 가 없어
+`InvalidContentEntryDataError` 로 **사이트 전체 빌드가 깨진다**. 작업용 파일은 repo 밖에
+둔다.
+
 주차 노트 페이지(`/lecture/<slug>/<노트>`)는 **MI Lab 사이트 크롬(네비·푸터·로고) 없이**
 읽기 중심 독립 문서로 렌더된다 (맨 아래 "← 전체 일정" 링크만). `course.md` 페이지는 크롬 있음.
 
