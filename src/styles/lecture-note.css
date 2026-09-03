@@ -298,6 +298,69 @@
   border-radius: 0.25rem;
 }
 
+/* ── 참고문헌 (GFM 각주) — <Cite>/<References> 대체 ──
+   `본문[^키]` + `[^키]: 서지정보` 로 쓴다. remark-gfm 이 등장 순서로 번호를
+   매기고 하단에 자동 수집한다. 아래는 그 출력(section.footnotes)의 스타일. */
+.prose-lecture .footnotes {
+  margin-top: 3.5rem;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: #475569;
+}
+/* GFM 기본 라벨("Footnotes", sr-only 클래스는 이 사이트에 없음) 숨기고 대체 */
+.prose-lecture .footnotes > h2 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.prose-lecture .footnotes::before {
+  content: "참고문헌";
+  display: block;
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 1rem;
+}
+.prose-lecture .footnotes ol {
+  padding-left: 1.4rem;
+}
+.prose-lecture .footnotes li {
+  margin: 0.5rem 0;
+  scroll-margin-top: 4rem;
+}
+.prose-lecture .footnotes li:target {
+  background: #f1f5f9;
+  border-radius: 0.25rem;
+}
+.prose-lecture .footnotes li p {
+  margin: 0.2rem 0;
+}
+/* 본문 안의 각주 번호 [1] */
+.prose-lecture [data-footnote-ref] {
+  text-decoration: none;
+  color: #64748b;
+  font-size: 0.7em;
+}
+.prose-lecture [data-footnote-ref]:hover {
+  color: #0f172a;
+}
+/* 참고문헌 항목 끝의 ↩ 백링크 */
+.prose-lecture a[data-footnote-backref] {
+  text-decoration: none;
+  margin-left: 0.35rem;
+  color: #94a3b8;
+}
+.prose-lecture a[data-footnote-backref]:hover {
+  color: #0f172a;
+}
+
 /* ── 표 (GFM) ── */
 .prose-lecture table {
   width: 100%;

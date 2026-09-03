@@ -7,7 +7,12 @@ interface Props {
   headings: { depth: number; slug: string; text: string }[];
 }
 const { headings } = Astro.props;
-const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const items = headings.filter(
+  (h) =>
+    (h.depth === 2 || h.depth === 3) &&
+    // GFM 각주가 주입하는 "Footnotes" 라벨 heading 은 목차에서 제외
+    h.slug !== "footnote-label",
+);
 ---
 
 {

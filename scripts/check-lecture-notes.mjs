@@ -78,6 +78,13 @@ for (const file of htmlFiles(dist)) {
       if (!html.includes(`id="${hrefMatch[1]}"`))
         err(rel, `인용 [${hrefMatch[1]}] 에 대응하는 참고문헌 항목 없음`);
     }
+    // GFM 각주(<Cite> 대체): 정의 안 된 `[^키]` 는 remark 가 링크로 못 바꾸고
+    // 본문에 리터럴로 남는다 → 코드/수식 밖에서 발견되면 오타로 간주.
+    const prose = html
+      .replace(/<pre\b[\s\S]*?<\/pre>/g, "")
+      .replace(/<code\b[\s\S]*?<\/code>/g, "");
+    const strayFn = prose.match(/\[\^[A-Za-z0-9_-]+\]/);
+    if (strayFn) err(rel, `해석 안 된 각주 참조: ${strayFn[0]}`);
   } else if (rel.endsWith("index.html") || rel === "404.html") {
     // 강의 노트 외 모든 페이지는 엄격 CSP 유지 (HeadMeta 회귀 방지)
     if (csp !== STRICT_CSP)
