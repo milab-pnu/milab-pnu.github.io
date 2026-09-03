@@ -1,5 +1,9 @@
 # GitHub organization 이전 — 실행 플랜
 
+> **완료 (2026-09-03).** 10개 태스크 전부 실행됨. `jaehoonoh-pnu` → org `milab-pnu`
+> 이전 완료, 사이트 루트 Pages(`https://milab-pnu.github.io/`) 라이브, Discussions 제거,
+> notify→deploy 체인 검증, 3개 repo 재하드닝. 옛 계정·repo 는 미정지 후 정리 예정.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. 이 플랜은 코드 기능이 아니라 **운영 마이그레이션 런북**이다. "테스트" 자리에 `npm run build` 통과 / GitHub 상태 확인 / 라이브 URL 확인이 들어간다. push·브라우저 작업은 **사용자 승인 게이트**.
 
 **Goal:** `jaehoonoh-pnu` 개인 계정의 세 repo(`milab`, `2026f-advanced-deep-learning`, `2026f-applied-data-science`)를 새 org `milab-pnu` 로 이전하고, 그 과정에서 GitHub Discussions 관련 코드·문서·설정을 전부 제거하며, 사이트 Pages 를 루트(`https://milab-pnu.github.io/`)로 전환한다.
