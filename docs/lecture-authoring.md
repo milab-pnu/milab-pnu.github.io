@@ -62,6 +62,11 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
    - 흐름이 끊기지 않게. 이해 안 된 채 넘어가는 문장이 없어야 한다.
    - 구성요소마다 **무엇을 계산하는가 · 왜 그렇게 하는가 · 작은 예시** 순서.
    - 용어는 기본적으로 **영어**(technical term). 한글로 풀어쓰되 핵심 용어는 영어 병기.
+   - **약어는 처음 나올 때 full form 을 함께 적는다** — 개념어(`RoPE(rotary position
+     embedding)`, `DSLC(data science life cycle)`, `FFN(feed-forward network)`)뿐 아니라
+     범용 약어(`GPU(graphics processing unit)`, `API(application programming interface)`,
+     `ML(machine learning)`)도. 이후에는 약어만 쓴다. 예외: 학회·저널명(NeurIPS, ICLR
+     등)과 제품·모델 고유명(BERT, PyTorch 등)은 고유명사라 풀지 않는다.
    - 수식은 직관과 함께. 유도가 길면 `<Details>` 로 접는다.
    - 그림·영상은 **외부에서 가져와** `<Figure>`·`<Video>` 로 넣는다(출처 표기 필수).
      설명·외부 자료로 부족할 때만 인라인 `<svg>` 개념도를 직접 그린다(최후 수단).
@@ -69,7 +74,8 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
    - 직관 설명이 막히면 `eli5` 스킬을 쓴다.
    - 톤·구성 참고: <https://thinkingmachines.ai/blog/interaction-models/>
 4. **검토한다.** 수식 기호 일관성, 각주 참조(`[^키]`) ↔ 정의(`[^키]:`) 매칭, 용어 통일,
-   heading 에 수식 없음, 문단 간 논리 연결을 확인한다. `npm run build` 로
+   **약어 첫 등장 시 full form 병기**, heading 에 수식 없음, 문단 간 논리 연결을
+   확인한다. `npm run build` 로
    `check-lecture-notes.mjs` 를 통과시킨다.
 5. **push 한다.** 과목 폴더에서 커밋 → push → 1~2분 뒤 라이브.
 
