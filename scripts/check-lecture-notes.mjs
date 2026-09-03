@@ -74,6 +74,15 @@ for (const file of htmlFiles(dist)) {
       .replace(/<code\b[\s\S]*?<\/code>/g, "");
     const strayFn = prose.match(/\[\^[A-Za-z0-9_-]+\]/);
     if (strayFn) err(rel, `해석 안 된 각주 참조: ${strayFn[0]}`);
+    // <Sidenote> 는 문장 끝에 붙여 써야 한다. 단독 줄에 두면 위첨자 번호가
+    // 블록 경계 뒤에 앵커 없이 떠서 우측 여백 정렬이 어긋난다 → 앞에 블록 닫힘
+    // 태그나 빈 <p>/<li> 가 오면 위반으로 본다 (정상은 인라인 텍스트 바로 뒤).
+    if (
+      /(?:<\/(?:ul|ol|p|blockquote|h[1-6]|pre|figure|table)>|<(?:p|li)>)\s*<sup class="sidenote-ref"/.test(
+        html,
+      )
+    )
+      err(rel, "단독 줄에 놓인 <Sidenote> — 앞 문장 끝에 붙여 쓴다");
   } else if (rel.endsWith("index.html") || rel === "404.html") {
     // 강의 노트 외 모든 페이지는 엄격 CSP 유지 (HeadMeta 회귀 방지)
     if (csp !== STRICT_CSP)

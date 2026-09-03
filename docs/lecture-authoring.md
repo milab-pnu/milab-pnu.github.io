@@ -334,8 +334,9 @@ cd pnu/milab-pnu
   차단 — Astro 가 작은 모듈 스크립트를 HTML 에 인라인해버리므로 노트용 JS 는 `public/`
   정적 파일로 두고 `<script is:inline src>` 로 부른다. 그 외 모든 페이지는 엄격 CSP.
 - **빌드 검사** `scripts/check-lecture-notes.mjs` 가 `postbuild` 로 돌며 산출물에서
-  노트 페이지의 CSP·인라인 `style=`/`<script>`·해석 안 된 각주(`[^키]`)를, 그 외
-  페이지의 엄격 CSP 유지를 확인한다. 테스트 프레임워크는 없다.
+  노트 페이지의 CSP·인라인 `style=`/`<script>`·해석 안 된 각주(`[^키]`)·단독 줄에 놓인
+  `<Sidenote>`(문장 끝에 안 붙은 것)를, 그 외 페이지의 엄격 CSP 유지를 확인한다.
+  테스트 프레임워크는 없다.
 - **`lectures/_dev-fixture/`** (`.gitignore` 됨, 로컬 전용): 노트 컴포넌트와 각주 인용을
   전부 쓰는 회귀 픽스처. 표현 계층을 고칠 때 강의 repo sync 없이 `npm run build` 로 렌더·검사를
   확인하려고 둔다. CI 에는 없으므로 배포에 영향 없다. `sync-lectures.mjs` 가 "미등록
