@@ -71,12 +71,17 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
    - 그림·영상은 **외부에서 가져와** `<Figure>`·`<Video>` 로 넣는다(출처 표기 필수).
      설명·외부 자료로 부족할 때만 인라인 `<svg>` 개념도를 직접 그린다(최후 수단).
    - 곁가지 설명은 `<Sidenote>`, 강조/직관/주의/예시는 `<Callout>`.
+   - **단정적 표현을 절제한다.** "A가 아니라 B다" 식 범주적 부정, "전혀·항상·반드시·
+     결코" 류 절대어, "~할 이유가 없다"·"의미가 0" 식 단언은 근거가 확실할 때만 쓴다.
+     대개는 정도로 눅인다 — "A보다 B가 주가 된다", "대체로", "정보 이득이 거의 없다",
+     "~는 위험하다". 기억용 heuristic(kill criteria 등)은 의도적으로 강하게 쓰되 남발하지
+     않는다.
    - 직관 설명이 막히면 `eli5` 스킬을 쓴다.
    - 톤·구성 참고: <https://thinkingmachines.ai/blog/interaction-models/>
 4. **검토한다.** 수식 기호 일관성, 각주 참조(`[^키]`) ↔ 정의(`[^키]:`) 매칭, 용어 통일,
-   **약어 첫 등장 시 full form 병기**, heading 에 수식 없음, 문단 간 논리 연결을
-   확인한다. `npm run build` 로
-   `check-lecture-notes.mjs` 를 통과시킨다.
+   **약어 첫 등장 시 full form 병기**, **과한 단정 표현 눅이기**, heading 에 수식 없음,
+   문단 간 논리 연결을 확인한다. `npm run build` 로 `check-lecture-notes.mjs` 를
+   통과시킨다.
 5. **push 한다.** 과목 폴더에서 커밋 → push → 1~2분 뒤 라이브.
 
 ## 강의 repo 구조
