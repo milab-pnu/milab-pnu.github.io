@@ -241,6 +241,15 @@ softmax 가 포화되지 않는다.[^aiayn]
   아님. → **우리가 다시 그리거나**, 본문에서 실제로 분석하는 경우만 §28 인용(그림
   한 장, 출처 명시, 장식용 금지).
 - **Wikimedia Commons 는 파일마다 다르다** — 파일 페이지에서 확인.
+- **재사용 가능한 도식 모음(딥러닝):** 자작 전에 먼저 뒤진다.
+  - [dvgodoy/dl-visuals](https://github.com/dvgodoy/dl-visuals) — Transformer·attention·BERT·
+    positional encoding 등 215장, **CC BY 4.0**(상업적 사용까지 허용). raw GitHub URL 또는
+    Wikimedia Commons 미러. 출처: `그림 dvgodoy / dl-visuals · CC BY 4.0`.
+  - [Jay Alammar](https://jalammar.github.io/) *Illustrated Transformer / BERT / GPT-2* —
+    **CC BY-NC-SA 4.0**, 우리 노트(비영리·무수정)에 임베드 가능. mp4 클립도 있음.
+  - [Lil'Log](https://lilianweng.github.io/) (Lilian Weng) — 도식 재사용 시 라이선스 각 글에서 확인.
+  - CC 표기 없는 블로그(Thinking Machines 등)는 **전권 보유**로 본다 — 그림 임베드 불가,
+    설명 방식·구성만 참고하고 필요하면 자작한다.
 - **자르거나 다시 그리지 않는다.** 원본 그대로가 아니면 새로 그린다(인라인 `<svg>`).
 - 라이선스 불명 = 전권으로 가정 → 자작. **핫링크도 저작권 판단 대상**(면책 아님).
 - `source` 형식: `저작자 · 출처 · 라이선스(버전 모르면 생략) · "수정 없음"`. 재현 그림이면
