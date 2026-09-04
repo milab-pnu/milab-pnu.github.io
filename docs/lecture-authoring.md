@@ -258,6 +258,13 @@ softmax 가 포화되지 않는다.[^aiayn]
 **코드·데이터·사진 등**: 코드는 repo `LICENSE` 확인(없으면 복사 금지), 데이터셋은
 재배포·게재 허용 여부, 스톡 사진 금지, `<Video>` 임베드는 링크라 OK. 애매하면 안 쓴다.
 
+**영상·강연(딥러닝)**: `<Video>` 는 YouTube/Vimeo URL 을 iframe 으로 감싸는 링크라 그대로
+임베드해도 된다(다른 URL 은 빌드 실패). 강연은 [Stanford CS25 *Transformers United*](https://web.stanford.edu/class/cs25/)
+([녹화](https://web.stanford.edu/class/cs25/recordings/) ·
+[YouTube 재생목록](https://www.youtube.com/playlist?list=PLoROMvodv4rNiJRchCzutFw5ItR_Z27CM))
+가 폭넓다 — Karpathy·Vaswani·Hinton 등. 필요한 대목에 해당 강연을 `<Video>` 로 넣고,
+슬라이드·페이지 글은 © Stanford 라 인용만 한다.
+
 ### 권장 구조
 
 노트를 교재의 **"다리"** 로 만든다:
