@@ -23,7 +23,7 @@ export const NAV: { label: string; href: string; external?: boolean }[] = [
   { label: "LECTURE", href: "/lecture" },
   {
     label: "TECH NEWS",
-    href: "https://app.notion.com/p/MILAB-PNU-3d45cf459f7080deb8a2f2de9e863e78?source=copy_link",
+    href: "https://app.notion.com/p/Tech-News-fb25cf459f70834fae7b019a7ac64585?source=copy_link",
     external: true,
   },
 ];
