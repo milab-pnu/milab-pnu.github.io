@@ -1,25 +1,16 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import NewsList from "../components/NewsList.astro";
+import NewsPager from "../components/NewsPager.astro";
 import { SITE, withBase } from "../consts";
+import { getSortedNews, newsTotalPages, NEWS_PAGE_SIZE } from "../lib/news";
 
-const news = (await getCollection("news")).sort(
-  (a, b) =>
-    b.data.date.getTime() - a.data.date.getTime() ||
-    b.data.order - a.data.order,
-);
+const news = await getSortedNews();
+const pageItems = news.slice(0, NEWS_PAGE_SIZE);
+const totalPages = newsTotalPages(news.length);
 
-// 날짜는 UTC 자정으로 파싱되므로(z.coerce.date) 표시도 UTC 기준으로 —
-// 안 그러면 UTC 서쪽 방문자에게 하루 빠르게 보이고 <time datetime> 과도 어긋남
-const fmt = (d: Date) =>
-  `${d.getUTCFullYear()}. ${String(d.getUTCMonth() + 1).padStart(2, "0")}. ${String(
-    d.getUTCDate(),
-  ).padStart(2, "0")}`;
-
-// TODO: 실제 링크로 교체
-//  - labIntroUrl: 연구실 소개 자료 (임시: public/ 에 PDF 두거나 구글드라이브 공유 링크)
-//  - applyFormUrl: 지원서 (구글 폼 링크 권장)
-const labIntroUrl = withBase("/docs/lab-intro.pdf");
+const labIntroUrl = withBase("/lab-intro");
+// TODO: 실제 구글 폼(또는 지원 접수) 링크로 교체
 const applyFormUrl = "https://forms.gle/";
 ---
 
@@ -39,7 +30,7 @@ const applyFormUrl = "https://forms.gle/";
     <h2 class="text-xl font-bold text-slate-900">구성원 모집</h2>
     <p class="mt-3 leading-relaxed text-slate-600">
       멀티모달 인공지능 연구에 관심있는 학부생과 대학원생의 지원을 환영합니다.{" "}
-      <a class="font-medium text-slate-900 underline decoration-slate-400 underline-offset-2 hover:decoration-slate-900" href={labIntroUrl} target="_blank" rel="noopener">[연구실 소개 자료]</a>{" "}
+      <a class="font-medium text-slate-900 underline decoration-slate-400 underline-offset-2 hover:decoration-slate-900" href={labIntroUrl}>[연구실 소개 자료]</a>{" "}
       <a class="font-medium text-slate-900 underline decoration-slate-400 underline-offset-2 hover:decoration-slate-900" href={applyFormUrl} target="_blank" rel="noopener">[지원서]</a>
     </p>
     <p class="mt-3 text-sm font-medium text-slate-500">
@@ -56,20 +47,7 @@ const applyFormUrl = "https://forms.gle/";
     <div class="mb-4 flex items-baseline justify-between">
       <h2 class="text-xl font-bold text-slate-900">최신 뉴스</h2>
     </div>
-    <ul class="divide-y divide-slate-200 border-y border-slate-200">
-      {
-        news.map((item) => (
-          <li class="flex flex-col gap-1 py-3 sm:flex-row sm:items-baseline sm:gap-4">
-            <time
-              datetime={item.data.date.toISOString()}
-              class="shrink-0 text-sm tabular-nums text-slate-500"
-            >
-              {fmt(item.data.date)}
-            </time>
-            <span class="text-slate-800">{item.data.title}</span>
-          </li>
-        ))
-      }
-    </ul>
+    <NewsList items={pageItems} />
+    <NewsPager currentPage={1} totalPages={totalPages} />
   </section>
 </BaseLayout>

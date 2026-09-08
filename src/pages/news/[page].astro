@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import NewsList from "../../components/NewsList.astro";
+import NewsPager from "../../components/NewsPager.astro";
+import { getSortedNews, newsTotalPages, NEWS_PAGE_SIZE } from "../../lib/news";
+
+export async function getStaticPaths() {
+  const news = await getSortedNews();
+  const totalPages = newsTotalPages(news.length);
+  // 1페이지는 홈("/")이 담당하므로 2페이지부터만 정적 경로 생성
+  return Array.from({ length: totalPages - 1 }, (_, i) => ({
+    params: { page: String(i + 2) },
+  }));
+}
+
+const page = Number(Astro.params.page);
+const news = await getSortedNews();
+const totalPages = newsTotalPages(news.length);
+const pageItems = news.slice((page - 1) * NEWS_PAGE_SIZE, page * NEWS_PAGE_SIZE);
+---
+
+<BaseLayout title={`News · ${page}`} description="MI Lab 최신 뉴스">
+  <PageHeader title="최신 뉴스" />
+  <NewsList items={pageItems} />
+  <NewsPager currentPage={page} totalPages={totalPages} />
+</BaseLayout>

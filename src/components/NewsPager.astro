@@ -1,0 +1,34 @@
+---
+import { withBase } from "../consts";
+
+interface Props {
+  currentPage: number;
+  totalPages: number;
+}
+const { currentPage, totalPages } = Astro.props;
+
+// 1페이지는 홈("/")이 곧 1페이지라 별도 경로가 없음
+const hrefFor = (page: number) => (page === 1 ? withBase("/") : withBase(`/news/${page}`));
+---
+
+<nav class="mt-4 flex items-center gap-1" aria-label="뉴스 페이지">
+  {
+    Array.from({ length: totalPages }, (_, i) => i + 1).map((page) =>
+      page === currentPage ? (
+        <span
+          class="rounded px-3 py-1.5 text-sm font-semibold text-slate-900"
+          aria-current="page"
+        >
+          {page}
+        </span>
+      ) : (
+        <a
+          href={hrefFor(page)}
+          class="rounded px-3 py-1.5 text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+        >
+          {page}
+        </a>
+      ),
+    )
+  }
+</nav>
