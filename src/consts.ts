@@ -14,13 +14,18 @@ export const SITE = {
   address: "부산광역시 금정구 부산대학로63번길 2, 제12공학관 326호",
 } as const;
 
-export const NAV: { label: string; href: string }[] = [
+export const NAV: { label: string; href: string; external?: boolean }[] = [
   { label: "HOME", href: "/" },
   { label: "MEMBERS", href: "/members" },
   { label: "ALUMNI", href: "/alumni" },
   { label: "PROJECT", href: "/project" },
   { label: "PAPER", href: "/paper" },
   { label: "LECTURE", href: "/lecture" },
+  {
+    label: "TECH NEWS",
+    href: "https://app.notion.com/p/MILAB-PNU-3d45cf459f7080deb8a2f2de9e863e78?source=copy_link",
+    external: true,
+  },
 ];
 
 /** 뒤 슬래시 없는 base (루트 서빙이면 "") */

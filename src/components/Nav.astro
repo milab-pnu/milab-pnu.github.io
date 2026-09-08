@@ -18,10 +18,12 @@ const currentPath = Astro.url.pathname;
           NAV.map((item) => (
             <li>
               <a
-                href={withBase(item.href)}
+                href={item.external ? item.href : withBase(item.href)}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noopener noreferrer" : undefined}
                 class:list={[
                   "rounded px-3 py-2 text-sm font-medium transition-colors",
-                  isActive(currentPath, item.href)
+                  !item.external && isActive(currentPath, item.href)
                     ? "bg-slate-100 text-slate-900"
                     : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
                 ]}
@@ -49,10 +51,12 @@ const currentPath = Astro.url.pathname;
           NAV.map((item) => (
             <li>
               <a
-                href={withBase(item.href)}
+                href={item.external ? item.href : withBase(item.href)}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noopener noreferrer" : undefined}
                 class:list={[
                   "block px-4 py-2 text-sm",
-                  isActive(currentPath, item.href)
+                  !item.external && isActive(currentPath, item.href)
                     ? "bg-slate-100 font-semibold text-slate-900"
                     : "text-slate-700 hover:bg-slate-50",
                 ]}
