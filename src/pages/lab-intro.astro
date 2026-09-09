@@ -1,14 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
-import { SITE } from "../consts";
+import { SITE, withBase } from "../consts";
 
 // "연구실 운영 방식" 섹션은 아직 예시 문구 — 실제 내용으로 교체 필요.
-const WRITTEN_DATE = "2026. 09. 08";
+const WRITTEN_DATE = "2026. 09. 09";
 ---
 
 <BaseLayout title="Lab Intro" description="MI Lab 연구실 소개">
-  <PageHeader title="연구실 소개 (작성 중)" subtitle="Multimodal Intelligence Lab" />
+  <PageHeader title="연구실 소개" subtitle="Multimodal Intelligence Lab" />
 
   <p class="mb-10 text-sm text-slate-500">
     작성자: 오재훈 (<a class="underline decoration-slate-400 underline-offset-2 hover:decoration-slate-900" href={`mailto:${SITE.email}`}>{SITE.email}</a>)
@@ -50,7 +50,13 @@ const WRITTEN_DATE = "2026. 09. 08";
           <ul class="mt-2 list-disc space-y-1 pl-5">
             <li>수학: 선형대수·확률과 통계·미적분의 기본 개념</li>
             <li>프로그래밍: Python 기반의 기본적인 코딩 능력</li>
-            <li>딥러닝: 신경망 학습 원리와 LLM(대규모 언어모델)을 포함한 기본 개념</li>
+            <li>
+              딥러닝: 신경망 학습 원리와 LLM(대규모 언어모델)을 포함한 기본 개념 (<a
+                class="underline decoration-slate-400 underline-offset-2 hover:decoration-slate-900"
+                href={withBase("/lecture/2026f-advanced-deep-learning")}
+              >2026 Fall 고급딥러닝</a> 7주차까지의 내용)
+            </li>
+            <li>AI 코딩 도구(예: Claude Code, Codex 등)를 활용할 수 있는 능력</li>
           </ul>
         </dd>
       </div>
