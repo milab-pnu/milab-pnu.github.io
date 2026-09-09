@@ -16,7 +16,8 @@ pnu/
 ├── milab-pnu/                        # 사이트 코드
 │   └── lectures/                     # 빌드용 자동 clone — 절대 손대지 않음
 └── lectures/                         # ← 작업 공간
-    ├── CLAUDE.md                     # 얇은 요약 (이 문서를 가리킴)
+    ├── AGENTS.md                     # 공통 작업 지침 (이 문서를 가리킴)
+    ├── CLAUDE.md                     # AGENTS.md와 항상 동일하게 유지
     └── 2026-02/
         ├── advanced_deep_learning/   # = github.com/milab-pnu/2026f-advanced-deep-learning
         └── applied_data_science/     # = github.com/milab-pnu/2026f-applied-data-science
@@ -108,7 +109,7 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
    - **기법·단계를 서로 깎아내리지 않는다.** "모델링은 덜 중요하다", "X만 잘하면 된다"
      식 중요도 서열은 대개 틀리거나 오해를 부른다. 하려는 말이 "여기서 실수하면 되돌리기
      비싸다"거나 "이 수업은 이 단계를 특히 점검한다"라면 그렇게 쓴다.
-   - 직관 설명이 막히면 `eli5` 스킬을 쓴다.
+   - 직관 설명이 막히면 일상적인 비유와 작은 구체적 예시로 풀고, 예시를 실제 개념·수식에 연결한 뒤 비유의 한계를 밝힌다. `eli5` 스킬을 사용할 수 있으면 이 과정을 돕는 데 활용한다.
    - 톤·구성 참고: <https://thinkingmachines.ai/blog/interaction-models/>
 4. **검토한다.** 수식 기호 일관성, 각주 `[^키]` ↔ 정의 매칭·인용↔주장 적합성, 용어 통일,
    약어 full form 병기, 과한 단정 눅이기, 기법·단계 서열 안 매기기, **중복 논점 제거**
@@ -356,10 +357,7 @@ cd pnu/milab-pnu
 - `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론 폴더명 = URL 경로.
 - 강의 repo 는 **public**. 비밀정보·비공개 개인정보를 넣지 않는다.
 - 언어는 한국어 (커밋 메시지·주석 포함).
-- 강의 repo 커밋 트레일러:
-  ```
-  Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
-  ```
+- 강의 repo의 `Co-Authored-By` 트레일러는 실제 작업에 참여한 도구의 식별 정보를 사용한다. 특정 모델명을 고정하거나 확인되지 않은 이름·이메일을 만들지 않는다. 정확한 정보를 확인할 수 없으면 트레일러를 생략한다.
 
 ## 이 문서 관리
 
