@@ -257,7 +257,7 @@ softmax 가 포화되지 않는다.[^aiayn]
     positional encoding 등 215장, **CC BY 4.0**(상업적 사용까지 허용). raw GitHub URL 또는
     Wikimedia Commons 미러. 출처: `그림 dvgodoy / dl-visuals · CC BY 4.0`.
   - [Jay Alammar](https://jalammar.github.io/) *Illustrated Transformer / BERT / GPT-2* —
-    **CC BY-NC-SA 4.0**, 우리 노트(비영리·무수정)에 임베드 가능. mp4 클립도 있음.
+    CC 표시와 개별 그림·mp4의 이용 조건을 해당 페이지에서 확인한다. NC·SA 등 조건을 충족하는 이용인지 검토하고, 근거가 불명확하면 원문 페이지를 링크한다.
   - [Lil'Log](https://lilianweng.github.io/) (Lilian Weng) — 도식 재사용 시 라이선스 각 글에서 확인.
   - CC 표기 없는 블로그(Thinking Machines 등)는 **전권 보유**로 본다 — 그림 임베드 불가,
     설명 방식·구성만 참고하고 필요하면 자작한다.
@@ -284,7 +284,7 @@ softmax 가 포화되지 않는다.[^aiayn]
 2. 주차 노트는 교재에 **없는 것**을 쓴다 — 우리 과목 맥락(프로젝트·평가·국내 자료),
    우리 학생 도메인 예시, "이 방법론은 N장을 읽어라, 여기서는 **우리 프로젝트에
    어떻게 적용하는지**만".
-3. 애매하면 **직접 그린다**. 더 크게 인용·번역해야 하면 저자에게 교육용 허락을 구한다.
+3. 이용 근거가 애매하면 **원문 페이지를 링크한다**. 자작 그림은 원본의 표현·배치를 옮기지 않고 개념을 독립적으로 구성한다. 재사용이 필요하지만 근거를 확정할 수 없으면 공개 배포 범위를 명시해 권리자에게 허락을 구한다.
 
 ## 표
 
@@ -356,7 +356,7 @@ cd pnu/milab-pnu
 → `MILAB_DEPLOY_TOKEN` secret 등록. 그다음 직접:
 
 1. `course.md` 를 실제 내용으로 채우고 `git push`
-2. `../lectures.config.json` 에 스크립트가 출력한 한 줄 추가 → 커밋 · push
+2. `milab-pnu/lectures.config.json`에 스크립트가 출력한 항목 추가 → 커밋 · push. `localPath`는 `pnu/lectures/` 기준 상대 경로이며, 스크립트가 `-Path`에서 계산한다. 누락하면 개발 서버에서 해당 과목을 찾지 못한다.
 
 `-Pat` 생략 시 secret 만 수동: `gh secret set MILAB_DEPLOY_TOKEN -R milab-pnu/<slug>`
 (PAT 발급 방법은 `../README.md` "재배포 트리거용 PAT").

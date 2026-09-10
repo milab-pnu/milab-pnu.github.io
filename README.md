@@ -75,7 +75,7 @@ src/
     ├── index / members / alumni / project / paper / 404
     └── lecture/           # index(목록) · [course]/index(강의) · [course]/[note](주차 노트)
 
-lectures.config.json       # 강의 repo 목록 [{ slug, repo, ref }]  (아래 "강의 페이지")
+lectures.config.json       # 강의 repo 목록 [{ slug, repo, ref, localPath }]  (아래 "강의 페이지")
 scripts/
 ├── sync-lectures.mjs      # 위 목록의 repo 를 lectures/<slug>/ 로 clone (빌드 전 자동)
 ├── new-lecture.ps1        # 새 강의 repo 생성·클론·스캐폴드 자동화

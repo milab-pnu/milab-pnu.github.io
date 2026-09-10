@@ -31,6 +31,12 @@ if ($Slug -notmatch '^[a-z0-9][a-z0-9-]*$') {
 
 $work = if ([System.IO.Path]::IsPathRooted($Path)) { $Path }
         else { Join-Path $root $Path }
+$work = [System.IO.Path]::GetFullPath($work)
+$lectureRoot = [System.IO.Path]::GetFullPath((Join-Path $root '..\lectures')).TrimEnd('\') + '\'
+if (-not $work.StartsWith($lectureRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+  throw "작업 폴더는 $lectureRoot 아래에 지정하세요."
+}
+$localPath = $work.Substring($lectureRoot.Length).Replace('\', '/')
 if (Test-Path $work) { throw "이미 존재하는 경로: $work" }
 
 Write-Host "1) GitHub repo 생성  $repo" -ForegroundColor Cyan
@@ -69,5 +75,6 @@ Write-Host "== 남은 일 2가지 ==" -ForegroundColor Green
 Write-Host "  (1) $work\course.md 를 실제 내용으로 수정 -> git push"
 Write-Host "  (2) milab-pnu\lectures.config.json 에 아래 항목 추가 후 커밋/푸시:"
 Write-Host ""
-Write-Host "  { `"slug`": `"$Slug`", `"repo`": `"https://github.com/$repo.git`", `"ref`": `"main`" }" -ForegroundColor White
+$configEntry = [ordered]@{ slug = $Slug; repo = "https://github.com/$repo.git"; ref = 'main'; localPath = $localPath }
+Write-Host ($configEntry | ConvertTo-Json -Compress) -ForegroundColor White
 Write-Host ""
