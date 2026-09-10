@@ -41,8 +41,6 @@ for (const n of notes.sort(
   notesByWeek.set(n.data.week, arr);
 }
 const noteSlugOf = (id: string) => id.split("/").slice(2).join("/");
-
-const showLinks = true;
 ---
 
 <BaseLayout title={d.title} description={d.summary || `${d.title} 강의`}>
@@ -100,9 +98,7 @@ const showLinks = true;
                 <th class="py-2.5 pr-4 font-semibold">주차</th>
                 {showDate && <th class="py-2.5 pr-4 font-semibold">날짜</th>}
                 <th class="py-2.5 pr-4 font-semibold">주제</th>
-                {showLinks && (
-                  <th class="py-2.5 pr-4 font-semibold">강의자료</th>
-                )}
+                <th class="py-2.5 pr-4 font-semibold">강의자료</th>
               </tr>
             </thead>
             <tbody>
@@ -117,28 +113,26 @@ const showLinks = true;
                       </td>
                     )}
                     <td class="py-2.5 pr-4 text-slate-800">{w.topic}</td>
-                    {showLinks && (
-                      <td class="py-2.5 pr-4">
-                        {wkNotes.length > 0 ? (
-                          <ul class="space-y-1">
-                            {wkNotes.map((note) => (
-                              <li>
-                                <a
-                                  class="text-slate-900 underline decoration-slate-300 underline-offset-2 hover:decoration-slate-900"
-                                  href={withBase(
-                                    `/lecture/${slug}/${noteSlugOf(note.id)}`,
-                                  )}
-                                >
-                                  {note.data.title}
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <span class="text-slate-300">—</span>
-                        )}
-                      </td>
-                    )}
+                    <td class="py-2.5 pr-4">
+                      {wkNotes.length > 0 ? (
+                        <ul class="space-y-1">
+                          {wkNotes.map((note) => (
+                            <li>
+                              <a
+                                class="text-slate-900 underline decoration-slate-300 underline-offset-2 hover:decoration-slate-900"
+                                href={withBase(
+                                  `/lecture/${slug}/${noteSlugOf(note.id)}`,
+                                )}
+                              >
+                                {note.data.title}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <span class="text-slate-300">—</span>
+                      )}
+                    </td>
                   </tr>
                 );
               })}

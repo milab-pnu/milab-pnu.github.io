@@ -3,21 +3,14 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { NOTE_CSP, STRICT_CSP } from "../src/lib/csp.mjs";
 
-const dist = resolve(dirname(fileURLToPath(import.meta.url)), "..", "dist");
+// 선택 인수는 회귀 검사용 산출물 디렉터리.
+const dist = process.argv[2]
+  ? resolve(process.argv[2])
+  : resolve(dirname(fileURLToPath(import.meta.url)), "..", "dist");
 const errors = [];
 const err = (f, m) => errors.push(`${f}: ${m}`);
-
-const NOTE_CSP =
-  "default-src 'self'; script-src 'self'; style-src 'self'; " +
-  "img-src 'self' https: data:; " +
-  "frame-src https://www.youtube-nocookie.com https://player.vimeo.com; " +
-  "media-src 'self' https:; font-src 'self' data:; " +
-  "base-uri 'none'; form-action 'none'; object-src 'none'";
-const STRICT_CSP =
-  "default-src 'self'; script-src 'none'; style-src 'self'; " +
-  "img-src 'self' data:; font-src 'self' data:; " +
-  "base-uri 'none'; form-action 'none'; object-src 'none'";
 
 /** dist 안의 모든 .html 경로 (재귀) */
 function htmlFiles(dir) {
@@ -30,8 +23,8 @@ function htmlFiles(dir) {
   return out;
 }
 
-if (!existsSync(dist)) {
-  console.error("[check] dist/ 없음 — 먼저 astro build");
+if (!existsSync(join(dist, "index.html"))) {
+  console.error("[check] index.html 없음 — 먼저 astro build");
   process.exit(1);
 }
 
@@ -41,8 +34,17 @@ for (const file of htmlFiles(dist)) {
   const html = readFileSync(file, "utf8");
   const rel = file.slice(dist.length + 1).replace(/\\/g, "/");
   // 강의 노트 페이지: /lecture/<slug>/<note>/ (강의 목록·강의 첫 페이지 제외)
-  const isNote =
-    /^lecture\/[^/]+\/[^/]+\//.test(rel) && rel !== "lecture/index.html";
+  const isNote = /^lecture\/[^/]+\/[^/]+\//.test(rel);
+
+  // 전체 비공개/등록 강의 없음은 정상이다. 개수 대신 강의 링크의 대상 누락을 검사한다.
+  for (const match of html.matchAll(/<a\b[^>]*\shref="(\/(?!\/)[^"?#]*)[^\"]*"/g)) {
+    const path = decodeURIComponent(match[1]);
+    const lecturePath = path.match(/(?:^|\/)lecture(?:\/.*)?$/)?.[0];
+    if (!lecturePath) continue;
+    const target = lecturePath.replace(/^\//, "").replace(/\/$/, "");
+    if (!existsSync(join(dist, target, "index.html")))
+      err(rel, `강의 링크 대상 없음: ${path}`);
+  }
 
   const cspMatch = html.match(
     /http-equiv="Content-Security-Policy"\s+content="([^"]+)"/,
@@ -89,13 +91,6 @@ for (const file of htmlFiles(dist)) {
       err(rel, `엄격 CSP 여야 함\n  기대: ${STRICT_CSP}\n  실제: ${csp}`);
   }
 }
-
-// dist 레이아웃이 바뀌어 노트 페이지가 하나도 안 잡히면 (base 변경 등) → 조용한 통과 방지
-if (noteCount === 0)
-  err(
-    "(전역)",
-    "강의 노트 페이지를 하나도 찾지 못함 — dist 레이아웃/경로 규칙 확인",
-  );
 
 if (errors.length) {
   console.error(

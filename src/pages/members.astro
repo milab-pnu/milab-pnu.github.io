@@ -2,7 +2,7 @@
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
-import MemberCard from "../components/MemberCard.astro";
+import MemberGroups from "../components/MemberGroups.astro";
 import ProfileList from "../components/ProfileList.astro";
 import MemberLinks from "../components/MemberLinks.astro";
 import { withBase } from "../consts";
@@ -95,23 +95,5 @@ const GROUPS: { label: string; roles: string[] }[] = [
     )
   }
 
-  {
-    GROUPS.map((group) => {
-      const list = current.filter((m) => group.roles.includes(m.data.role));
-      return (
-        <section class="mb-12">
-          <h2 class="mb-4 text-lg font-bold text-slate-900">{group.label}</h2>
-          {list.length > 0 ? (
-            <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {list.map((m) => (
-                <MemberCard member={m} />
-              ))}
-            </ul>
-          ) : (
-            <p class="text-sm text-slate-500">—</p>
-          )}
-        </section>
-      );
-    })
-  }
+  <MemberGroups members={current} groups={GROUPS} />
 </BaseLayout>

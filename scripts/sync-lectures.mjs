@@ -4,7 +4,7 @@
 // git submodule 을 쓰지 않는 이유: 편집마다 메인 repo 의 포인터 커밋이 필요해서.
 // lectures/ 는 .gitignore — 메인 repo 에 커밋되지 않는다.
 //
-// prebuild / predev 훅에서 자동 실행. 수동 실행: npm run lectures:sync
+// prebuild 훅에서 자동 실행. 수동 실행: npm run lectures:sync
 
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync } from "node:fs";

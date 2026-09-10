@@ -2,7 +2,6 @@
 // (src/data/*.bib 를 빌드 타임에 ?raw 로 읽어서 사용)
 
 interface BibEntry {
-  type: string;
   key: string;
   fields: Record<string, string>;
 }
@@ -41,14 +40,15 @@ function parseBibtex(src: string): BibEntry[] {
     const open = text.indexOf("{", at);
     if (open === -1) break;
 
-    const type = text.slice(at + 1, open).trim().toLowerCase();
-
     // 짝 맞는 닫는 중괄호 찾기
     let depth = 0;
     let j = open;
     for (; j < text.length; j++) {
       if (text[j] === "{") depth++;
       else if (text[j] === "}" && --depth === 0) break;
+    }
+    if (depth !== 0) {
+      throw new Error("[bibtex] 닫히지 않은 엔트리 중괄호 — .bib 문법을 확인하세요.");
     }
 
     const body = text.slice(open + 1, j);
@@ -90,6 +90,9 @@ function parseBibtex(src: string): BibEntry[] {
       } else if (rest[m] === '"') {
         let p = m + 1;
         while (p < rest.length && rest[p] !== '"') p++;
+        if (p === rest.length) {
+          throw new Error(`[bibtex] ${key}: 닫히지 않은 따옴표`);
+        }
         value = rest.slice(m + 1, p);
         k = p + 1;
       } else {
@@ -102,7 +105,7 @@ function parseBibtex(src: string): BibEntry[] {
       if (name) fields[name] = value.replace(/\s+/g, " ").trim();
     }
 
-    entries.push({ type, key, fields });
+    entries.push({ key, fields });
   }
 
   // 파서가 조용히 항목을 흘리면(중괄호 짝 안 맞음, 키 뒤 쉼표 누락 등)

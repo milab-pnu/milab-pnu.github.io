@@ -7,6 +7,7 @@ import "../styles/lecture-note.css";
 import HeadMeta from "../components/HeadMeta.astro";
 import LectureNav from "../components/lecture/LectureNav.astro";
 import { withBase } from "../consts";
+import { NOTE_CSP } from "../lib/csp.mjs";
 
 interface Props {
   title: string;
@@ -20,12 +21,6 @@ const { title, courseTitle, courseSlug, week, headings, description } =
   Astro.props;
 const courseHref = withBase(`/lecture/${courseSlug}`);
 
-const NOTE_CSP =
-  "default-src 'self'; script-src 'self'; style-src 'self'; " +
-  "img-src 'self' https: data:; " +
-  "frame-src https://www.youtube-nocookie.com https://player.vimeo.com; " +
-  "media-src 'self' https:; font-src 'self' data:; " +
-  "base-uri 'none'; form-action 'none'; object-src 'none'";
 ---
 
 <!doctype html>

@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
-import MemberCard from "../components/MemberCard.astro";
+import MemberGroups from "../components/MemberGroups.astro";
 
 const members = (await getCollection("members")).sort(
   (a, b) => a.data.order - b.data.order,
@@ -18,23 +18,5 @@ const GROUPS: { label: string; roles: string[] }[] = [
 <BaseLayout title="Alumni" description="MI Lab 졸업생">
   <PageHeader title="Alumni" />
 
-  {
-    GROUPS.map((group) => {
-      const list = alumni.filter((m) => group.roles.includes(m.data.role));
-      return (
-        <section class="mb-12">
-          <h2 class="mb-4 text-lg font-bold text-slate-900">{group.label}</h2>
-          {list.length > 0 ? (
-            <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {list.map((m) => (
-                <MemberCard member={m} />
-              ))}
-            </ul>
-          ) : (
-            <p class="text-sm text-slate-500">—</p>
-          )}
-        </section>
-      );
-    })
-  }
+  <MemberGroups members={alumni} groups={GROUPS} />
 </BaseLayout>

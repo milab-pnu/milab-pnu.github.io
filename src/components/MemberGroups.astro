@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from "astro:content";
+import MemberCard from "./MemberCard.astro";
+
+interface Props {
+  members: CollectionEntry<"members">[];
+  groups: { label: string; roles: string[] }[];
+}
+const { members, groups } = Astro.props;
+---
+
+{
+  groups.map((group) => {
+    const list = members.filter((m) => group.roles.includes(m.data.role));
+    return (
+      <section class="mb-12">
+        <h2 class="mb-4 text-lg font-bold text-slate-900">{group.label}</h2>
+        {list.length > 0 ? (
+          <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((m) => <MemberCard member={m} />)}
+          </ul>
+        ) : (
+          <p class="text-sm text-slate-500">—</p>
+        )}
+      </section>
+    );
+  })
+}

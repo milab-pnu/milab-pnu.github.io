@@ -14,6 +14,7 @@
     "dev:status": "astro dev status",
     "dev:logs": "astro dev logs",
     "build": "node scripts/build-with-dev.mjs",
+    "check": "astro check && node scripts/check-bibtex.mjs && node scripts/check-lecture-visibility.mjs && node scripts/check-build-validation.mjs",
     "postbuild": "node scripts/check-lecture-notes.mjs",
     "preview": "astro preview",
     "astro": "astro"

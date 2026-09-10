@@ -13,6 +13,7 @@
 npm install
 npm run dev       # 개발 서버 (포그라운드) — http://localhost:4321/
 npm run build     # dist/ 로 정적 빌드
+npm run check     # Astro 정적 검사 + 논문 파서·공개 설정·빌드 검사 회귀 검증
 npm run preview   # 빌드 결과 미리보기
 ```
 
@@ -70,9 +71,10 @@ src/
 ├── lib/bibtex.ts          # .bib 파서 (파싱 실패 시 빌드를 세움)
 ├── layouts/               # BaseLayout(사이트 크롬) · NoteLayout(강의 노트, 크롬 없음)
 ├── components/            # HeadMeta, Nav, Footer, PageHeader, MemberCard,
-│                          #   MemberLinks, ProfileList, PaperList, Icon
+│                          #   MemberLinks, MemberGroups, ProfileList, PaperList, Icon
 └── pages/
-    ├── index / members / alumni / project / paper / 404
+    ├── index / members / alumni / project / paper / lab-intro / 404
+    ├── news/[page]        # 뉴스 2페이지 이후 (1페이지는 홈)
     └── lecture/           # index(목록) · [course]/index(강의) · [course]/[note](주차 노트)
 
 lectures.config.json       # 강의 repo 목록 [{ slug, repo, ref, localPath }]  (아래 "강의 페이지")
@@ -84,6 +86,10 @@ lectures/                  # sync-lectures 가 clone 하는 곳 (.gitignore — 
 docs/
 └── lecture-authoring.md   # 강의 자료 작성 규칙 (정본)
 ```
+
+배포용 CSP는 `src/lib/csp.mjs`에서 관리하며 레이아웃과 산출물 검사가 공유한다.
+`npm run build`의 후처리는 CSP·강의 노트 표현 규칙과 내부 강의 링크의 대상 파일을 검사한다.
+모든 주차를 비공개로 설정하거나 등록된 노트가 없어도 정상적으로 통과한다.
 
 ### 콘텐츠 수정 방법
 
