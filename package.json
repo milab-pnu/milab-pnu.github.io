@@ -13,7 +13,7 @@
     "dev:stop": "astro dev stop",
     "dev:status": "astro dev status",
     "dev:logs": "astro dev logs",
-    "build": "astro build",
+    "build": "node scripts/build-with-dev.mjs",
     "postbuild": "node scripts/check-lecture-notes.mjs",
     "preview": "astro preview",
     "astro": "astro"
