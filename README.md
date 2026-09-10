@@ -175,3 +175,69 @@ GitHub → Settings → Developer settings → **Fine-grained tokens** → Gener
 `lectures.config.json` 항목은 그대로 두면 페이지도 유지된다. 콘텐츠를 고정하려면
 `"ref"` 를 `"main"` 대신 태그나 커밋 SHA 로 바꾼다. 목록에서 빼면 사이트에서 사라진다
 (repo 와 히스토리는 남음).
+
+## 강의 미리보기와 과목별 공개 설정
+
+### 내 컴퓨터에서 모든 강의 보기
+
+PowerShell에서 사이트 폴더로 이동해 개발 서버를 시작한다.
+
+```powershell
+cd C:\Users\USER\Desktop\pnu\milab-pnu
+.\dev.ps1
+```
+
+- 데이터사이언스: <http://localhost:4321/lecture/2026f-applied-data-science/>
+- 고급딥러닝: <http://localhost:4321/lecture/2026f-advanced-deep-learning/>
+
+로컬에서는 미공개 주차도 모두 보인다. `pnu/lectures/<학기>/<과목>/`의 파일을 저장하면
+푸시 없이 반영된다. 편집 폴더는 `lectures.config.json`의 `localPath`로 연결한다.
+처음 사이트를 설치할 때는 `npm ci`로 의존성을 설치하고 해당 과목 저장소도 클론해 둔다.
+서버 종료는 `.\dev.ps1 stop`, 재시작은 `.\dev.ps1 restart`다.
+PowerShell에서 스크립트 실행 정책으로 차단되면 본인이 검토한 스크립트에 한해
+`powershell -ExecutionPolicy Bypass -File .\dev.ps1`처럼 해당 실행에만 허용할 수 있다.
+공개 명령도 `powershell -ExecutionPolicy Bypass -File .\lecture-publish.ps1 -Course 2026f-applied-data-science -Weeks "1,2"`로 실행할 수 있다.
+`npm run preview`는 이미 빌드한 배포 결과를 보여 주므로 전체 보기용 개발 서버와 다르다.
+
+### 학생에게 공개할 주차 선택하기
+
+같은 사이트 폴더에서 실행한다. GitHub CLI(`gh`)가 설치되어 있어야 하며, 최초 한 번
+`gh auth login`으로 사이트 저장소 관리 권한이 있는 계정에 로그인한다.
+
+```powershell
+# 데이터사이언스는 1·2주차 공개
+.\lecture-publish.ps1 -Course 2026f-applied-data-science -Weeks "1,2"
+
+# 고급딥러닝은 1·2·3주차 공개
+.\lecture-publish.ps1 -Course 2026f-advanced-deep-learning -Weeks "1,2,3"
+
+# 지정 과목 전체 공개 / 전체 비공개
+.\lecture-publish.ps1 -Course 2026f-applied-data-science -Weeks "all"
+.\lecture-publish.ps1 -Course 2026f-applied-data-science -Weeks "none"
+```
+
+위 명령들은 사용 예시이며 실행한 명령의 설정만 적용된다. `-Course`에는 `lectures.config.json`에 등록된 전체 slug만 사용한다.
+예: `2026f-applied-data-science`, `2026f-advanced-deep-learning`. 폴더 이름이나 축약형은 받지 않는다.
+인수 없이 `.\lecture-publish.ps1`을 실행하면 과목과 주차를 차례로 입력한다.
+
+각 명령은 선택한 과목의 공개 설정만 저장하고 사이트 재배포를 요청한다. 다른 과목의 설정은
+유지되며 이후 콘텐츠 푸시에도 같은 공개 범위가 적용된다. 콘텐츠 커밋·푸시는 필요 없지만
+배포가 완료되기까지 반영 시간이 필요하다. 공개 주차 목록은 누적 추가가 아니라 **전체 교체**다.
+예를 들어 1·2·3주차를 열려면 `"3"` 대신 `"1,2,3"`을 입력한다.
+
+비공개 주차는 Schedule의 주제를 유지하면서 자료 링크와 HTML 페이지 생성을 제외한다.
+원래 주소로 직접 접근해도 배포 사이트의 미공개 페이지는 제공되지 않는다.
+설정하지 않은 과목은 전체 공개이며, public GitHub 저장소 원문이나 이미 받은 파일까지
+접근을 제한하는 기능은 아니다.
+
+GitHub 화면에서 관리할 경우 사이트 저장소 Settings → Secrets and variables → Actions →
+Variables에서 과목 변수를 수정하고, Actions → Deploy to GitHub Pages → Run workflow를 실행한다.
+변수 이름은 다음과 같다.
+
+| 과목 | 변수 |
+|---|---|
+| 데이터사이언스 | `LECTURE_2026F_APPLIED_DATA_SCIENCE_PUBLIC_WEEKS` |
+| 고급딥러닝 | `LECTURE_2026F_ADVANCED_DEEP_LEARNING_PUBLIC_WEEKS` |
+
+변수 값은 `1,2`, `all`, `none` 중 해당 형식으로 입력한다. 새 과목도 같은 명명 규칙을 사용한다.
+검증 명령은 `node scripts/check-lecture-visibility.mjs`다.

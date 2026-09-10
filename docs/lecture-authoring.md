@@ -44,19 +44,11 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
 
 ## 학생 사이트 공개 주차
 
-데이터사이언스 공개 범위는 사이트 저장소의 Actions 변수 `ADS_PUBLIC_WEEKS`로 저장한다.
-`1,2`는 해당 주차만, `all`은 전체, `none`은 전체 비공개다. 미설정은 기존 동작인 전체 공개다.
-다음 명령으로 설정 저장과 배포 요청을 함께 한다(콘텐츠 커밋·push 불필요, GitHub CLI 로그인 필요).
-
-```powershell
-./lecture-publish.ps1 -Weeks "1,2"
-```
-
-인수 없이 실행하면 공개 주차를 묻는다. GitHub Settings → Secrets and variables → Actions →
-Variables에서도 변경할 수 있으며, 이 경우 Actions의 Deploy to GitHub Pages를 수동 실행한다.
-설정은 이후 배포에도 유지된다. 비공개 노트는 목록 링크와 페이지 생성에서 제외하며 Schedule의
-주제는 그대로 유지한다. 로컬 `./dev.ps1`에서는 모든 자료를 볼 수 있다. `astro preview`는
-배포 산출물 확인이므로 이 전체 보기와 다르다. public GitHub 원문은 접근 제한 대상이 아니다.
+로컬 전체 미리보기와 과목별 학생 공개 설정의 실행 방법은 [README](../README.md#강의-미리보기와-과목별-공개-설정)에 정리한다.
+공개 주차는 과목별 GitHub Actions 변수 `LECTURE_<SLUG 대문자·하이픈을 밑줄로 치환>_PUBLIC_WEEKS`에
+저장한다. 미설정은 전체 공개다. 기존 `ADS_PUBLIC_WEEKS`는 데이터사이언스의 새 변수가 없을 때만
+사용한다. 개발 서버는 `lectures.config.json`의 `localPath`를 읽고 모든 노트를 표시한다.
+새 과목 등록 시 `localPath`를 `pnu/lectures/` 기준 상대 경로로 지정한다.
 
 ## 주차 노트: 내용 채우기 절차
 

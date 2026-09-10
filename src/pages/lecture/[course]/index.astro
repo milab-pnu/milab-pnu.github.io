@@ -30,7 +30,7 @@ const showDate = weeks.some((w) => w.date);
 
 // 이 강의의 주차 노트 → week 번호별로 묶기
 const notes = (await getCollection("lectureNotes")).filter(
-  (n) => n.id.split("/")[0] === slug && isNoteVisible(n, import.meta.env.DEV, import.meta.env.ADS_PUBLIC_WEEKS),
+  (n) => n.id.split("/")[0] === slug && isNoteVisible(n, import.meta.env.DEV, import.meta.env.LECTURE_VISIBILITY_VARIABLES),
 );
 const notesByWeek = new Map<number, typeof notes>();
 for (const n of notes.sort(

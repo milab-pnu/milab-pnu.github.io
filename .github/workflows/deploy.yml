@@ -31,7 +31,7 @@ jobs:
       # lectures.config.json 의 강의 repo 들을 lectures/ 로 clone 한다 (공개 repo, 토큰 불필요).
       - run: npm run build
         env:
-          ADS_PUBLIC_WEEKS: ${{ vars.ADS_PUBLIC_WEEKS || 'all' }}
+          LECTURE_VISIBILITY_VARIABLES: ${{ toJSON(vars) }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
