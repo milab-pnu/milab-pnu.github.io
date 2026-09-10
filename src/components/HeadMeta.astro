@@ -27,7 +27,8 @@ const canonical = Astro.site
 {/* GitHub Pages 는 HTTP 헤더 불가 → meta 로. nginx 이전 시 실제 헤더 +
     frame-ancestors 로 강화. 기본은 엄격(script-src 'none'); 강의 노트 페이지만
     NoteLayout 이 완화 CSP 를 csp prop 으로 넘긴다 (번들 스크립트·외부 이미지·임베드). */}
-<meta http-equiv="Content-Security-Policy" content={csp} />
+{/* 개발 모드의 Vite 인라인 CSS와 실시간 갱신을 허용하고 배포에만 CSP를 적용한다. */}
+{import.meta.env.PROD && <meta http-equiv="Content-Security-Policy" content={csp} />}
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="generator" content={Astro.generator} />
 <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />

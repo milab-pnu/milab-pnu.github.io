@@ -416,3 +416,10 @@ cd pnu/milab-pnu
   전부 쓰는 회귀 픽스처. 표현 계층을 고칠 때 강의 repo sync 없이 `npm run build` 로 렌더·검사를
   확인하려고 둔다. CI 에는 없으므로 배포에 영향 없다. `sync-lectures.mjs` 가 "미등록
   폴더" 경고를 내지만 무시해도 된다.
+
+### 로컬 개발 서버의 CSP
+
+`HeadMeta`의 CSP meta는 production 빌드에만 넣는다. 개발 서버는 Vite가 CSS를
+인라인으로 주입하고 실시간 갱신 스크립트를 실행하므로 배포용 CSP를 그대로 적용하면
+로컬 화면이 깨진다. 로컬 HTTP 200뿐 아니라 스타일 로딩도 확인한다. 배포의 엄격
+CSP는 `check-lecture-notes.mjs`로 계속 검증한다. 디자인과 CSS 자체는 두 모드가 공유한다.
