@@ -307,8 +307,10 @@ softmax 가 포화되지 않는다.[^aiayn]
   `01a-transformer.mdx` 의 Alammar seq2seq 클립). `<Figure>` 는 이미지 전용, `<Video>` 는
   YouTube/Vimeo 전용이라 이 경우엔 둘 다 안 쓴다. `<figcaption>` 안에서는 마크다운·각주가
   안 먹으니 `[^키]` 는 본문 산문에 둔다. 라이선스 확인은 이미지와 동일.
-- 상대경로 로컬 이미지(`./assets/그림.png`, `<Figure src="./assets/…" />`)도 쓸 수 있다.
-  Astro 콘텐츠 컬렉션의 상대경로 이미지는 자동 최적화(webp·크기·lazy)를 거친다.
+- 로컬 이미지를 `<Figure>`에 넣을 때는 MDX에서 `import plot from "./assets/그림.png";`로
+  가져온 뒤 `<Figure src={plot.src} alt="…" source="…" />`로 전달한다. 현재 `Figure`는
+  문자열 경로를 해석하거나 이미지를 최적화하지 않는 `<img>` 래퍼이므로 `src="./assets/…"`를
+  직접 넣지 않는다. import는 빌드 자산 경로를 생성하며 자동 WebP 변환을 뜻하지 않는다.
   **외부 URL 이미지는 최적화 없이 그대로 나간다** — 원본을 적당한 해상도로.
 - 설명·외부 그림으로 부족하면 **인라인 `<svg>` 다이어그램**을 직접 그린다(최후 수단).
   CSP 상 `style=`·`<style>` 불가 → presentation 속성(`fill=`, `stroke=`, `font-size=`)만.
