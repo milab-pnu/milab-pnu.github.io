@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
+import { isNoteVisible } from "../../../lib/lecture-visibility.mjs";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { withBase } from "../../../consts";
 
@@ -29,7 +30,7 @@ const showDate = weeks.some((w) => w.date);
 
 // 이 강의의 주차 노트 → week 번호별로 묶기
 const notes = (await getCollection("lectureNotes")).filter(
-  (n) => n.id.split("/")[0] === slug,
+  (n) => n.id.split("/")[0] === slug && isNoteVisible(n, import.meta.env.DEV, import.meta.env.ADS_PUBLIC_WEEKS),
 );
 const notesByWeek = new Map<number, typeof notes>();
 for (const n of notes.sort(
@@ -41,10 +42,11 @@ for (const n of notes.sort(
 }
 const noteSlugOf = (id: string) => id.split("/").slice(2).join("/");
 
-const showLinks = notes.length > 0;
+const showLinks = true;
 ---
 
 <BaseLayout title={d.title} description={d.summary || `${d.title} 강의`}>
+  {import.meta.env.DEV && <p class="mb-4 rounded border border-amber-200 bg-amber-50 p-3 text-sm">로컬 미리보기 · 미공개 자료를 포함한 전체 강의입니다.</p>}
   <header class="mb-8 border-b border-slate-200 pb-5">
     <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
       {d.titleEn || d.title}

@@ -7,8 +7,6 @@
   },
   "scripts": {
     "lectures:sync": "node scripts/sync-lectures.mjs",
-    "predev": "node scripts/sync-lectures.mjs",
-    "predev:bg": "node scripts/sync-lectures.mjs",
     "prebuild": "node scripts/sync-lectures.mjs",
     "dev": "astro dev",
     "dev:bg": "astro dev --background",

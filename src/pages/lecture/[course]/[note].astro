@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
+import { isNoteVisible } from "../../../lib/lecture-visibility.mjs";
 import NoteLayout from "../../../layouts/NoteLayout.astro";
 import Sidenote from "../../../components/lecture/Sidenote.astro";
 import Figure from "../../../components/lecture/Figure.astro";
@@ -23,7 +24,7 @@ export async function getStaticPaths() {
     getCollection("lectureNotes"),
     getCollection("courses"),
   ]);
-  return notes.map((note) => {
+  return notes.filter((note) => isNoteVisible(note, import.meta.env.DEV, import.meta.env.ADS_PUBLIC_WEEKS)).map((note) => {
     const parts = note.id.split("/");
     const courseSlug = parts[0];
     const noteSlug = parts.slice(2).join("/");

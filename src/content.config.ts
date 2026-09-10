@@ -1,6 +1,22 @@
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
+import lectureConfig from "../lectures.config.json";
+
+// 로컬 편집 폴더를 직접 읽는다. 배포는 동기화된 공개 저장소를 읽는다.
+function lectureLoader(suffix: string) {
+  if (!import.meta.env.DEV) return glob({ pattern: `*/${suffix}`, base: "./lectures" });
+  return glob({
+    pattern: lectureConfig.map((c) => `${c.localPath}/${suffix}`),
+    base: "../lectures",
+    generateId: ({ entry }) => {
+      const path = entry.replaceAll("\\", "/");
+      const course = lectureConfig.find((c) => path.startsWith(`${c.localPath}/`));
+      if (!course) throw new Error(`로컬 강의 경로를 확인하세요: ${path}`);
+      return `${course.slug}/${path.slice(course.localPath.length + 1)}`.replace(/\.mdx?$/, "");
+    },
+  });
+}
 
 // 메인 사이트 "최신 뉴스"
 const news = defineCollection({
@@ -41,7 +57,7 @@ const members = defineCollection({
 // lectures.config.json 에 적힌 repo 들을 lectures/<slug>/ 로 clone 해두면 여기서 스캔.
 // lectures/ 가 비어 있어도(등록된 강의 0개) 빌드는 정상.
 const courses = defineCollection({
-  loader: glob({ pattern: "*/course.md", base: "./lectures" }),
+  loader: lectureLoader("course.md"),
   schema: z.object({
     title: z.string(), // 고급딥러닝
     titleEn: z.string().optional(), // Advanced Deep Learning
@@ -68,7 +84,7 @@ const courses = defineCollection({
 // 주차별 강의 노트 — 각 강의 repo 의 weeks/*.md(x). 빌드되어 /lecture/<slug>/<noteSlug> 페이지가 됨.
 // frontmatter 의 week 번호로 course.md 의 Schedule 표 행에 연결된다.
 const lectureNotes = defineCollection({
-  loader: glob({ pattern: "*/weeks/*.{md,mdx}", base: "./lectures" }),
+  loader: lectureLoader("weeks/*.{md,mdx}"),
   schema: z.object({
     title: z.string(),
     week: z.number(),

@@ -30,6 +30,8 @@ jobs:
       # npm run build 의 prebuild 훅이 scripts/sync-lectures.mjs 를 실행해
       # lectures.config.json 의 강의 repo 들을 lectures/ 로 clone 한다 (공개 repo, 토큰 불필요).
       - run: npm run build
+        env:
+          ADS_PUBLIC_WEEKS: ${{ vars.ADS_PUBLIC_WEEKS || 'all' }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

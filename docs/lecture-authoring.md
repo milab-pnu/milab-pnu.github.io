@@ -39,8 +39,24 @@ git push
 
 push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 트리거 → **1~2분 뒤 반영**.
 로컬 미리보기: `cd pnu/milab-pnu && ./dev.ps1` → http://localhost:4321/
-(dev 서버는 시작할 때 GitHub 에서 최신 강의 콘텐츠를 당겨온다 → **push 안 한 로컬 커밋은
-미리보기에 안 뜬다.** 바로 보려면 push 가 확실).
+(dev 서버는 `lectures.config.json`의 `localPath`에 지정한 `pnu/lectures/` 편집 폴더를 직접
+읽는다. 저장하면 반영되며, 미공개 주차도 모두 표시한다. 배포 빌드는 GitHub 콘텐츠를 동기화한다).
+
+## 학생 사이트 공개 주차
+
+데이터사이언스 공개 범위는 사이트 저장소의 Actions 변수 `ADS_PUBLIC_WEEKS`로 저장한다.
+`1,2`는 해당 주차만, `all`은 전체, `none`은 전체 비공개다. 미설정은 기존 동작인 전체 공개다.
+다음 명령으로 설정 저장과 배포 요청을 함께 한다(콘텐츠 커밋·push 불필요, GitHub CLI 로그인 필요).
+
+```powershell
+./lecture-publish.ps1 -Weeks "1,2"
+```
+
+인수 없이 실행하면 공개 주차를 묻는다. GitHub Settings → Secrets and variables → Actions →
+Variables에서도 변경할 수 있으며, 이 경우 Actions의 Deploy to GitHub Pages를 수동 실행한다.
+설정은 이후 배포에도 유지된다. 비공개 노트는 목록 링크와 페이지 생성에서 제외하며 Schedule의
+주제는 그대로 유지한다. 로컬 `./dev.ps1`에서는 모든 자료를 볼 수 있다. `astro preview`는
+배포 산출물 확인이므로 이 전체 보기와 다르다. public GitHub 원문은 접근 제한 대상이 아니다.
 
 ## 주차 노트: 내용 채우기 절차
 
