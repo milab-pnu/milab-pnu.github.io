@@ -16,6 +16,12 @@ MI Lab 웹사이트(Astro 정적 빌드). 배경·구조·배포·강의 시스�
 - **강의 자료 작성 규칙의 정본은 `docs/lecture-authoring.md`** (frontmatter·수식·이미지·
   저작권·새 강의 추가·함정). 새 규칙은 거기 반영한다.
 
+## 커밋 공동 작성자
+
+Claude Code·Codex가 작성하거나 수정한 커밋에는 실제 참여한 도구의 `Co-Authored-By`를
+반드시 추가한다. 모델명을 확인할 수 없어도 도구 이름으로 남긴다. 표기와 검증 방법은
+`docs/lecture-authoring.md`의 공동 작성자 규칙을 따른다.
+
 ## 개발 서버
 
 백그라운드로 띄운다: `.\dev.ps1 [start|stop|status|logs|restart]`

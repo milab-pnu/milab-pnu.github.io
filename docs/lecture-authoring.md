@@ -362,7 +362,17 @@ cd pnu/milab-pnu
 - `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론 폴더명 = URL 경로.
 - 강의 repo 는 **public**. 비밀정보·비공개 개인정보를 넣지 않는다.
 - 언어는 한국어 (커밋 메시지·주석 포함).
-- 강의 repo의 `Co-Authored-By` 트레일러는 실제 작업에 참여한 도구의 식별 정보를 사용한다. 특정 모델명을 고정하거나 확인되지 않은 이름·이메일을 만들지 않는다. 정확한 정보를 확인할 수 없으면 트레일러를 생략한다.
+- **Claude Code·Codex가 작성하거나 수정한 모든 커밋에 `Co-Authored-By`를 반드시 추가한다.**
+  과목 repo와 `milab-pnu` 모두 적용한다. 기본 표기는
+  `Co-Authored-By: Codex <noreply@openai.com>` 또는
+  `Co-Authored-By: Claude <noreply@anthropic.com>`이다. 실제 모델명이 확인되면
+  도구 이름에 병기하되 특정 모델을 고정하지 않는다. 모델명 확인이 안 되어도 기본 표기로
+  남기며 생략하지 않는다. 실제 참여한 도구만 적고, 둘 다 참여했으면 각각 한 줄씩 적는다.
+  본문 뒤 빈 줄을 두고 트레일러를 추가하며, 기존 공동 작성자는 보존하고 중복은 피한다.
+  커밋 후 `git log -1 --format=%B`로 누락을 확인한다. 이미 push한 커밋의 소급 수정은
+  사용자가 요청할 때만 한다.
+  표기 근거: [Codex 공식 소스](https://github.com/openai/codex/blob/e4a3612/codex-rs/core/src/commit_attribution.rs),
+  [Claude Code 문서](https://code.claude.com/docs/en/configuration).
 
 ## 이 문서 관리
 
