@@ -114,7 +114,7 @@ const noteSlugOf = (id: string) => id.split("/").slice(2).join("/");
                     )}
                     <td class="py-2.5 pr-4 text-slate-800">{w.topic}</td>
                     <td class="py-2.5 pr-4">
-                      {wkNotes.length > 0 ? (
+                      {wkNotes.length > 0 || w.submissionUrl ? (
                         <ul class="space-y-1">
                           {wkNotes.map((note) => (
                             <li>
@@ -128,6 +128,16 @@ const noteSlugOf = (id: string) => id.split("/").slice(2).join("/");
                               </a>
                             </li>
                           ))}
+                          {w.submissionUrl && (
+                            <li>
+                              <a
+                                class="text-slate-900 underline decoration-slate-300 underline-offset-2 hover:decoration-slate-900"
+                                href={w.submissionUrl}
+                              >
+                                과제 제출
+                              </a>
+                            </li>
+                          )}
                         </ul>
                       ) : (
                         <span class="text-slate-300">—</span>

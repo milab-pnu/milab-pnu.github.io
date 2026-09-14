@@ -169,7 +169,11 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
 | `location` |  | |
 | `credits` |  | 숫자 |
 | `summary` |  | 검색엔진용 한 줄. 화면엔 안 보임 |
-| `weeks` |  | 계획표. 항목: `{ n: 1, topic: "주제", date?: "2026-09-01" }` |
+| `weeks` |  | 계획표. 항목: `{ n: 1, topic: "주제", date?: "2026-09-01", submissionUrl?: "https://…" }` |
+
+`weeks` 항목에 `submissionUrl`(HTTPS URL)을 지정하면 Schedule 표의 해당 주차
+강의자료 목록 맨 뒤에 **과제 제출** 링크가 표시된다. 노트가 없는 주차에도 표시되며,
+노트 공개 주차 설정과 별개로 항상 공개되므로 제출 창구를 공개할 때 추가한다.
 
 본문(마크다운)은 Goals / Prerequisites / Grading 등으로 표시된다.
 
