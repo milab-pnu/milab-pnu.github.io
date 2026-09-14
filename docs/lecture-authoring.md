@@ -51,6 +51,9 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
 공개 주차는 과목별 GitHub Actions 변수 `LECTURE_<SLUG 대문자·하이픈을 밑줄로 치환>_PUBLIC_WEEKS`에
 저장한다. 미설정은 전체 공개다. 기존 `ADS_PUBLIC_WEEKS`는 데이터사이언스의 새 변수가 없을 때만
 사용한다. 개발 서버는 `lectures.config.json`의 `localPath`를 읽고 모든 노트를 표시한다.
+공개 노트에서 아직 비공개인 주차로 직접 링크하지 않는다. 필요하면 주차명만 안내한다.
+전체 공개 빌드가 통과해도 제한 공개 빌드에서는 링크 대상이 없어 실패할 수 있으므로,
+주차 간 링크를 바꿀 때는 실제 배포의 공개 주차 설정으로도 빌드·검사한다.
 새 과목 등록 시 `localPath`를 `pnu/lectures/` 기준 상대 경로로 지정한다.
 
 ## 주차 노트: 내용 채우기 절차
