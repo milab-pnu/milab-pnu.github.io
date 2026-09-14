@@ -329,6 +329,15 @@ softmax 가 포화되지 않는다.[^aiayn]
 마크다운 표의 정렬 표시(`:---`, `---:`, `:---:`)는 현재 렌더러에서 인라인
 `style="text-align:…"`로 변환되어 CSP·빌드 검사에 걸린다. 구분 행은 `---`만 사용한다.
 
+## 강조와 한국어 조사
+
+`**시퀀스 모델(sequence model)**은`처럼 문장부호로 끝나는 강조 뒤에 조사가 바로
+붙으면 CommonMark가 닫는 `**`를 인식하지 못해 별표가 노출될 수 있다. 괄호뿐 아니라
+따옴표·물음표 등도 해당한다. `**시퀀스 모델**(sequence model)은`처럼 강조 범위를
+조정하거나, 괄호까지 강조해야 하면 `<strong>시퀀스 모델(sequence model)</strong>은`으로
+쓴다. 조사를 억지로 띄우거나 보이지 않는 문자를 넣지 않는다. 렌더된 본문에서 별표가
+그대로 남는지 확인한다. [CommonMark 강조 규칙](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis).
+
 ## 코드블록
 
 ` ```python ` 처럼 언어를 붙여도 된다. 단 **syntax highlighting 은 꺼져 있어**
