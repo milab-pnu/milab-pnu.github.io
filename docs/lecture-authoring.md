@@ -22,14 +22,14 @@ pnu/
     ├── AGENTS.md                     # 공통 작업 지침 (이 문서를 가리킴)
     ├── CLAUDE.md                     # AGENTS.md와 항상 동일하게 유지
     └── 2026-02/
-        ├── advanced_deep_learning/   # = github.com/milab-pnu/2026f-advanced-deep-learning
-        └── applied_data_science/     # = github.com/milab-pnu/2026f-applied-data-science
+        ├── 2026f-advanced-deep-learning/   # = github.com/milab-pnu/2026f-advanced-deep-learning
+        └── 2026f-applied-data-science/     # = github.com/milab-pnu/2026f-applied-data-science
 ```
 
 ## 평소 수정 흐름
 
 ```sh
-cd pnu/lectures/2026-02/advanced_deep_learning
+cd pnu/lectures/2026-02/2026f-advanced-deep-learning
 # course.md 또는 weeks/*.md 수정 → 빌드·검사 통과 확인 → 커밋
 git add -A && git commit -m "..."
 # 과목 repo 는 알아서 push. milab-pnu 는 물어보고 push
@@ -54,7 +54,7 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
 공개 노트에서 아직 비공개인 주차로 직접 링크하지 않는다. 필요하면 주차명만 안내한다.
 전체 공개 빌드가 통과해도 제한 공개 빌드에서는 링크 대상이 없어 실패할 수 있으므로,
 주차 간 링크를 바꿀 때는 실제 배포의 공개 주차 설정으로도 빌드·검사한다.
-새 과목 등록 시 `localPath`를 `pnu/lectures/` 기준 상대 경로로 지정한다.
+새 과목 등록 시 `localPath`를 `pnu/lectures/` 기준 상대 경로로 지정한다. 로컬 과목 폴더명을 바꾸면 이 설정도 함께 수정하고 개발 서버를 재시작한다.
 
 ## 주차 노트: 내용 채우기 절차
 

@@ -3,12 +3,12 @@
     "slug": "2026f-advanced-deep-learning",
     "repo": "https://github.com/milab-pnu/2026f-advanced-deep-learning.git",
     "ref": "main",
-    "localPath": "2026-02/advanced_deep_learning"
+    "localPath": "2026-02/2026f-advanced-deep-learning"
   },
   {
     "slug": "2026f-applied-data-science",
     "repo": "https://github.com/milab-pnu/2026f-applied-data-science.git",
     "ref": "main",
-    "localPath": "2026-02/applied_data_science"
+    "localPath": "2026-02/2026f-applied-data-science"
   }
 ]
