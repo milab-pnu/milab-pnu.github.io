@@ -76,6 +76,10 @@ const courses = defineCollection({
           topic: z.string(),
           date: z.string().optional(),
           submissionUrl: z.url({ protocol: /^https$/ }).optional(),
+          submissionLinks: z.array(z.object({
+            label: z.string().min(1),
+            url: z.url({ protocol: /^https$/ }),
+          })).default([]),
         }),
       )
       .default([]),

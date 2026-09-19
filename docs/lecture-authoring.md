@@ -205,6 +205,10 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
 강의자료 목록 맨 뒤에 **과제 제출** 링크가 표시된다. 노트가 없는 주차에도 표시되며,
 노트 공개 주차 설정과 별개로 항상 공개되므로 제출 창구를 공개할 때 추가한다.
 
+반별 제출 창구가 여러 개면 `submissionLinks: [{ label: "과제 제출 (금 09시 수업)", url: "https://…" }, { label: "과제 제출 (금 19시 수업)", url: "https://…" }]`를 사용한다.
+각 링크는 지정한 순서와 문구로 표시되며 URL은 HTTPS여야 한다. `submissionLinks`가
+비어 있지 않으면 기존 `submissionUrl`보다 우선한다.
+
 본문(마크다운)은 Goals / Prerequisites / Grading 등으로 표시된다.
 
 ### `weeks/*.md` 또는 `.mdx`

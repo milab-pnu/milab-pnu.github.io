@@ -104,6 +104,9 @@ const noteSlugOf = (id: string) => id.split("/").slice(2).join("/");
             <tbody>
               {weeks.map((w) => {
                 const wkNotes = notesByWeek.get(w.n) ?? [];
+                const submissionLinks = w.submissionLinks.length > 0
+                  ? w.submissionLinks
+                  : w.submissionUrl ? [{ label: "과제 제출", url: w.submissionUrl }] : [];
                 return (
                   <tr class="border-b border-slate-100 align-top">
                     <td class="py-2.5 pr-4 tabular-nums text-slate-500">{w.n}</td>
@@ -114,7 +117,7 @@ const noteSlugOf = (id: string) => id.split("/").slice(2).join("/");
                     )}
                     <td class="py-2.5 pr-4 text-slate-800">{w.topic}</td>
                     <td class="py-2.5 pr-4">
-                      {wkNotes.length > 0 || w.submissionUrl ? (
+                      {wkNotes.length > 0 || submissionLinks.length > 0 ? (
                         <ul class="space-y-1">
                           {wkNotes.map((note) => (
                             <li>
@@ -128,16 +131,16 @@ const noteSlugOf = (id: string) => id.split("/").slice(2).join("/");
                               </a>
                             </li>
                           ))}
-                          {w.submissionUrl && (
+                          {submissionLinks.map((link) => (
                             <li>
                               <a
                                 class="text-slate-900 underline decoration-slate-300 underline-offset-2 hover:decoration-slate-900"
-                                href={w.submissionUrl}
+                                href={link.url}
                               >
-                                과제 제출
+                                {link.label}
                               </a>
                             </li>
-                          )}
+                          ))}
                         </ul>
                       ) : (
                         <span class="text-slate-300">—</span>
