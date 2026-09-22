@@ -15,7 +15,7 @@ education:
   - "    Optimization and Statistical Inference Lab (Supervisor: Se-Young Yun)"
   - "    Dissertation: On the Deep Learning-based Personalized Models under Source-to-Source and Source-to-Target Data Heterogeneity"
   - "B.S. in Mathematics and Convergence Software, Sogang University (2013.02-2016.08)"
-  - "    Ranked 1st in the Department of Mathematics (GPA: 3.93/4.3)"
+  - "    Ranked 1st in the Department of Mathematics"
 workHistory:
   - "Assistant Professor, Pusan National University (2026.09-)"
   - "    Graduate School of Data Science (2026.09-)"
