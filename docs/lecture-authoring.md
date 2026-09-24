@@ -423,6 +423,10 @@ cd pnu/milab-pnu
 - **GitHub 쓰기 API 를 몰아서 호출하지 않는다** (예: `gh` 를 짧은 시간에 루프로 십수 번,
   더구나 여러 repo 에 걸쳐). 어뷰징 탐지에 걸려 **계정이 정지**된다 (실제로 겪음 — 복구에
   며칠, 그동안 push·Pages·gh 전부 차단). write 작업은 소량씩 간격을 두고.
+- **`npm run build`는 GitHub에서 동기화한 과목 콘텐츠를 빌드한다.** push 전의 로컬 수정은
+  이 빌드·검사에 반영되지 않으므로, push 전에는 개발 서버에서 해당 노트를 열어 HTTP 200과
+  렌더를 확인하고, push 후 다시 빌드한다. `.mdx` 본문의 `(<)`처럼 `<` 뒤에 글자가 아닌 문자가
+  오면 JSX로 해석되어 `MDXError`가 난다. 부등호는 `≤`나 백틱 코드로 쓴다.
 - 배포가 "성공" 인데 사이트 반영이 안 되면 (드묾): milab → Actions → deploy → "Run workflow".
 - `MILAB_DEPLOY_TOKEN` PAT 만료 시 자동 배포가 조용히 멈춘다 → 수동 버튼 or 재발급.
 - `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론 폴더명 = URL 경로.
