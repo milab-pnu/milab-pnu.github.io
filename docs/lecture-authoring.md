@@ -454,6 +454,9 @@ cd pnu/milab-pnu
   이 빌드·검사에 반영되지 않으므로, push 전에는 개발 서버에서 해당 노트를 열어 HTTP 200과
   렌더를 확인하고, push 후 다시 빌드한다. `.mdx` 본문의 `(<)`처럼 `<` 뒤에 글자가 아닌 문자가
   오면 JSX로 해석되어 `MDXError`가 난다. 부등호는 `≤`나 백틱 코드로 쓴다.
+- 스크립트(Python 등)로 노트에 수식을 넣을 때는 raw string을 쓴다. 일반 문자열이면 `\text`·`\to`가
+  탭 문자로 바뀌어 수식이 조용히 깨지며, 렌더 결과의 `merror` 검사로도 잡히지 않는다. 수정 후 노트에
+  탭 문자가 없는지 확인한다.
 - 배포가 "성공" 인데 사이트 반영이 안 되면 (드묾): milab → Actions → deploy → "Run workflow".
 - `MILAB_DEPLOY_TOKEN` PAT 만료 시 자동 배포가 조용히 멈춘다 → 수동 버튼 or 재발급.
 - `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론 폴더명 = URL 경로.
