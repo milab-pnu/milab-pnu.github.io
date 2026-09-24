@@ -82,6 +82,12 @@ Claude Code와 Codex로 `milab-pnu`와 과목 repo를 작업할 때의 공통 �
   과목 repo 폴더 안에서 실행한다. `codex --search exec`는 `pgrep -f "codex exec"`에 잡히지 않으니 끝났는지는
   출력 파일 경로로 pgrep하거나 `wait`으로 확인한다. 끝나기 전에 resume하면 "thread already has an active
   writer"로 실패한다. macOS에는 `timeout` 명령이 없다.
+- **`resume`은 모델도 잊고 `config.toml`의 기본 모델로 돌아간다.** 첫 호출에 `-m gpt-6-sol`을 줬어도
+  resume에는 `-c model="gpt-6-sol"`을 다시 붙인다(빠뜨리면 "recorded with model X but resuming with Y" 경고와
+  함께 기본 모델로 돈다). effort도 매 호출 `-c model_reasoning_effort="…"`로 다시 준다.
+- `codex exec`는 **git repo이거나 `config.toml`의 trusted 폴더 안에서만** 돈다. 세션 스크래치패드 같은 임시 폴더에서
+  부르면 "Not inside a trusted directory"로 즉시 실패하니 과목 repo 폴더에서 부르고 `-o`만 임시 폴더로 준다.
+  프롬프트를 인자로 넘길 때는 `</dev/null`을 붙인다(stdin이 열려 있으면 "Reading additional input from stdin"으로 대기).
 - 노트 여러 개를 병렬로 검토할 때는 담당(서브에이전트)마다 자기 노트 파일 하나만 고치고 커밋은 하지 않는다.
   커밋은 부모가 파일 단위로 나눠서 한다.
 
