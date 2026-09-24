@@ -9,7 +9,7 @@
 한 과목의 선호를 다른 과목에 자동 적용하지 않는다.
 
 시스템이 어떻게 도는지(sync·CI·배포 메커니즘)는 `../README.md` 의 "강의 페이지" 절 참고.
-Claude Code·Codex 협업 방식(역할·동시 작업·인수인계)은 `agent-workflow.md` 참고.
+Claude Code·Codex 협업 방식(역할·자동 리뷰 루프·동시 작업)은 `agent-workflow.md` 참고.
 
 ## 작업 위치
 
@@ -23,7 +23,6 @@ pnu/
 └── lectures/                         # ← 작업 공간
     ├── AGENTS.md                     # 공통 작업 지침 (이 문서를 가리킴)
     ├── CLAUDE.md                     # AGENTS.md 를 가리키는 심볼릭 링크
-    ├── HANDOFF.md                    # 도구 간 인수인계 메모 (있을 때만) — agent-workflow.md
     └── 2026-02/
         ├── 2026f-advanced-deep-learning/   # = github.com/milab-pnu/2026f-advanced-deep-learning
         └── 2026f-applied-data-science/     # = github.com/milab-pnu/2026f-applied-data-science
