@@ -73,9 +73,15 @@ Claude Code와 Codex로 `milab-pnu`와 과목 repo를 작업할 때의 공통 �
 - 리뷰어가 PDF 같은 원자료를 직접 못 읽으면 작성자가 추출한 텍스트 경로를 함께 준다.
 - 리뷰어(Codex 샌드박스)는 로컬 개발 서버(`localhost:4321`)에 접속하지 못한다. 렌더 확인은 작성자가
   하고 그 결과를 리뷰어에게 전달한다. 리뷰어의 "렌더 확인 불가"는 문서 오류가 아니다.
-- Codex는 `~/.codex/config.toml`의 기본 reasoning effort(현재 `low`)로 돈다. 리뷰에는
-  `-c model_reasoning_effort="medium"` 이상을 명시한다. `--json`의 `thread.started` 이벤트에서 세션 id를 받아
-  `codex exec resume <id>`로 이어 간다. macOS에는 `timeout` 명령이 없다.
+- Codex는 `~/.codex/config.toml`의 기본 reasoning effort(현재 `low`)로 돈다. 리뷰에 쓸 effort는
+  사용자가 정하고 `-c model_reasoning_effort="…"`로 명시한다. 첫 검토처럼 흐름·구성 문제를 찾아야 하면
+  `medium` 이상, 이미 검토된 노트의 사실·출처·표기 재점검은 `low`로도 오탐 없이 돌았다(low는 지적이 짧고
+  규칙 위반·수치 위주이며 흐름·문장 기준의 지적은 거의 내지 않는다).
+- `--json`의 `thread.started` 이벤트에서 세션 id를 받아 `codex exec resume <id>`로 이어 간다.
+  **`resume`은 `-s`·`-C`를 받지 않는다**(즉시 Usage 오류). 샌드박스는 `-c sandbox_mode="read-only"`로 넘기고
+  과목 repo 폴더 안에서 실행한다. `codex --search exec`는 `pgrep -f "codex exec"`에 잡히지 않으니 끝났는지는
+  출력 파일 경로로 pgrep하거나 `wait`으로 확인한다. 끝나기 전에 resume하면 "thread already has an active
+  writer"로 실패한다. macOS에는 `timeout` 명령이 없다.
 - 노트 여러 개를 병렬로 검토할 때는 담당(서브에이전트)마다 자기 노트 파일 하나만 고치고 커밋은 하지 않는다.
   커밋은 부모가 파일 단위로 나눠서 한다.
 
