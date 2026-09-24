@@ -23,8 +23,9 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# Claude Code local skills/config (should not be in a public repo)
+# Claude Code·Codex 로컬 설정 (public repo 에 올리지 않음)
 .claude/
+.codex/
 
 # local working handoff doc
 /HANDOFF.md

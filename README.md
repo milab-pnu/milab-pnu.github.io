@@ -78,13 +78,19 @@ src/
     └── lecture/           # index(목록) · [course]/index(강의) · [course]/[note](주차 노트)
 
 lectures.config.json       # 강의 repo 목록 [{ slug, repo, ref, localPath }]  (아래 "강의 페이지")
+dev.ps1                    # 개발 서버 제어 (PowerShell) — npm run dev:bg 등과 동일
+lecture-publish.ps1        # 과목별 공개 주차 설정 + 재배포 (PowerShell)
 scripts/
 ├── sync-lectures.mjs      # 위 목록의 repo 를 lectures/<slug>/ 로 clone (빌드 전 자동)
+├── build-with-dev.mjs     # npm run build — 백그라운드 개발 서버와 충돌 없이 빌드
+├── check-*.mjs            # 빌드 후 검사·npm run check 회귀 검사
 ├── new-lecture.ps1        # 새 강의 repo 생성·클론·스캐폴드 자동화
 └── lecture-template/      # 새 강의 골격 파일
 lectures/                  # sync-lectures 가 clone 하는 곳 (.gitignore — 커밋 안 됨)
 docs/
-└── lecture-authoring.md   # 강의 자료 작성 규칙 (정본)
+├── lecture-authoring.md   # 강의 자료 작성 규칙 (정본)
+└── agent-workflow.md      # Claude Code·Codex 협업 규칙 (정본)
+AGENTS.md                  # 에이전트 지침 (CLAUDE.md 는 이를 가리키는 심볼릭 링크)
 ```
 
 배포용 CSP는 `src/lib/csp.mjs`에서 관리하며 레이아웃과 산출물 검사가 공유한다.
@@ -186,11 +192,12 @@ GitHub → Settings → Developer settings → **Fine-grained tokens** → Gener
 
 ### 내 컴퓨터에서 모든 강의 보기
 
-PowerShell에서 사이트 폴더로 이동해 개발 서버를 시작한다.
+사이트 폴더로 이동해 개발 서버를 시작한다.
 
-```powershell
-cd C:\Users\USER\Desktop\pnu\milab-pnu
-.\dev.ps1
+```sh
+cd pnu/milab-pnu
+npm run dev:bg      # macOS·Linux·Windows 공통
+.\dev.ps1           # Windows PowerShell (같은 동작)
 ```
 
 - 데이터사이언스: <http://localhost:4321/lecture/2026f-applied-data-science/>
@@ -199,7 +206,7 @@ cd C:\Users\USER\Desktop\pnu\milab-pnu
 로컬에서는 미공개 주차도 모두 보인다. `pnu/lectures/<학기>/<과목>/`의 파일을 저장하면
 푸시 없이 반영된다. 편집 폴더는 `lectures.config.json`의 `localPath`로 연결한다.
 처음 사이트를 설치할 때는 `npm ci`로 의존성을 설치하고 해당 과목 저장소도 클론해 둔다.
-서버 종료는 `.\dev.ps1 stop`, 재시작은 `.\dev.ps1 restart`다.
+서버 종료는 `npm run dev:stop`(또는 `.\dev.ps1 stop`), 재시작은 `.\dev.ps1 restart`다.
 PowerShell에서 스크립트 실행 정책으로 차단되면 본인이 검토한 스크립트에 한해
 `powershell -ExecutionPolicy Bypass -File .\dev.ps1`처럼 해당 실행에만 허용할 수 있다.
 공개 명령도 `powershell -ExecutionPolicy Bypass -File .\lecture-publish.ps1 -Course 2026f-applied-data-science -Weeks "1,2"`로 실행할 수 있다.
@@ -225,6 +232,14 @@ PowerShell에서 스크립트 실행 정책으로 차단되면 본인이 검토�
 위 명령들은 사용 예시이며 실행한 명령의 설정만 적용된다. `-Course`에는 `lectures.config.json`에 등록된 전체 slug만 사용한다.
 예: `2026f-applied-data-science`, `2026f-advanced-deep-learning`. 폴더 이름이나 축약형은 받지 않는다.
 인수 없이 `.\lecture-publish.ps1`을 실행하면 과목과 주차를 차례로 입력한다.
+
+PowerShell(`pwsh`)이 없는 macOS·Linux에서는 스크립트가 하는 일을 `gh`로 직접 실행한다
+(`brew install powershell`로 `pwsh`를 설치해 스크립트를 써도 된다).
+
+```sh
+gh variable set LECTURE_2026F_APPLIED_DATA_SCIENCE_PUBLIC_WEEKS --repo milab-pnu/milab-pnu.github.io --body "1,2"
+gh workflow run deploy.yml --repo milab-pnu/milab-pnu.github.io --ref main
+```
 
 각 명령은 선택한 과목의 공개 설정만 저장하고 사이트 재배포를 요청한다. 다른 과목의 설정은
 유지되며 이후 콘텐츠 푸시에도 같은 공개 범위가 적용된다. 콘텐츠 커밋·푸시는 필요 없지만

@@ -5,9 +5,11 @@
 (맨 아래 "이 문서 관리" 참고).
 
 **이 문서는 과목 공통 규칙만 담는다.** 특정 과목에서 합의한 참고문헌 구성·파일명·수업 형식은
-해당 과목 repo의 `AGENTS.md`에 기록한다. 한 과목의 선호를 다른 과목에 자동 적용하지 않는다.
+해당 과목 repo의 `AGENTS.md`에 기록한다(없으면 만들고 `CLAUDE.md`를 그 심볼릭 링크로 둔다).
+한 과목의 선호를 다른 과목에 자동 적용하지 않는다.
 
 시스템이 어떻게 도는지(sync·CI·배포 메커니즘)는 `../README.md` 의 "강의 페이지" 절 참고.
+Claude Code·Codex 협업 방식(역할·동시 작업·인수인계)은 `agent-workflow.md` 참고.
 
 ## 작업 위치
 
@@ -20,7 +22,8 @@ pnu/
 │   └── lectures/                     # 빌드용 자동 clone — 절대 손대지 않음
 └── lectures/                         # ← 작업 공간
     ├── AGENTS.md                     # 공통 작업 지침 (이 문서를 가리킴)
-    ├── CLAUDE.md                     # AGENTS.md와 항상 동일하게 유지
+    ├── CLAUDE.md                     # AGENTS.md 를 가리키는 심볼릭 링크
+    ├── HANDOFF.md                    # 도구 간 인수인계 메모 (있을 때만) — agent-workflow.md
     └── 2026-02/
         ├── 2026f-advanced-deep-learning/   # = github.com/milab-pnu/2026f-advanced-deep-learning
         └── 2026f-applied-data-science/     # = github.com/milab-pnu/2026f-applied-data-science
@@ -41,7 +44,7 @@ git push
 사용자에게 물어본다.
 
 push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 트리거 → **1~2분 뒤 반영**.
-로컬 미리보기: `cd pnu/milab-pnu && ./dev.ps1` → http://localhost:4321/
+로컬 미리보기: `cd pnu/milab-pnu && npm run dev:bg`(Windows는 `.\dev.ps1`도 가능) → http://localhost:4321/
 (dev 서버는 `lectures.config.json`의 `localPath`에 지정한 `pnu/lectures/` 편집 폴더를 직접
 읽는다. 저장하면 반영되며, 미공개 주차도 모두 표시한다. 배포 빌드는 GitHub 콘텐츠를 동기화한다).
 
@@ -401,7 +404,7 @@ softmax 가 포화되지 않는다.[^aiayn]
 ```powershell
 cd pnu/milab-pnu
 ./scripts/new-lecture.ps1 -Slug 2027s-machine-learning `
-    -Path ..\lectures\2027-01\machine_learning `
+    -Path ..\lectures\2027-01\2027s-machine-learning `   # 폴더명 = slug(저장소 이름)
     -Pat github_pat_xxxxx        # milab-pnu.github.io Actions:write PAT — 기존 MILAB_DEPLOY_TOKEN 재사용 가능 (아래 참고)
 ```
 
@@ -480,4 +483,4 @@ CSP는 `check-lecture-notes.mjs`로 계속 검증한다. 디자인과 CSS 자체
 
 ### 개발 서버 실행 중 빌드
 
-로컬 검증은 `npm run build`를 사용한다. 실행 중인 백그라운드 개발 서버를 잠시 중지하고, 빌드 성공·실패 후 같은 포트로 다시 시작한다. `astro build`나 `astro sync`를 개발 서버와 동시에 직접 실행하면 공유 `.astro` 콘텐츠 목록이 덮어써져 `UnknownContentCollectionError`가 발생할 수 있다. 이 경우 `dev.ps1 restart`로 복구한다. 포그라운드 서버는 직접 종료한 뒤 빌드하고 다시 켠다. 학생 사이트 공개 설정은 바뀌지 않는다.
+로컬 검증은 `npm run build`를 사용한다. 실행 중인 백그라운드 개발 서버를 잠시 중지하고, 빌드 성공·실패 후 같은 포트로 다시 시작한다. `astro build`나 `astro sync`를 개발 서버와 동시에 직접 실행하면 공유 `.astro` 콘텐츠 목록이 덮어써져 `UnknownContentCollectionError`가 발생할 수 있다. 이 경우 개발 서버를 재시작(`npm run dev:stop` 후 `npm run dev:bg`, 또는 `.\dev.ps1 restart`)해 복구한다. 포그라운드 서버는 직접 종료한 뒤 빌드하고 다시 켠다. 학생 사이트 공개 설정은 바뀌지 않는다.
