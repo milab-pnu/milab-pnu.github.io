@@ -88,7 +88,8 @@ scripts/
 └── lecture-template/      # 새 강의 골격 파일
 lectures/                  # sync-lectures 가 clone 하는 곳 (.gitignore — 커밋 안 됨)
 docs/
-├── lecture-authoring.md   # 강의 자료 작성 규칙 (정본)
+├── lecture-authoring.md   # 강의 노트 작성·검토 규칙 (정본)
+├── lecture-site-reference.md  # frontmatter·컴포넌트·이미지·공개 주차·새 강의 추가·설계 배경
 └── agent-workflow.md      # Claude Code·Codex 협업 규칙 (정본)
 AGENTS.md                  # 에이전트 지침 (CLAUDE.md 는 이를 가리키는 심볼릭 링크)
 ```
@@ -167,8 +168,9 @@ pnu/
 `gh workflow run deploy.yml -R milab-pnu/milab-pnu.github.io` 을 실행 (secret `MILAB_DEPLOY_TOKEN`).
 `on.schedule` 없음. 수동 재배포는 milab → Actions → deploy → "Run workflow".
 
-> **강의 자료 작성 방법 · frontmatter 스키마 · 수식/이미지 규칙 · 새 강의 추가 · 함정**
-> → `docs/lecture-authoring.md` (강의 작성 규칙의 정본).
+> **강의 노트 작성·검토 규칙** → `docs/lecture-authoring.md` (정본).
+> **frontmatter 스키마 · 컴포넌트 · 이미지 · 공개 주차 · 새 강의 추가 · 설계 배경**
+> → `docs/lecture-site-reference.md`.
 
 ### 재배포 트리거용 PAT (`MILAB_DEPLOY_TOKEN`)
 

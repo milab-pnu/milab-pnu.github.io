@@ -1,8 +1,8 @@
 # 에이전트 협업 가이드 (Claude Code · Codex)
 
 Claude Code와 Codex로 `milab-pnu`와 과목 repo를 작업할 때의 공통 규칙. **이 문서가
-도구 협업 규칙의 정본이다.** 강의 작성 규칙은 `lecture-authoring.md`, 사이트 구조는
-`../README.md`를 따른다.
+도구 협업 규칙의 정본이다.** 강의 작성·검토 규칙은 `lecture-authoring.md`, 사이트 동작은
+`lecture-site-reference.md`, 사이트 구조는 `../README.md`를 따른다.
 
 **한 도구만 써도 된다.** 아래 규칙은 도구 수와 관계없이 지키는 것(시작 위치·지침 읽기·
 설정·커밋)과 둘을 함께 쓸 때만 해당하는 것(역할·자동 리뷰 루프·동시 작업)으로 나뉜다.
@@ -112,7 +112,7 @@ Claude Code와 Codex로 `milab-pnu`와 과목 repo를 작업할 때의 공통 �
 - 불가피하게 두 세션이 한 repo를 쓰게 되면 `git add -A`를 쓰지 않는다. 다른 세션의 진행 중인 편집이 커밋에
   딸려 들어가 커밋 메시지·공동 작성자와 내용이 어긋난다(실제로 겪음). 자기가 고친 파일만 `git add <파일>`로 담는다.
 - `milab-pnu` 빌드·개발 서버도 한 번에 한 도구만 다룬다. 서버를 켠 채 빌드할 때의 주의는
-  `lecture-authoring.md` "개발 서버 실행 중 빌드"를 따른다.
+  `lecture-site-reference.md` "개발 서버 실행 중 빌드"를 따른다.
 
 ### 이어서 작업하기
 

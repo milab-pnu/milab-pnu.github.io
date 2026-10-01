@@ -13,8 +13,9 @@ MI Lab 웹사이트(Astro 정적 빌드). 배경·구조·배포·강의 시스�
 - **강의 콘텐츠는 이 repo 에서 고치지 않는다.** 강의 하나 = 별도 repo 이고
   `pnu/lectures/<학기>/<과목>/` 의 클론에서 작업한다. `lectures/`(빌드용 자동 clone)는
   손대지도 커밋하지도 않는다. — `README.md` "강의 페이지"
-- **강의 자료 작성 규칙의 정본은 `docs/lecture-authoring.md`** (frontmatter·수식·이미지·
-  저작권·새 강의 추가·함정). 새 규칙은 거기 반영한다.
+- **강의 노트 작성·검토 규칙의 정본은 `docs/lecture-authoring.md`**(검토 기준·표기·인용·저작권·
+  커밋). frontmatter·컴포넌트·이미지·공개 주차·새 강의 추가·설계 배경은
+  `docs/lecture-site-reference.md`. 새 규칙은 해당 문서에 반영한다.
 
 ## 도구 협업 (Claude Code · Codex)
 
