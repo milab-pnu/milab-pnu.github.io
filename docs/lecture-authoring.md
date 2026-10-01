@@ -55,7 +55,10 @@ push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 
 사용한다. 개발 서버는 `lectures.config.json`의 `localPath`를 읽고 모든 노트를 표시한다.
 공개 노트에서 아직 비공개인 주차로 직접 링크하지 않는다. 필요하면 주차명만 안내한다.
 전체 공개 빌드가 통과해도 제한 공개 빌드에서는 링크 대상이 없어 실패할 수 있으므로,
-주차 간 링크를 바꿀 때는 실제 배포의 공개 주차 설정으로도 빌드·검사한다.
+주차 간 링크를 바꿀 때는 실제 배포의 공개 주차 설정으로도 빌드·검사한다. 배포는 변수를 개별 환경 변수가 아니라
+JSON 하나(`LECTURE_VISIBILITY_VARIABLES`)로 넘기므로 로컬에서도 같은 형태로 준다. 예:
+`LECTURE_VISIBILITY_VARIABLES='{"LECTURE_2026F_ADVANCED_DEEP_LEARNING_PUBLIC_WEEKS":"1,2"}' npm run build`.
+`LECTURE_…_PUBLIC_WEEKS=1,2 npm run build`처럼 개별 변수로 주면 무시되어 전체 공개로 빌드된다.
 새 과목 등록 시 `localPath`를 `pnu/lectures/` 기준 상대 경로로 지정한다. 로컬 과목 폴더명을 바꾸면 이 설정도 함께 수정하고 개발 서버를 재시작한다.
 
 ## 주차 노트: 내용 채우기 절차
