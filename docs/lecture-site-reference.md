@@ -23,9 +23,10 @@ pnu/
 
 ```sh
 cd pnu/lectures/2026-02/2026f-advanced-deep-learning
-# course.md 또는 weeks/*.md 수정 → 빌드·검사 통과 확인 → 커밋
+# course.md 또는 weeks/*.md 수정 → 개발 서버에서 렌더 확인 → 커밋·push
 git add -A && git commit -m "..."
 git push
+# push 후 pnu/milab-pnu 에서 npm run build 로 빌드·검사 (빌드는 GitHub 콘텐츠를 동기화한다)
 ```
 
 push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 트리거 → **1~2분 뒤 반영**.
@@ -125,7 +126,7 @@ JS 표현식으로 해석되니 주의 (인라인 `$...$` 수식 안의 `{}` 는
 | 컴포넌트 | 용법 | 비고 |
 |---|---|---|
 | `<Sidenote>…</Sidenote>` | 본문 옆 우측 여백 주석 | **문장 끝에 붙여 쓴다**(`…한다.<Sidenote>…</Sidenote>`) — 단독 줄에 두면 본문 위첨자 번호가 허공에 뜬다. 자동 번호. 좁은 화면은 인라인. 설명 전용 — 서지 인용은 각주(`[^키]`) |
-| `<Figure src alt caption? source? wide? hero? />` | 그림 + 캡션 + 출처 | `alt` 필수. `source` 로 출처 표기 필수. `wide`=본문보다 넓게, `hero`=최상단 전체 폭 |
+| `<Figure src alt caption? source? wide? hero? />` | 그림 + 캡션 + 출처 | `alt` 필수. `source` 로 출처 표기 필수. `wide`는 현재 일반과 같다(최대 32rem). `hero`=노트 최상단, 최대 40rem |
 | `<Video src caption? />` | YouTube/Vimeo 임베드 | URL 파싱 → nocookie iframe. **그 외 URL 은 빌드 실패** |
 | `<Callout type="intuition"\|"warning"\|"example"\|"note">…</Callout>` | 강조 박스 | 라벨: 직관/주의/예시/노트 |
 | `<Details summary="…">…</Details>` | 접이식 블록 | 긴 유도·보충. 네이티브 `<details>` |
@@ -153,7 +154,8 @@ softmax 가 포화되지 않는다.[^aiayn]
 - 같은 `[^키]` 를 여러 번 쓰면 **항목 1개 + 위치별 backlink**. 중복 관리 불필요.
 - 정의(`[^키]: …`)는 어디 둬도 되지만 **노트 맨 끝에 모아** 둔다 (기존 참고문헌 목록 위치).
   빌드가 하단에 "참고문헌" 절로 자동 수집한다. 정의 본문은 마크다운(`[제목](url)`·`*이탤릭*`·`$수식$`).
-- `<Sidenote>` 안에서도 `[^키]` 를 쓸 수 있다. `<figcaption>` 안에서는 마크다운·각주가 안 먹는다.
+- `<Sidenote>`와 MDX에 직접 쓴 `<figcaption>` 안에서도 `[^키]`·마크다운이 처리된다.
+  `<Figure caption="…">`는 문자열 prop이라 마크다운·각주 없이 텍스트 그대로 나간다.
 - 정의 안 된 `[^키]` 는 본문에 리터럴로 남고 `check-lecture-notes.mjs` 가 잡는다.
 
 ## 수식·코드블록 렌더
@@ -180,8 +182,7 @@ softmax 가 포화되지 않는다.[^aiayn]
   raw `<figure><video src="https://…" autoplay loop muted playsinline controls width="100%"
   aria-label="…"></video><figcaption>…</figcaption></figure>` 가 그대로 동작한다(예:
   `01a-transformer.mdx` 의 Alammar seq2seq 클립). `<Figure>` 는 이미지 전용, `<Video>` 는
-  YouTube/Vimeo 전용이라 이 경우엔 둘 다 안 쓴다. `<figcaption>` 안에서는 마크다운·각주가
-  안 먹으니 `[^키]` 는 본문 산문에 둔다. 라이선스 확인은 이미지와 동일.
+  YouTube/Vimeo 전용이라 이 경우엔 둘 다 안 쓴다. 라이선스 확인은 이미지와 동일.
 - 로컬 이미지를 `<Figure>`에 넣을 때는 MDX에서 `import plot from "./assets/그림.png";`로
   가져온 뒤 `<Figure src={plot.src} alt="…" source="…" />`로 전달한다. 현재 `Figure`는
   문자열 경로를 해석하거나 이미지를 최적화하지 않는 `<img>` 래퍼이므로 `src="./assets/…"`를
@@ -189,13 +190,14 @@ softmax 가 포화되지 않는다.[^aiayn]
   **외부 URL 이미지는 최적화 없이 그대로 나간다** — 원본을 적당한 해상도로.
 - 설명·외부 그림으로 부족하면 **인라인 `<svg>` 다이어그램**을 직접 그린다(최후 수단).
   CSP 상 `style=`·`<style>` 불가 → presentation 속성(`fill=`, `stroke=`, `font-size=`)만.
-  `01-transformers.mdx` 에 예시가 있다. **한 노트 안의 SVG 는 viewBox 크기·글자
+  고급딥러닝 `01b-bert-vs-gpt.mdx` 에 예시가 있다. **한 노트 안의 SVG 는 viewBox 크기·글자
   크기·박스 규격·색을 서로 맞춘다** — 안 그러면 그림마다 축척이 달라 보인다.
   현재 팔레트: 박스 `#f8fafc`/`#e2e8f0`, 강조 `#0f172a`, 보조 텍스트 `#64748b`,
   연결선 `#0f172a`(강조)·`#94a3b8`(약).
-- **그림 폭은 CSS 가 통일한다** — 원본 해상도와 무관하게 hero 40rem, 그 외 모든
-  `<Figure>`·`<figure>` 는 32rem 로 고정되고 가운데 정렬된다. 즉 큰 이미지를 넣어도
-  본문을 가득 채우지 않는다. `wide` prop 은 현재 일반과 동일하게 취급된다.
+- **그림 폭은 CSS 가 통일한다**(`lecture-note.css`) — 원본 해상도와 무관하게 `<Figure>`와
+  `<figure class="lecture-figure">`는 최대 32rem, hero 는 최대 40rem 로 가운데 정렬된다.
+  `wide` prop 은 현재 일반과 같다. 클래스 없는 `<figure>`는 이 제한을 받지 않고 본문 폭을 따른다
+  (본문 바로 아래 `<svg>`는 최대 32rem).
 - 슬라이드 PDF·데이터셋 등 **큰 파일은 페이지에 심지 말고 링크로**.
 - 각 노트는 독립 정적 HTML → 방문할 때만 로드. 페이지 하나가 너무 커지면 주차 노트를 쪼갠다.
 
@@ -221,9 +223,11 @@ softmax 가 포화되지 않는다.[^aiayn]
 
 ```powershell
 cd pnu/milab-pnu
+# -Path 의 폴더명 = slug(저장소 이름)
+# -Pat: milab-pnu.github.io Actions:write PAT — 기존 MILAB_DEPLOY_TOKEN 재사용 가능 (아래 참고)
 ./scripts/new-lecture.ps1 -Slug 2027s-machine-learning `
-    -Path ..\lectures\2027-01\2027s-machine-learning `   # 폴더명 = slug(저장소 이름)
-    -Pat github_pat_xxxxx        # milab-pnu.github.io Actions:write PAT — 기존 MILAB_DEPLOY_TOKEN 재사용 가능 (아래 참고)
+    -Path ..\lectures\2027-01\2027s-machine-learning `
+    -Pat github_pat_xxxxx
 ```
 
 스크립트가: GitHub repo 생성 → 작업 폴더 클론 → 골격 복사(`scripts/lecture-template/`)
@@ -246,7 +250,7 @@ cd pnu/milab-pnu
 
 ## 건드리기 전에 알아야 할 설계 배경
 
-사이트 대부분이 **엄격 CSP**(`style-src 'self'`, `script-src 'none'`, `img-src 'self'`)로
+사이트 대부분이 **엄격 CSP**(`style-src 'self'`, `script-src 'none'`, `img-src 'self' data:`, 정본 `src/lib/csp.mjs`)로
 돌아서, 인라인 `style=` 이나 런타임 JS·외부 자원을 쓰는 렌더링은 조용히 깨진다. 아래는
 그 때문에 내려진 결정이라 되돌리면 안 된다:
 
@@ -254,8 +258,6 @@ cd pnu/milab-pnu
   기본 HTML 출력은 인라인 style 범벅이라 CSP 에 막힌다. HTML 출력으로 되돌리면 수식이 깨짐.
 - **코드블록 하이라이팅 꺼짐** (`markdown.syntaxHighlight: false`). Shiki 가 토큰마다
   인라인 `style=` 로 색을 넣어 CSP 에 막힌다 + 사이트는 무채색 방침. 켜지 않는다.
-- **표 정렬 표시 금지.** 마크다운 표의 `:---`·`---:`·`:---:` 는 인라인 `style="text-align:…"`
-  로 변환되어 CSP·빌드 검사에 걸린다.
 - **강의 노트 페이지(`/lecture/<course>/<note>`)만 완화 CSP.** `NoteLayout` 이
   `HeadMeta` 의 `csp` prop 으로 넘긴다: `script-src 'self'`(번들 아닌 정적 파일
   `public/lecture-nav.js` 목차 추적 스크립트 1개), `img-src 'self' https: data:`(외부 이미지),
@@ -266,11 +268,8 @@ cd pnu/milab-pnu
 - **빌드 검사** `scripts/check-lecture-notes.mjs` 가 `postbuild` 로 돌며 산출물에서
   노트 페이지의 CSP·인라인 `style=`/`<script>`·해석 안 된 각주(`[^키]`)·단독 줄에 놓인
   `<Sidenote>`(문장 끝에 안 붙은 것)를, 그 외 페이지의 엄격 CSP 유지를 확인한다.
-  테스트 프레임워크는 없다.
-- **`lectures/_dev-fixture/`** (`.gitignore` 됨, 로컬 전용): 노트 컴포넌트와 각주 인용을
-  전부 쓰는 회귀 픽스처. 표현 계층을 고칠 때 강의 repo sync 없이 `npm run build` 로 렌더·검사를
-  확인하려고 둔다. CI 에는 없으므로 배포에 영향 없다. `sync-lectures.mjs` 가 "미등록
-  폴더" 경고를 내지만 무시해도 된다.
+  테스트 프레임워크는 없고, 그 밖의 회귀 검사는 `npm run check`(astro check·`check-bibtex`·
+  `check-lecture-visibility`·`check-build-validation`)로 돌린다.
 
 ### 로컬 개발 서버의 CSP
 
@@ -281,4 +280,4 @@ CSP는 `check-lecture-notes.mjs`로 계속 검증한다. 디자인과 CSS 자체
 
 ### 개발 서버 실행 중 빌드
 
-로컬 검증은 `npm run build`를 사용한다. 실행 중인 백그라운드 개발 서버를 잠시 중지하고, 빌드 성공·실패 후 같은 포트로 다시 시작한다. `astro build`나 `astro sync`를 개발 서버와 동시에 직접 실행하면 공유 `.astro` 콘텐츠 목록이 덮어써져 `UnknownContentCollectionError`가 발생할 수 있다. 이 경우 개발 서버를 재시작(`npm run dev:stop` 후 `npm run dev:bg`, 또는 `.\dev.ps1 restart`)해 복구한다. 포그라운드 서버는 직접 종료한 뒤 빌드하고 다시 켠다. 학생 사이트 공개 설정은 바뀌지 않는다.
+로컬 검증은 `npm run build`를 사용한다. 이 명령(`scripts/build-with-dev.mjs`)이 실행 중인 백그라운드 개발 서버를 스스로 중지하고, 빌드 성공·실패와 관계없이 같은 포트로 다시 시작하므로 따로 끄고 켤 필요가 없다. 포그라운드 서버가 떠 있으면 오류를 내고 중단하니, 직접 종료한 뒤 빌드하고 다시 켠다. `astro build`나 `astro sync`를 개발 서버와 동시에 직접 실행하면 공유 `.astro` 콘텐츠 목록이 덮어써져 `UnknownContentCollectionError`가 발생할 수 있다. 이 경우 개발 서버를 재시작(`npm run dev:stop` 후 `npm run dev:bg`, 또는 `.\dev.ps1 restart`)해 복구한다. 학생 사이트 공개 설정은 바뀌지 않는다.
