@@ -152,6 +152,19 @@
   display: inline-block;
   text-align: left; /* 수식 내부 정렬은 기본값 유지 */
 }
+/* aligned 는 <mtable columnalign="right left" columnspacing="0em"> 으로 나오는데,
+   Chrome 의 MathML Core 는 두 속성을 무시해 칸이 가운데 정렬되고 칸 사이가 벌어진다
+   (= 가 줄마다 어긋남). 속성이 뜻하는 정렬을 CSS 로 다시 준다. */
+.prose-lecture mtable[columnalign^="right left"] > mtr > mtd {
+  padding-left: 0;
+  padding-right: 0;
+}
+.prose-lecture mtable[columnalign^="right left"] > mtr > mtd:nth-child(odd) {
+  text-align: right;
+}
+.prose-lecture mtable[columnalign^="right left"] > mtr > mtd:nth-child(even) {
+  text-align: left;
+}
 
 /* ── Video ── */
 .lecture-video {
