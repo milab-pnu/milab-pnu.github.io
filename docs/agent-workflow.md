@@ -80,7 +80,7 @@ Claude Code와 Codex로 `milab-pnu`와 과목 repo를 작업할 때의 공통 �
 - `--json`의 `thread.started` 이벤트에서 세션 id를 받아 `codex exec resume <id>`로 이어 간다.
   **`resume`은 `-s`·`-C`를 받지 않는다**(즉시 Usage 오류). 샌드박스는 `-c sandbox_mode="read-only"`로 넘기고
   과목 repo 폴더 안에서 실행한다. `codex --search exec`는 `pgrep -f "codex exec"`에 잡히지 않으니 끝났는지는
-  출력 파일 경로로 pgrep하거나 `wait`으로 확인한다. 끝나기 전에 resume하면 "thread already has an active
+  `-o`로 준 출력 파일이 생겼는지로 확인하거나 `wait`으로 기다린다(출력 파일 경로로 `pgrep -f`하면 그 경로가 든 대기 루프 자신이 잡혀 끝나지 않는다). 끝나기 전에 resume하면 "thread already has an active
   writer"로 실패한다. macOS에는 `timeout` 명령이 없다.
 - **`resume`은 모델도 잊고 `config.toml`의 기본 모델로 돌아간다.** 첫 호출에 `-m gpt-6-sol`을 줬어도
   resume에는 `-c model="gpt-6-sol"`을 다시 붙인다(빠뜨리면 "recorded with model X but resuming with Y" 경고와
