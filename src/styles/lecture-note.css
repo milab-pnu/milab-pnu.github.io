@@ -352,6 +352,9 @@
   margin: 2rem 0;
   font-size: 0.95rem;
   line-height: 1.55;
+  /* 좁은 칸에서 한국어가 글자 단위로 끊기지 않게 어절 단위로 줄바꿈한다 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 .prose-lecture thead th {
   text-align: left;
