@@ -6,47 +6,27 @@
 
 ## 작업 위치와 미리보기
 
-강의 하나 = **독립 GitHub repo**. 각 repo 는 `pnu/lectures/<학기>/<과목>/` 에 클론되어 있고
-(`origin` = 그 repo), **강의 자료는 항상 거기서** 수정하고 `git push` 한다.
+강의 하나 = **독립 GitHub repo**이고 `pnu/lectures/<학기>/<과목>/`의 클론에서 고친다(폴더 지도는
+`pnu/lectures/AGENTS.md`). 노트를 고치고 개발 서버에서 렌더를 본 뒤 자기 파일만 `git add <파일>`로 커밋·push한다.
+push하면 그 repo의 `.github/workflows/notify.yml`이 사이트 재배포를 트리거해 **1~2분 뒤 반영**된다.
 
-```
-pnu/
-├── milab-pnu/                        # 사이트 코드
-│   └── lectures/                     # 빌드용 자동 clone — 절대 손대지 않음
-└── lectures/                         # ← 작업 공간
-    ├── AGENTS.md                     # 공통 작업 지침 (lecture-authoring.md 를 가리킴)
-    ├── CLAUDE.md                     # AGENTS.md 를 가리키는 심볼릭 링크
-    └── 2026-02/
-        ├── 2026f-advanced-deep-learning/   # = github.com/milab-pnu/2026f-advanced-deep-learning
-        └── 2026f-applied-data-science/     # = github.com/milab-pnu/2026f-applied-data-science
-```
-
-```sh
-cd pnu/lectures/2026-02/2026f-advanced-deep-learning
-# course.md 또는 weeks/*.md 수정 → 개발 서버에서 렌더 확인 → 커밋·push
-git add -A && git commit -m "..."
-git push
-# push 후 pnu/milab-pnu 에서 npm run build 로 빌드·검사 (빌드는 GitHub 콘텐츠를 동기화한다)
-```
-
-push → 그 repo 의 `.github/workflows/notify.yml` 이 사이트 재배포를 트리거 → **1~2분 뒤 반영**.
-로컬 미리보기: `cd pnu/milab-pnu && npm run dev:bg`(Windows는 `.\dev.ps1`도 가능) → http://localhost:4321/
-(dev 서버는 `lectures.config.json`의 `localPath`에 지정한 `pnu/lectures/` 편집 폴더를 직접
-읽는다. 저장하면 반영되며, 미공개 주차도 모두 표시한다. 배포 빌드는 GitHub 콘텐츠를 동기화한다).
+개발 서버(`cd pnu/milab-pnu && npm run dev:bg` → http://localhost:4321/)는 `lectures.config.json`의
+`localPath`가 가리키는 편집 폴더를 직접 읽어 저장 즉시 반영하고 미공개 주차도 모두 보인다. 반면
+`npm run build`는 GitHub의 과목 콘텐츠를 동기화해 빌드하므로 push 전 수정은 반영되지 않는다. push 전에는
+개발 서버에서 HTTP 200과 렌더를 확인하고, push 후 다시 빌드한다.
 
 ## 학생 사이트 공개 주차
 
-로컬 전체 미리보기와 과목별 학생 공개 설정의 실행 방법은 [README](../README.md#강의-미리보기와-과목별-공개-설정)에 정리한다.
-공개 주차는 과목별 GitHub Actions 변수 `LECTURE_<SLUG 대문자·하이픈을 밑줄로 치환>_PUBLIC_WEEKS`에
-저장한다. 미설정은 전체 공개다. 기존 `ADS_PUBLIC_WEEKS`는 데이터사이언스의 새 변수가 없을 때만
-사용한다. 개발 서버는 `lectures.config.json`의 `localPath`를 읽고 모든 노트를 표시한다.
+공개 설정 방법은 [README](../README.md#강의-미리보기와-과목별-공개-설정). 공개 주차는 과목별 Actions 변수
+`LECTURE_<SLUG 대문자·하이픈은 밑줄>_PUBLIC_WEEKS`에 두며, 미설정은 전체 공개다(기존 `ADS_PUBLIC_WEEKS`는
+데이터사이언스의 새 변수가 없을 때만 쓰인다).
 
 전체 공개 빌드가 통과해도 제한 공개 빌드에서는 링크 대상이 없어 실패할 수 있으므로,
 주차 간 링크를 바꿀 때는 실제 배포의 공개 주차 설정으로도 빌드·검사한다. 배포는 변수를 개별 환경 변수가 아니라
 JSON 하나(`LECTURE_VISIBILITY_VARIABLES`)로 넘기므로 로컬에서도 같은 형태로 준다. 예:
 `LECTURE_VISIBILITY_VARIABLES='{"LECTURE_2026F_ADVANCED_DEEP_LEARNING_PUBLIC_WEEKS":"1,2"}' npm run build`.
 `LECTURE_…_PUBLIC_WEEKS=1,2 npm run build`처럼 개별 변수로 주면 무시되어 전체 공개로 빌드된다.
-새 과목 등록 시 `localPath`를 `pnu/lectures/` 기준 상대 경로로 지정한다. 로컬 과목 폴더명을 바꾸면 이 설정도 함께 수정하고 개발 서버를 재시작한다.
+새 과목의 `localPath`는 `pnu/lectures/` 기준 상대 경로이고, 로컬 폴더명을 바꾸면 함께 고치고 개발 서버를 재시작한다.
 
 ## 강의 repo 구조
 
@@ -242,9 +222,6 @@ cd pnu/milab-pnu
 
 ## 운영 주의점
 
-- **`npm run build`는 GitHub에서 동기화한 과목 콘텐츠를 빌드한다.** push 전의 로컬 수정은
-  이 빌드·검사에 반영되지 않으므로, push 전에는 개발 서버에서 해당 노트를 열어 HTTP 200과
-  렌더를 확인하고, push 후 다시 빌드한다.
 - 배포가 "성공" 인데 사이트 반영이 안 되면 (드묾): milab → Actions → deploy → "Run workflow".
 - `MILAB_DEPLOY_TOKEN` PAT 만료 시 자동 배포가 조용히 멈춘다 → 수동 버튼 or 재발급.
 - `slug` 은 소문자·숫자·하이픈만. `lectures.config.json` 의 `slug` = 클론 폴더명 = URL 경로.

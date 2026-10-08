@@ -1,40 +1,17 @@
 # milab-pnu — 에이전트 안내
 
-MI Lab 웹사이트(Astro 정적 빌드). 배경·구조·배포·강의 시스템은 `README.md` 가 정본이고,
-여기서 반복하지 않는다. 아래는 작업 전에 알아야 할 것만.
-
-## 지침 파일 관리
-
-`AGENTS.md`가 공통 지침의 원본이고, `CLAUDE.md`는 이를 가리키는 심볼릭 링크다.
-규칙은 `AGENTS.md`에서 수정한다. `CLAUDE.md` 링크를 일반 파일로 덮어쓰지 않는다.
+MI Lab 웹사이트(Astro 정적 빌드). 배경·구조·배포·강의 시스템은 `README.md`가 정본이고 여기서
+반복하지 않는다. `AGENTS.md`가 원본이고 `CLAUDE.md`는 그 심볼릭 링크다(일반 파일로 덮어쓰지 않는다).
 
 ## 먼저 알 것
 
-- **강의 콘텐츠는 이 repo 에서 고치지 않는다.** 강의 하나 = 별도 repo 이고
-  `pnu/lectures/<학기>/<과목>/` 의 클론에서 작업한다. `lectures/`(빌드용 자동 clone)는
-  손대지도 커밋하지도 않는다. — `README.md` "강의 페이지"
-- **강의 노트 작성·검토 규칙의 정본은 `docs/lecture-authoring.md`**(검토 기준·표기·인용·저작권·
-  커밋). frontmatter·컴포넌트·이미지·공개 주차·새 강의 추가·설계 배경은
-  `docs/lecture-site-reference.md`. 새 규칙은 해당 문서에 반영한다.
-
-## 도구 협업 (Claude Code · Codex)
-
-정본은 `docs/agent-workflow.md`. 한 도구만 써도 되고, 함께 쓸 때만 아래가 추가된다.
-
-- 작성·리뷰 역할은 작업마다 사용자가 정한다. 리뷰어는 매번 문서 전체를 검토하고 변경은
-  diff 로 확인하며, 지적만 하고 수정은 요청받을 때만 한다.
-- 한 작업 트리는 한 도구만 수정한다. 리뷰는 작성 도구가 리뷰 도구를 읽기 전용으로 불러
-  합의할 때까지 주고받는다(자동 리뷰 루프). 별도 인수인계 파일은 만들지 않는다.
-- `.claude/`·`.codex/` 로컬 설정은 커밋하지 않는다.
-
-## 커밋 공동 작성자
-
-Claude Code·Codex가 작성하거나 수정한 커밋에는 실제 참여한 도구의 `Co-Authored-By`를
-반드시 추가한다. 모델명을 확인할 수 없어도 도구 이름으로 남긴다. 표기와 검증 방법은
-`docs/lecture-authoring.md`의 공동 작성자 규칙을 따른다.
-
-## 개발 서버
-
-백그라운드로 띄운다: `npm run dev:bg` / `dev:stop` / `dev:status` / `dev:logs`
-→ http://localhost:4321/. Windows(PowerShell)에서는 `.\dev.ps1 [start|stop|status|logs|restart]`
-도 쓸 수 있다(macOS 에는 `pwsh` 가 없으면 동작하지 않는다). 자세히는 `README.md` "개발".
+- **강의 콘텐츠는 이 repo에서 고치지 않는다.** 강의 하나 = 별도 repo이고 `pnu/lectures/<학기>/<과목>/`
+  클론에서 작업한다. `lectures/`(빌드용 자동 clone)는 손대지도 커밋하지도 않는다.
+- **정본 문서.** 강의 노트 작성·검토(검토 기준·표기·인용·저작권·커밋)는 `docs/lecture-authoring.md`,
+  frontmatter·컴포넌트·이미지·공개 주차·새 강의·설계 배경은 `docs/lecture-site-reference.md`,
+  Claude Code·Codex 협업은 `docs/agent-workflow.md`. 새 규칙은 해당 문서에 넣는다.
+- **커밋.** 실제 참여한 도구의 `Co-Authored-By`를 반드시 붙인다(모델명을 몰라도 도구 이름으로).
+  이 repo의 push는 사용자에게 묻는다. `.claude/`·`.codex/` 로컬 설정은 커밋하지 않는다.
+- **개발 서버**는 백그라운드로: `npm run dev:bg` / `dev:stop` / `dev:status` / `dev:logs`
+  → http://localhost:4321/ (Windows는 `.\dev.ps1`도 가능, macOS에서는 `pwsh`가 없으면 안 됨).
+  자세히는 `README.md` "개발".
