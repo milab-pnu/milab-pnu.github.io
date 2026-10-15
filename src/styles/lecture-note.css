@@ -165,6 +165,12 @@
 .prose-lecture mtable[columnalign^="right left"] > mtr > mtd:nth-child(even) {
   text-align: left;
 }
+/* \boxed 는 <menclose notation="box"> 로 나오는데, MathML Core 에 menclose 가 없어
+   Chrome 은 상자를 그리지 않는다 → 테두리를 CSS 로 다시 준다. */
+.prose-lecture menclose[notation="box"] {
+  border: 1px solid currentColor;
+  padding: 0.1em 0.3em;
+}
 
 /* ── Video ── */
 .lecture-video {
