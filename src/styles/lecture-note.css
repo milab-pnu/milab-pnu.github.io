@@ -94,10 +94,9 @@
 
 /* ── Figure / 대표 그림 ──
    그림 폭은 원본 이미지 해상도와 무관하게 고정된다. 딱 두 값뿐:
-     · 히어로(.lecture-hero)  → 40rem, 노트 최상단
-     · 그 외 모든 figure       → 32rem
+     · 히어로(.lecture-hero), 글자가 빽빽한 그림(.lecture-figure--wide) → 40rem
+     · 그 외 모든 figure → 32rem
    전부 가운데 정렬, 본문 열 밖으로 삐져나가지 않는다. 본문 텍스트는 왼쪽 정렬 그대로.
-   `.lecture-figure--wide` 는 더 이상 특별 취급하지 않는다(같은 32rem).
    선택자를 `.prose-lecture` 로 스코프한 건 global.css 의 `.prose-lecture figure`(0,1,1) 를 이기기 위함. */
 .prose-lecture .lecture-figure,
 .prose-lecture .lecture-hero {
@@ -105,8 +104,11 @@
   max-width: 32rem;
   margin: 2.5rem auto;
 }
+.prose-lecture .lecture-figure--wide,
 .prose-lecture .lecture-hero {
   max-width: 40rem;
+}
+.prose-lecture .lecture-hero {
   margin-top: 0;
 }
 /* 이미지·SVG 는 항상 figure 폭을 그대로 채운다 → 폭이 원본 해상도에 안 휘둘린다 */

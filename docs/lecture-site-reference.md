@@ -106,7 +106,7 @@ JS 표현식으로 해석되니 주의 (인라인 `$...$` 수식 안의 `{}` 는
 | 컴포넌트 | 용법 | 비고 |
 |---|---|---|
 | `<Sidenote>…</Sidenote>` | 본문 옆 우측 여백 주석 | **문장 끝에 붙여 쓴다**(`…한다.<Sidenote>…</Sidenote>`) — 단독 줄에 두면 본문 위첨자 번호가 허공에 뜬다. 자동 번호. 좁은 화면은 인라인. 설명 전용 — 서지 인용은 각주(`[^키]`) |
-| `<Figure src alt caption? source? wide? hero? />` | 그림 + 캡션 + 출처 | `alt` 필수. `source` 로 출처 표기 필수. `wide`는 현재 일반과 같다(최대 32rem). `hero`=노트 최상단, 최대 40rem |
+| `<Figure src alt caption? source? wide? hero? />` | 그림 + 캡션 + 출처 | `alt` 필수. `source` 로 출처 표기 필수. `wide`=글자가 빽빽해 32rem에서 안 읽히는 그림, 최대 40rem. `hero`=노트 최상단, 최대 40rem |
 | `<Video src caption? />` | YouTube/Vimeo 임베드 | URL 파싱 → nocookie iframe. **그 외 URL 은 빌드 실패** |
 | `<Callout type="intuition"\|"warning"\|"example"\|"note">…</Callout>` | 강조 박스 | 라벨: 직관/주의/예시/노트 |
 | `<Details summary="…">…</Details>` | 접이식 블록 | 긴 유도·보충. 네이티브 `<details>` |
@@ -176,9 +176,8 @@ softmax 가 포화되지 않는다.[^aiayn]
   현재 팔레트: 박스 `#f8fafc`/`#e2e8f0`, 강조 `#0f172a`, 보조 텍스트 `#64748b`,
   연결선 `#0f172a`(강조)·`#94a3b8`(약).
 - **그림 폭은 CSS 가 통일한다**(`lecture-note.css`) — 원본 해상도와 무관하게 `<Figure>`와
-  `<figure class="lecture-figure">`는 최대 32rem, hero 는 최대 40rem 로 가운데 정렬된다.
-  `wide` prop 은 현재 일반과 같다. 클래스 없는 `<figure>`는 이 제한을 받지 않고 본문 폭을 따른다
-  (본문 바로 아래 `<svg>`는 최대 32rem).
+  `<figure class="lecture-figure">`는 최대 32rem, `wide`·hero 는 최대 40rem 로 가운데 정렬된다.
+  클래스 없는 `<figure>`는 이 제한을 받지 않고 본문 폭을 따른다(본문 바로 아래 `<svg>`는 최대 32rem).
 - 슬라이드 PDF·데이터셋 등 **큰 파일은 페이지에 심지 말고 링크로**.
 - 각 노트는 독립 정적 HTML → 방문할 때만 로드. 페이지 하나가 너무 커지면 주차 노트를 쪼갠다.
 
