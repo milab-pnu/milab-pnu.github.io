@@ -7,11 +7,19 @@ interface Props {
   groups: { label: string; roles: string[] }[];
 }
 const { members, groups } = Astro.props;
+
+// 그룹 안 정렬: order(예외용, 기본 99) → 입학 시기(title "2026.09 ~" 문자열) → 이름 가나다순
+const sorted = members.toSorted(
+  (a, b) =>
+    a.data.order - b.data.order ||
+    (a.data.title ?? "￿").localeCompare(b.data.title ?? "￿") ||
+    a.data.name.localeCompare(b.data.name, "ko"),
+);
 ---
 
 {
   groups.map((group) => {
-    const list = members.filter((m) => group.roles.includes(m.data.role));
+    const list = sorted.filter((m) => group.roles.includes(m.data.role));
     return (
       <section class="mb-12">
         <h2 class="mb-4 text-lg font-bold text-slate-900">{group.label}</h2>

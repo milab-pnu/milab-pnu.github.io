@@ -101,11 +101,13 @@ AGENTS.md                  # 에이전트 지침 (CLAUDE.md 는 이를 가리키
 ### 콘텐츠 수정 방법
 
 - **뉴스 추가**: `src/content/news/2026-09-01-something.md` 생성, frontmatter에 `title`, `date`.
-- **구성원 추가**: `src/content/members/NN-name.md` 생성.
+- **구성원 추가**: `src/content/members/<성-이름>.md` 생성 (예: `cho-jungwoo.md`). 다른 파일은 건드리지 않는다.
   - `role`: professor / postdoc / phd / ms / undergrad
   - `title`: 입학 시기 등 (예: `"2026.09 ~"`)
   - `email`: 카드에 텍스트로 표시됨
-  - `order`: 정렬 (작을수록 위). 같은 과정 안에서는 입학 시기 순, 같은 시기면 가나다순으로 매긴다.
+  - 정렬: 과정(postdoc/phd/ms/undergrad) 칸 안에서 `title`의 입학 시기 순, 같은 시기면 이름 가나다순으로
+    자동 정렬된다. 그래서 `title`은 `"YYYY.MM ~"` 형식을 지킨다.
+  - `order`: 생략. 자동 정렬을 일부러 거슬러야 할 때만 넣는다 (작을수록 위, 기본 99).
   - `photo`: 사진을 `public/members/` 에 두고 `photo: "/members/파일명.jpg"` (jpg/png/webp).
     카드는 세로형(5:6, 80×96)으로 잘려 보이므로 증명사진 비율의 세로 사진을 쓰고,
     빌드에서 따로 줄이지 않으니 긴 변 500px 안팎으로 줄여서 올린다.

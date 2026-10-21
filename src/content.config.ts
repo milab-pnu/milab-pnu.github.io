@@ -49,6 +49,7 @@ const members = defineCollection({
     // professor 상세용. 한 줄 = 한 항목 (예: "Ph.D. in CS, KAIST (2018–2022)")
     education: z.array(z.string()).default([]),
     workHistory: z.array(z.string()).default([]),
+    // 예외용 수동 순서 (작을수록 위). 보통은 비워 두면 그룹 안에서 입학 시기 → 가나다순 자동 정렬
     order: z.number().default(99),
   }),
 });

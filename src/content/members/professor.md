@@ -28,5 +28,4 @@ workHistory:
   - "AI Research Engineer, ASLEEP (2022.12-2023.01)"
   - "Research Intern, Naver AI Lab (2021.09-2022.02)"
   - "Consultant, VTW (2016.07-2016.12)"
-order: 0
 ---

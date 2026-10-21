@@ -7,9 +7,7 @@ import ProfileList from "../components/ProfileList.astro";
 import MemberLinks from "../components/MemberLinks.astro";
 import { withBase } from "../consts";
 
-const members = (await getCollection("members")).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+const members = await getCollection("members");
 
 const professor = members.find((m) => m.data.role === "professor");
 // 본문(마크다운)이 실제로 있을 때만 렌더 — 빈 본문이면 구분선만 남아서 제외
