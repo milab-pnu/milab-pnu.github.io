@@ -4,5 +4,5 @@ nameEn: "Hojin Choi"
 role: "ms"
 title: "2026.09 ~"
 email: "seojin@pusan.ac.kr"
-order: 23
+order: 24
 ---
