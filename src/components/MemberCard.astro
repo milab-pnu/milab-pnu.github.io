@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import MemberLinks from "./MemberLinks.astro";
+import Icon from "./Icon.astro";
 import { withBase } from "../consts";
 
 interface Props {
@@ -24,8 +25,8 @@ const m = member.data;
           class="h-24 w-20 shrink-0 rounded-lg object-cover"
         />
       ) : (
-        <div class="flex h-24 w-20 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-400">
-          <span class="text-lg font-bold">{m.name.at(0)}</span>
+        <div class="flex h-24 w-20 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-300">
+          <Icon name="user" class="h-10 w-10" />
         </div>
       )
     }
