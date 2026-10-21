@@ -101,7 +101,7 @@ AGENTS.md                  # 에이전트 지침 (CLAUDE.md 는 이를 가리키
 ### 콘텐츠 수정 방법
 
 - **뉴스 추가**: `src/content/news/2026-09-01-something.md` 생성, frontmatter에 `title`, `date`.
-- **구성원 추가**: `src/content/members/<성-이름>.md` 생성 (예: `cho-jungwoo.md`). 다른 파일은 건드리지 않는다.
+- **구성원 추가**: `src/content/members/<성-이름>.md` 생성 (예: `cho-jeongwoo.md`). 다른 파일은 건드리지 않는다.
   - `role`: professor / postdoc / phd / ms / undergrad
   - `title`: 입학 시기 등 (예: `"2026.09 ~"`)
   - `email`: 카드에 텍스트로 표시됨
