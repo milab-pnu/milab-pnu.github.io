@@ -105,8 +105,10 @@ AGENTS.md                  # 에이전트 지침 (CLAUDE.md 는 이를 가리키
   - `role`: professor / postdoc / phd / ms / undergrad
   - `title`: 입학 시기 등 (예: `"2026.09 ~"`)
   - `email`: 카드에 텍스트로 표시됨
-  - `order`: 정렬 (작을수록 위)
-  - `photo`: 사진을 `public/members/` 에 두고 `photo: "/members/파일명.jpg"` (jpg/png/webp, 정사각형 권장)
+  - `order`: 정렬 (작을수록 위). 같은 과정 안에서는 입학 시기 순, 같은 시기면 가나다순으로 매긴다.
+  - `photo`: 사진을 `public/members/` 에 두고 `photo: "/members/파일명.jpg"` (jpg/png/webp).
+    카드는 세로형(5:6, 80×96)으로 잘려 보이므로 증명사진 비율의 세로 사진을 쓰고,
+    빌드에서 따로 줄이지 않으니 긴 변 500px 안팎으로 줄여서 올린다.
   - `alumni: true`: Members 에서 빠지고 **Alumni** 페이지(Ph.D./M.S. 구분)로 이동. role 은 phd/ms 유지.
   - professor 는 `education` / `workHistory` 배열(한 줄 = 한 항목)과 본문(소개글)이 크게 표시됨.
 - **논문 추가/수정**: `src/data/publications.bib` (학회·워크샵) 또는 `src/data/preprints.bib` 에

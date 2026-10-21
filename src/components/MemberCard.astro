@@ -17,6 +17,10 @@ const m = member.data;
         <img
           src={withBase(m.photo)}
           alt={m.name}
+          width="80"
+          height="96"
+          loading="lazy"
+          decoding="async"
           class="h-24 w-20 shrink-0 rounded-lg object-cover"
         />
       ) : (
