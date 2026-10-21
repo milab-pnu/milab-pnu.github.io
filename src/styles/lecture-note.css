@@ -154,6 +154,11 @@
   display: inline-block;
   text-align: left; /* 수식 내부 정렬은 기본값 유지 */
 }
+/* Tailwind preflight 가 모든 요소의 padding 을 0 으로 지워 행렬(pmatrix 등)의 칸이 붙는다.
+   MathML Core 기본 스타일시트의 칸 여백을 되돌린다. */
+.prose-lecture mtd {
+  padding: 0.5ex 0.4em;
+}
 /* aligned 는 <mtable columnalign="right left" columnspacing="0em"> 으로 나오는데,
    Chrome 의 MathML Core 는 두 속성을 무시해 칸이 가운데 정렬되고 칸 사이가 벌어진다
    (= 가 줄마다 어긋남). 속성이 뜻하는 정렬을 CSS 로 다시 준다. */
