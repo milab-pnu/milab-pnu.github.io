@@ -106,7 +106,7 @@ JS 표현식으로 해석되니 주의 (인라인 `$...$` 수식 안의 `{}` 는
 | 컴포넌트 | 용법 | 비고 |
 |---|---|---|
 | `<Sidenote>…</Sidenote>` | 본문 옆 우측 여백 주석 | **문장 끝에 붙여 쓴다**(`…한다.<Sidenote>…</Sidenote>`) — 단독 줄에 두면 본문 위첨자 번호가 허공에 뜬다. 자동 번호. 좁은 화면은 인라인. 설명 전용 — 서지 인용은 각주(`[^키]`) |
-| `<Figure src alt caption? source? wide? hero? />` | 그림 + 캡션 + 출처 | `alt` 필수. `source` 로 출처 표기 필수. `wide`=글자가 빽빽해 32rem에서 안 읽히는 그림, 최대 40rem. `hero`=노트 최상단, 최대 40rem |
+| `<Figure src alt caption? source? wide? hero? />` | 그림 + 캡션 + 출처 | `alt` 필수. 남의 그림은 `source` 로 출처 표기 필수, 자작 그림은 `source` 를 생략하고 데이터 출처는 각주로 밝힌다. `wide`=글자가 빽빽해 32rem에서 안 읽히는 그림, 최대 40rem. `hero`=노트 최상단, 최대 40rem |
 | `<Video src caption? />` | YouTube/Vimeo 임베드 | URL 파싱 → nocookie iframe. **그 외 URL 은 빌드 실패** |
 | `<Callout type="intuition"\|"warning"\|"example"\|"note">…</Callout>` | 강조 박스 | 라벨: 직관/주의/예시/노트 |
 | `<Details summary="…">…</Details>` | 접이식 블록 | 긴 유도·보충. 네이티브 `<details>` |
