@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import { SITE, withBase } from "../consts";
 
-const WRITTEN_DATE = "2026. 09. 09";
+const WRITTEN_DATE = "2026. 10. 23";
 ---
 
 <BaseLayout title="Lab Intro" description="MI Lab 연구실 소개">
@@ -33,10 +33,33 @@ const WRITTEN_DATE = "2026. 09. 09";
 
   <section class="mb-14">
     <h2 class="mb-5 text-lg font-bold text-slate-900">연구실 운영 방식</h2>
+    <p class="mb-3 text-sm leading-relaxed text-slate-600">
+      아래 규칙은 교수-학생뿐 아니라 학생-학생 사이에도 똑같이 적용됩니다.
+    </p>
     <ul class="list-disc space-y-1 pl-5 text-sm leading-relaxed text-slate-600">
-      <li>코어타임(11시–4시) 준수 (오프라인)</li>
-      <li>지도교수와의 미팅 — 개인 연구 진행 상황, 프로젝트 진행 상황 공유</li>
-      <li>매주 돌아가며 Tech News 작성</li>
+      <li>
+        코어타임(오전 11시-오후 4시) 준수 (오프라인)
+        <ul class="mt-1 list-[circle] space-y-1 pl-5">
+          <li>전화·메일·슬랙 등 메신저를 빠르게 확인합니다.</li>
+          <li>점심시간을 제외하고 연구실 자리에 있습니다. 점심시간은 자유롭게 쓰되, 슬랙을 확인할 수 있으면 짧게 답을 남기고 나중에 자세히 답합니다.</li>
+          <li>개인 사유(예: 병원)로 자리를 비울 때는 슬랙에 짧게라도 알립니다.</li>
+        </ul>
+      </li>
+      <li>지도교수와의 미팅 - 개인 연구 진행 상황, 프로젝트 진행 상황 공유</li>
+      <li>
+        매주 돌아가며 Tech News 작성
+        <ul class="mt-1 list-[circle] space-y-1 pl-5">
+          <li>매주 1명씩 금요일 퇴근 전까지 최신 기술 소식을 정리해 공유합니다.</li>
+          <li>단순히 옮겨 붙이지 않고, 그 소식이 무엇을 의미하는지와 우리가 무엇을 받아들여야 하는지 본인의 생각을 더해 정리합니다.</li>
+        </ul>
+      </li>
+      <li>
+        커뮤니케이션을 위한 노력 - 정리되지 않은 미팅은 서로의 시간을 빼앗으므로, 아래를 지킵니다.
+        <ul class="mt-1 list-[circle] space-y-1 pl-5">
+          <li>실험 결과 없이 막연한 이야기를 하지 않습니다. 실험으로 확인하고 발전시킵니다.</li>
+          <li>AI를 사용할 때는 내용과 출처를 반드시 확인·검토합니다. 본인도 이해하지 못한 내용을 그대로 가져오지 않습니다.</li>
+        </ul>
+      </li>
     </ul>
   </section>
 
@@ -57,6 +80,10 @@ const WRITTEN_DATE = "2026. 09. 09";
               >2026 Fall 고급딥러닝</a> 7주차까지의 내용)
             </li>
             <li>AI 코딩 도구(예: Claude Code, Codex 등)를 활용할 수 있는 능력</li>
+            <li>
+              커뮤니케이션 능력: 실험 결과를 바탕으로 연구 내용을 정리해 설명하고, AI가 만든 내용도
+              스스로 검토·이해한 뒤 공유할 수 있는 능력
+            </li>
           </ul>
         </dd>
       </div>
