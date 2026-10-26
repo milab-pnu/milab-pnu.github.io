@@ -7,7 +7,7 @@
 ## 작업 위치와 미리보기
 
 강의 하나 = **독립 GitHub repo**이고 `pnu/lectures/<학기>/<과목>/`의 클론에서 고친다(폴더 지도는
-`pnu/lectures/AGENTS.md`). 노트를 고치고 개발 서버에서 렌더를 본 뒤 자기 파일만 `git add <파일>`로 커밋·push한다.
+`pnu/lectures/AGENTS.md`). 노트를 고치고 개발 서버에서 렌더를 본 뒤, 사용자가 지시하면 자기 파일만 `git add <파일>`로 커밋·push한다.
 push하면 그 repo의 `.github/workflows/notify.yml`이 사이트 재배포를 트리거해 **1~2분 뒤 반영**된다.
 
 개발 서버(`cd pnu/milab-pnu && npm run dev:bg` → http://localhost:4321/)는 `lectures.config.json`의
@@ -174,7 +174,13 @@ softmax 가 포화되지 않는다.[^aiayn]
   고급딥러닝 `01b-bert-vs-gpt.mdx` 에 예시가 있다. **한 노트 안의 SVG 는 viewBox 크기·글자
   크기·박스 규격·색을 서로 맞춘다** — 안 그러면 그림마다 축척이 달라 보인다.
   현재 팔레트: 박스 `#f8fafc`/`#e2e8f0`, 강조 `#0f172a`, 보조 텍스트 `#64748b`,
-  연결선 `#0f172a`(강조)·`#94a3b8`(약).
+  연결선 `#0f172a`(강조)·`#94a3b8`(약). `<marker>` 같은 id는 한 페이지의 모든 SVG에서 겹치지 않게
+  그림마다 접두사를 붙인다.
+- **SVG 애니메이션은 SMIL `<animate>`로 만든다.** 스크립트·`<style>`이 CSP에 막히므로 요소마다
+  `opacity`를 `calcMode="discrete"`로 바꾸고, 모든 요소에 같은 `dur`·`repeatCount="indefinite"`를 줘
+  박자를 맞춘다. 기본 속성은 최종 상태로 두어 애니메이션이 없어도 그림이 읽히게 한다. 프레임은 repo 밖
+  테스트 HTML에서 `svg.pauseAnimations(); svg.setCurrentTime(t)`로 멈춰 시점별로 확인한다(헤드리스
+  브라우저의 virtual time은 시점이 어긋난다). 예: 고급딥러닝 `06a-llm-inference.mdx` 1장.
 - **그림 폭은 CSS 가 통일한다**(`lecture-note.css`) — 원본 해상도와 무관하게 `<Figure>`와
   `<figure class="lecture-figure">`는 최대 32rem, `wide`·hero 는 최대 40rem 로 가운데 정렬된다.
   클래스 없는 `<figure>`는 이 제한을 받지 않고 본문 폭을 따른다(본문 바로 아래 `<svg>`는 최대 32rem).
@@ -196,6 +202,11 @@ softmax 가 포화되지 않는다.[^aiayn]
 - [Jay Alammar](https://jalammar.github.io/) *Illustrated Transformer / BERT / GPT-2* —
   CC 표시와 개별 그림·mp4의 이용 조건을 해당 페이지에서 확인한다. NC·SA 등 조건을 충족하는 이용인지 검토하고, 근거가 불명확하면 원문 페이지를 링크한다.
 - [Lil'Log](https://lilianweng.github.io/) (Lilian Weng) — 도식 재사용 시 라이선스 각 글에서 확인.
+- [jax-ml/scaling-book](https://github.com/jax-ml/scaling-book) *How to Scale Your Model* — roofline·GPU·
+  inference·병렬화 그림, **MIT**(`assets/img/`, `assets/gpu/`). 저작권 표시를 남긴다:
+  `Austin et al. (2025), How to Scale Your Model · MIT License, © 2025 Google LLC`. 커밋 고정 raw URL로 건다.
+- arXiv 논문 그림은 abs 페이지의 license가 CC BY·CC BY-SA일 때만 쓴다(예: GQA 2305.13245, PagedAttention
+  2309.06180). 기본 license(nonexclusive-distrib)인 논문이 더 많으니 그림마다 확인한다.
 - CC 표기 없는 블로그(Thinking Machines 등)는 **전권 보유**로 본다 — 그림 임베드 불가,
   설명 방식·구성만 참고하고 필요하면 자작한다.
 - 강연은 [Stanford CS25 *Transformers United*](https://web.stanford.edu/class/cs25/)

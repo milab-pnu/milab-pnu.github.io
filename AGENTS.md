@@ -10,8 +10,8 @@ MI Lab 웹사이트(Astro 정적 빌드). 배경·구조·배포·강의 시스�
 - **정본 문서.** 강의 노트 작성·검토(검토 기준·표기·인용·저작권·커밋)는 `docs/lecture-authoring.md`,
   frontmatter·컴포넌트·이미지·공개 주차·새 강의·설계 배경은 `docs/lecture-site-reference.md`,
   Claude Code·Codex 협업은 `docs/agent-workflow.md`. 새 규칙은 해당 문서에 넣는다.
-- **커밋.** 실제 참여한 도구의 `Co-Authored-By`를 반드시 붙인다(모델명을 몰라도 도구 이름으로).
-  이 repo의 push는 사용자에게 묻는다. `.claude/`·`.codex/` 로컬 설정은 커밋하지 않는다.
+- **커밋·push는 사용자가 지시할 때만 한다.** 실제 참여한 도구의 `Co-Authored-By`를 반드시 붙인다
+  (모델명을 몰라도 도구 이름으로). `.claude/`·`.codex/` 로컬 설정은 커밋하지 않는다.
 - **개발 서버**는 백그라운드로: `npm run dev:bg` / `dev:stop` / `dev:status` / `dev:logs`
   → http://localhost:4321/ (Windows는 `.\dev.ps1`도 가능, macOS에서는 `pwsh`가 없으면 안 됨).
   자세히는 `README.md` "개발".
