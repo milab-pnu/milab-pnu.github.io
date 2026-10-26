@@ -12,9 +12,12 @@ Claude Code와 Codex로 `milab-pnu`와 과목 repo를 작업할 때의 **도구 
 - **과목 `AGENTS.md`는 직접 읽는다.** Claude Code는 상위 폴더와 작업 중 들어간 하위 폴더의 `CLAUDE.md`를
   불러오지만, Codex는 시작할 때 git 루트부터 시작 폴더까지의 `AGENTS.md`만 읽는다. `pnu/lectures/`는 git
   repo가 아니라서 Codex는 어디서 시작하든 과목 규칙이나 상위 규칙 하나를 놓칠 수 있다.
-- **커밋·push.** 실제 참여한 도구의 `Co-Authored-By`를 붙이고(리뷰 반영도 참여), 과목 repo는 알아서
-  push, `milab-pnu`는 물어본다. 표기는 `lecture-authoring.md` "커밋과 push".
-- **인수인계 파일은 만들지 않는다.** 맥락은 커밋 기록과 대화로 넘기고, 넘기기 전에 커밋한다.
+- **커밋·push는 사용자가 지시할 때만 한다.** 실제 참여한 도구의 `Co-Authored-By`를 붙인다(리뷰 반영도
+  참여). 표기는 `lecture-authoring.md` "커밋과 push".
+- **사용자가 직접 고치는 파일을 덮어쓰지 않는다.** "changed on disk" 알림이나 미커밋 변경이 있으면 편집 전에
+  `git diff` 전체를 읽고 그 줄은 건드리지 않는다. 편집 중인 파일은 전체 쓰기 대신 부분 편집만 하고, 사용자가
+  "그만"이라고 하면 되돌리지도 말고 손을 뗀다.
+- **인수인계 파일은 만들지 않는다.** 맥락은 커밋 기록과 대화로 넘긴다.
 
 ## 두 도구를 함께 쓸 때
 
