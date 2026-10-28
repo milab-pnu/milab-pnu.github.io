@@ -228,10 +228,10 @@ cd pnu/milab-pnu
 ```
 
 스크립트가: GitHub repo 생성 → 작업 폴더 클론 → 골격 복사(`scripts/lecture-template/`)
-→ `MILAB_DEPLOY_TOKEN` secret 등록. 그다음 직접:
+→ `MILAB_DEPLOY_TOKEN` secret 등록. 그다음 직접 작업하며, 커밋과 push는 사용자가 지시할 때만 한다:
 
-1. `course.md` 를 실제 내용으로 채우고 `git push`
-2. `milab-pnu/lectures.config.json`에 스크립트가 출력한 항목 추가 → 커밋 · push. `localPath`는 `pnu/lectures/` 기준 상대 경로이며, 스크립트가 `-Path`에서 계산한다. 누락하면 개발 서버에서 해당 과목을 찾지 못한다.
+1. `course.md`를 실제 내용으로 채우고, 지시받으면 커밋·push한다.
+2. `milab-pnu/lectures.config.json`에 스크립트가 출력한 항목을 추가하고, 지시받으면 커밋·push한다. `localPath`는 `pnu/lectures/` 기준 상대 경로이며, 스크립트가 `-Path`에서 계산한다. 누락하면 개발 서버에서 해당 과목을 찾지 못한다.
 
 `-Pat` 생략 시 secret 만 수동: `gh secret set MILAB_DEPLOY_TOKEN -R milab-pnu/<slug>`
 (PAT 발급 방법은 `../README.md` "재배포 트리거용 PAT").

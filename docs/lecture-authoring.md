@@ -1,8 +1,7 @@
 # 강의 노트 작성·검토 규칙
 
 강의 노트를 쓰고 검토할 때 지키는 **과목 공통 규칙의 정본**이다. 규칙은 핵심 한 문장과
-예시 하나로 적는다. 과목별 합의(참고문헌·파일명·절 번호·수업 형식)는 과목 repo의 `AGENTS.md`에 두고(없으면 만들고 `CLAUDE.md`를
-그 심볼릭 링크로 둔다), public repo에 둘 수 없는 합의(퀴즈 출제원 등)는 `pnu/lectures/<학기>/AGENTS.md`에 둔다.
+예시 하나로 적는다. 과목별 합의(참고문헌·파일명·절 번호·수업 형식)는 과목 repo의 `AGENTS.md`에 두고(없으면 만들고 `CLAUDE.md`에 복사한다), public repo에 둘 수 없는 합의(퀴즈 출제원 등)는 `pnu/lectures/<학기>/AGENTS.md`에 둔다.
 한 과목의 선호를 다른 과목에 자동 적용하지 않는다. 사이트 동작은 `lecture-site-reference.md`, 도구 협업은 `agent-workflow.md`,
 sync·CI·배포는 `../README.md` "강의 페이지".
 
@@ -232,6 +231,6 @@ sync·CI·배포는 `../README.md` "강의 페이지".
 ## 이 문서 관리
 
 공통 규칙·함정을 알게 되면 **이 문서(사이트 동작이면 `lecture-site-reference.md`)의 해당 절에 바로
-반영하고 `milab-pnu`에 커밋한다.** `pnu/lectures/`는 git repo가 아니라 거기 적으면 사라진다.
+반영한다.** 커밋은 사용자가 지시할 때만 한다. `pnu/lectures/`는 git repo가 아니라 그곳의 파일은 push로 공유되지 않는다.
 새 규칙도 핵심 한 문장과 예시 하나로 적고, 이미 있는 항목과 겹치면 합친다. 날짜 붙인 변경 로그는
 만들지 않는다(규칙은 항상 현재형).

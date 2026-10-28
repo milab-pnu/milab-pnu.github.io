@@ -91,7 +91,7 @@ docs/
 ├── lecture-authoring.md   # 강의 노트 작성·검토 규칙 (정본)
 ├── lecture-site-reference.md  # frontmatter·컴포넌트·이미지·공개 주차·새 강의 추가·설계 배경
 └── agent-workflow.md      # Claude Code·Codex 협업 규칙 (정본)
-AGENTS.md                  # 에이전트 지침 (CLAUDE.md 는 이를 가리키는 심볼릭 링크)
+AGENTS.md                  # 에이전트 지침 (CLAUDE.md는 복사본)
 ```
 
 배포용 CSP는 `src/lib/csp.mjs`에서 관리하며 레이아웃과 산출물 검사가 공유한다.

@@ -7,12 +7,11 @@ Claude Code와 Codex로 `milab-pnu`와 과목 repo를 작업할 때의 **도구 
 ## 공통
 
 - **시작 위치.** 강의 작업은 `pnu/lectures/`, 사이트 작업은 `pnu/milab-pnu/`에서 시작한다.
-- **지침 파일.** 각 폴더의 `AGENTS.md`가 원본이고 `CLAUDE.md`는 그 심볼릭 링크다. 링크를 일반
-  파일로 덮어쓰지 않는다. 도구별 설정(`.claude/`, `.codex/`)에 공통 규칙을 복제하지 않고 커밋하지도 않는다.
-  Windows에서는 개발자 모드를 켜고 `git config --global core.symlinks true`를 둔 뒤 클론한다. 그렇지 않으면 링크가
-  "AGENTS.md"라는 글자만 든 일반 파일로 풀려 Claude Code가 규칙을 읽지 못한다(macOS·Linux는 기본으로 된다).
-  git 밖에 있는 `pnu/lectures/AGENTS.md`·`pnu/lectures/<학기>/AGENTS.md`와 그 링크는 push로 옮겨지지 않으니
-  다른 컴퓨터에는 직접 복사하고 링크를 만든다.
+- **지침 파일.** 각 폴더의 `AGENTS.md`가 원본이고 `CLAUDE.md`는 같은 폴더의 복사본이다.
+  `AGENTS.md`를 만들거나 수정하면 `CLAUDE.md`에 복사해 두 파일을 같게 유지한다.
+  도구별 설정(`.claude/`, `.codex/`)에 공통 규칙을 복제하지 않고 커밋하지도 않는다.
+  git 밖에 있는 `pnu/lectures/AGENTS.md`와 학기 폴더 지침(있는 경우), 각각의 복사본은 push로 옮겨지지 않으니
+  다른 컴퓨터에는 두 파일을 직접 복사한다.
 - **과목 `AGENTS.md`는 직접 읽는다.** Claude Code는 상위 폴더와 작업 중 들어간 하위 폴더의 `CLAUDE.md`를
   불러오지만, Codex는 시작할 때 git 루트부터 시작 폴더까지의 `AGENTS.md`만 읽는다. `pnu/lectures/`는 git
   repo가 아니라서 Codex는 어디서 시작하든 과목 규칙이나 상위 규칙 하나를 놓칠 수 있다.
@@ -75,7 +74,7 @@ URL은 열 수 있지만, 검색이 필요한 자료까지 찾게 하려면 웹 
 - 리뷰어는 읽기 전용이라 "한 repo 한 도구" 규칙과 충돌하지 않는다. PDF를 못 읽으면 추출 텍스트 경로를 준다.
 - 리뷰어 샌드박스는 `localhost:4321`에 못 붙는다. 렌더 확인은 작성자가 하고 결과를 전한다.
   리뷰어의 "렌더 확인 불가"는 문서 오류가 아니다.
-- 노트 여러 개를 서브에이전트로 병렬 검토하면 담당마다 자기 노트 파일 하나만 고치고 커밋은 부모가 파일 단위로 한다.
+- 노트 여러 개를 서브에이전트로 병렬 검토하면 담당마다 자기 노트 파일 하나만 고친다. 사용자가 커밋을 지시하면 부모가 파일 단위로 한다.
 
 ### Codex 호출
 
@@ -110,5 +109,5 @@ codex exec resume <id> -c model="<모델>" -c model_reasoning_effort="medium" \
 
 ## 이 문서 관리
 
-협업 방식이 바뀌면 이 문서를 고치고 `milab-pnu`에 커밋한다. 각 `AGENTS.md`에는 요약과 이 문서
+협업 방식이 바뀌면 이 문서를 고친다. 커밋은 사용자가 지시할 때만 한다. 각 `AGENTS.md`에는 요약과 이 문서
 링크만 둔다.
