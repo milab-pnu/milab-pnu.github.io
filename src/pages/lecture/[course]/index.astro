@@ -133,12 +133,16 @@ const noteSlugOf = (id: string) => id.split("/").slice(2).join("/");
                           ))}
                           {submissionLinks.map((link) => (
                             <li>
-                              <a
-                                class="text-slate-900 underline decoration-slate-300 underline-offset-2 hover:decoration-slate-900"
-                                href={link.url}
-                              >
-                                {link.label}
-                              </a>
+                              {link.url ? (
+                                <a
+                                  class="text-slate-900 underline decoration-slate-300 underline-offset-2 hover:decoration-slate-900"
+                                  href={link.url}
+                                >
+                                  {link.label}
+                                </a>
+                              ) : (
+                                <span class="text-slate-900">{link.label}</span>
+                              )}
                             </li>
                           ))}
                         </ul>

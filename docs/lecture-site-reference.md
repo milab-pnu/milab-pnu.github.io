@@ -81,6 +81,7 @@ JSON 하나(`LECTURE_VISIBILITY_VARIABLES`)로 넘기므로 로컬에서도 같�
 반별 제출 창구가 여러 개면 `submissionLinks: [{ label: "과제 제출 (금 09시 수업)", url: "https://…" }, { label: "과제 제출 (금 19시 수업)", url: "https://…" }]`를 사용한다.
 각 링크는 지정한 순서와 문구로 표시되며 URL은 HTTPS여야 한다. `submissionLinks`가
 비어 있지 않으면 기존 `submissionUrl`보다 우선한다.
+주소가 아직 없으면 `url`을 빼고 `{ label: "초청 특강 (이름)" }`처럼 적는다. 링크 없이 이름만 표시된다.
 
 본문(마크다운)은 Goals / Prerequisites / Grading 등으로 표시된다.
 
