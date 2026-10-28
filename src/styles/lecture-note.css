@@ -139,44 +139,11 @@
   color: #94a3b8;
 }
 
-/* ── 디스플레이 수식 ($$…$$) ──
-   rehype-katex(mathml) 는 블록 수식을 <span class="katex"><math display="block">…
-   으로 내보내고, <p> 로 감싸지 않는다. 그래서 global.css 의 p:has(...) 가운데 정렬
-   규칙이 안 먹는다 → 여기서 span.katex 자체를 블록·가운데로. */
-.prose-lecture .katex:has(> math[display="block"]) {
-  display: block;
-  text-align: center;
+/* 긴 디스플레이 수식은 작은 화면에서 가로로 스크롤한다. */
+.prose-lecture .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
-  margin: 1.4rem 0;
-}
-.prose-lecture math[display="block"] {
-  display: inline-block;
-  text-align: left; /* 수식 내부 정렬은 기본값 유지 */
-}
-/* Tailwind preflight 가 모든 요소의 padding 을 0 으로 지워 행렬(pmatrix 등)의 칸이 붙는다.
-   MathML Core 기본 스타일시트의 칸 여백을 되돌린다. */
-.prose-lecture mtd {
-  padding: 0.5ex 0.4em;
-}
-/* aligned 는 <mtable columnalign="right left" columnspacing="0em"> 으로 나오는데,
-   Chrome 의 MathML Core 는 두 속성을 무시해 칸이 가운데 정렬되고 칸 사이가 벌어진다
-   (= 가 줄마다 어긋남). 속성이 뜻하는 정렬을 CSS 로 다시 준다. */
-.prose-lecture mtable[columnalign^="right left"] > mtr > mtd {
-  padding-left: 0;
-  padding-right: 0;
-}
-.prose-lecture mtable[columnalign^="right left"] > mtr > mtd:nth-child(odd) {
-  text-align: right;
-}
-.prose-lecture mtable[columnalign^="right left"] > mtr > mtd:nth-child(even) {
-  text-align: left;
-}
-/* \boxed 는 <menclose notation="box"> 로 나오는데, MathML Core 에 menclose 가 없어
-   Chrome 은 상자를 그리지 않는다 → 테두리를 CSS 로 다시 준다. */
-.prose-lecture menclose[notation="box"] {
-  border: 1px solid currentColor;
-  padding: 0.1em 0.3em;
+  padding: 0.2em 0;
 }
 
 /* ── Video ── */

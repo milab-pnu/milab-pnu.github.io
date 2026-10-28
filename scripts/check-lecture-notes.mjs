@@ -51,6 +51,22 @@ for (const file of htmlFiles(dist)) {
   );
   const csp = cspMatch?.[1] ?? null;
 
+  // KaTeX 배치 CSS가 없으면 아래첨자 크기·위치가 조용히 틀어질 수 있다.
+  if (html.includes('class="katex-html"')) {
+    const refs = [...html.matchAll(/href="\/_math\/([0-9a-f]{20})\.css"/g)];
+    const css = refs.map((m) => {
+      const path = join(dist, "_math", `${m[1]}.css`);
+      if (!existsSync(path)) { err(rel, `수식 스타일 파일 없음: ${m[1]}`); return ""; }
+      return readFileSync(path, "utf8");
+    }).join("\n");
+    if (!refs.length) err(rel, "수식 스타일 링크 없음");
+    const classes = new Set([...html.matchAll(/\bkm-[0-9a-f]{20}\b/g)].map((m) => m[0]));
+    for (const name of classes) {
+      if (!css.includes(`.${name}{`)) err(rel, `수식 스타일 규칙 없음: ${name}`);
+    }
+    if (/class="katex-error"/.test(html)) err(rel, "KaTeX 수식 오류 발견");
+  }
+
   if (isNote) {
     noteCount++;
     if (csp !== NOTE_CSP)

@@ -14,7 +14,7 @@
     "dev:status": "astro dev status",
     "dev:logs": "astro dev logs",
     "build": "node scripts/build-with-dev.mjs",
-    "check": "astro check && node scripts/check-bibtex.mjs && node scripts/check-lecture-visibility.mjs && node scripts/check-build-validation.mjs",
+    "check": "astro check && node --test scripts/test-math-styles.mjs && node scripts/check-bibtex.mjs && node scripts/check-lecture-visibility.mjs && node scripts/check-build-validation.mjs",
     "postbuild": "node scripts/check-lecture-notes.mjs",
     "preview": "astro preview",
     "astro": "astro"
@@ -24,7 +24,7 @@
     "@astrojs/mdx": "^7.0.8",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.8",
-    "katex": "^0.18.4",
+    "katex": "^0.16.47",
     "rehype-katex": "^7.0.1",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",

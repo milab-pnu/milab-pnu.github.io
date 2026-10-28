@@ -151,7 +151,7 @@ softmax 가 포화되지 않는다.[^aiayn]
   ```
 
   한 줄로 `$$...$$` 쓰면 인라인 취급된다 (remark-math 규칙).
-- 수식은 빌드 때 **MathML** 로 렌더 (KaTeX JS·CSS 런타임 불필요). 이유는 아래 "설계 배경".
+- 수식은 빌드 때 **KaTeX HTML과 접근성용 MathML** 로 렌더한다. 브라우저에서 수식 계산용 JS는 실행하지 않는다. 이유는 아래 "설계 배경".
 - 코드블록은 ` ```python ` 처럼 언어를 붙여도 된다. 단 **syntax highlighting 은 꺼져 있어**
   어두운 배경에 단색으로 나온다 (이유는 아래 "설계 배경"). 코드 내용·들여쓰기는 그대로 유지됨.
 
@@ -248,8 +248,10 @@ cd pnu/milab-pnu
 돌아서, 인라인 `style=` 이나 런타임 JS·외부 자원을 쓰는 렌더링은 조용히 깨진다. 아래는
 그 때문에 내려진 결정이라 되돌리면 안 된다:
 
-- **수식 → MathML** (`astro.config.mjs`, `rehype-katex { output: 'mathml' }`). KaTeX 의
-  기본 HTML 출력은 인라인 style 범벅이라 CSP 에 막힌다. HTML 출력으로 되돌리면 수식이 깨짐.
+- **수식 → KaTeX HTML + MathML** (`astro.config.mjs`, `src/lib/math-styles.mjs`). KaTeX가
+  계산한 수식 배치를 사용하고 MathML은 접근성에 제공한다. 생성된 인라인 스타일은 문서별
+  content hash CSS로 옮겨 CSP를 유지한다. 개발 서버는 같은 CSS를 메모리에서 제공하고,
+  빌드는 `dist/_math/`에 생성한다. KaTeX의 HTML 생성 버전과 CSS·폰트 버전은 일치해야 한다.
 - **코드블록 하이라이팅 꺼짐** (`markdown.syntaxHighlight: false`). Shiki 가 토큰마다
   인라인 `style=` 로 색을 넣어 CSP 에 막힌다 + 사이트는 무채색 방침. 켜지 않는다.
 - **강의 노트 페이지(`/lecture/<course>/<note>`)만 완화 CSP.** `NoteLayout` 이
