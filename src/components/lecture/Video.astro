@@ -2,27 +2,60 @@
 interface Props {
   src: string;
   caption?: string;
+  start?: number | string;
+  end?: number | string;
 }
-const { src, caption } = Astro.props;
+const { src, caption, start, end } = Astro.props;
+
+function toSeconds(t: number | string | undefined, name: string): number | undefined {
+  if (t === undefined) return undefined;
+  if (typeof t === "number" && Number.isInteger(t) && t >= 0) return t;
+  if (typeof t === "string" && /^\d+(:\d\d){0,2}$/.test(t))
+    return t.split(":").reduce((acc, part) => acc * 60 + Number(part), 0);
+  throw new Error(`<Video>: ${name}는 0 이상의 정수 초나 "m:ss" 형식이어야 한다: ${t}`);
+}
+
+function toClock(s: number): string {
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = String(s % 60).padStart(2, "0");
+  return h ? `${h}:${String(m).padStart(2, "0")}:${sec}` : `${m}:${sec}`;
+}
+
+const startSec = toSeconds(start, "start");
+const endSec = toSeconds(end, "end");
+if (startSec !== undefined && endSec !== undefined && endSec <= startSec)
+  throw new Error(`<Video>: end(${end})는 start(${start})보다 뒤여야 한다`);
 
 function toEmbed(url: string): { src: string; title: string } {
   const yt = url.match(
     /(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([\w-]{11})/,
   );
   if (yt) {
+    const params = new URLSearchParams();
+    if (startSec !== undefined) params.set("start", String(startSec));
+    if (endSec !== undefined) params.set("end", String(endSec));
+    const query = params.size ? `?${params}` : "";
     return {
-      src: `https://www.youtube-nocookie.com/embed/${yt[1]}`,
+      src: `https://www.youtube-nocookie.com/embed/${yt[1]}${query}`,
       title: "YouTube 동영상",
     };
   }
   const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   if (vm) {
-    return { src: `https://player.vimeo.com/video/${vm[1]}`, title: "Vimeo 동영상" };
+    if (endSec !== undefined) throw new Error(`<Video>: Vimeo는 end를 지원하지 않는다: ${url}`);
+    const hash = startSec !== undefined ? `#t=${startSec}s` : "";
+    return { src: `https://player.vimeo.com/video/${vm[1]}${hash}`, title: "Vimeo 동영상" };
   }
   throw new Error(`<Video>: 지원하지 않는 URL: ${url} — YouTube / Vimeo 만 가능`);
 }
 
 const { src: embedSrc, title } = toEmbed(src);
+const range =
+  startSec !== undefined || endSec !== undefined
+    ? `(재생 구간 ${toClock(startSec ?? 0)}–${endSec !== undefined ? toClock(endSec) : "끝"})`
+    : undefined;
+const captionText = [caption, range].filter(Boolean).join(" ");
 ---
 
 <figure class="lecture-video">
@@ -35,5 +68,5 @@ const { src: embedSrc, title } = toEmbed(src);
       allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
       allowfullscreen></iframe>
   </div>
-  {caption && <figcaption>{caption}</figcaption>}
+  {captionText && <figcaption>{captionText}</figcaption>}
 </figure>
