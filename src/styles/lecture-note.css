@@ -352,6 +352,18 @@
 .prose-lecture tbody tr:last-child td {
   border-bottom: 1px solid #cbd5e1;
 }
+/* 칸 안의 목록: 본문 목록의 위아래 여백을 없애 옆 칸의 첫 줄과 높이를 맞춘다 */
+.prose-lecture td ul,
+.prose-lecture td ol {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.prose-lecture td li {
+  margin: 0.15rem 0;
+}
+.prose-lecture td li:first-child {
+  margin-top: 0;
+}
 .prose-lecture table code {
   background: transparent;
   padding: 0;
