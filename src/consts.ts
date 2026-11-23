@@ -39,10 +39,11 @@ export function withBase(path: string): string {
 }
 
 /** 외부 프로필 링크 url 로 아이콘 종류 판별 (Icon.astro 의 name) */
-export function iconFor(url: string): "scholar" | "linkedin" | "github" | "link" {
+export function iconFor(url: string): "scholar" | "linkedin" | "github" | "calendar" | "link" {
   if (/scholar\.google\./.test(url)) return "scholar";
   if (/linkedin\.com/.test(url)) return "linkedin";
   if (/github\.com/.test(url)) return "github";
+  if (/teamup\.com/.test(url)) return "calendar";
   return "link";
 }
 

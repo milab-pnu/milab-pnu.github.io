@@ -42,7 +42,7 @@ const members = defineCollection({
     email: z.string().optional(),
     photo: z.string().optional(), // /members/xxx.jpg (public 기준)
     homepage: z.string().optional(),
-    // 외부 프로필 링크. url 로 아이콘 자동 판별(scholar/linkedin/github), 그 외는 일반 링크.
+    // 외부 프로필 링크. url 로 아이콘 자동 판별(scholar/linkedin/github/teamup 달력), 그 외는 일반 링크.
     links: z
       .array(z.object({ label: z.string(), url: z.url() }))
       .default([]),

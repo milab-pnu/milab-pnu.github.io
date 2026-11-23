@@ -25,18 +25,32 @@ const { name, homepage, links } = Astro.props;
           <Icon name="link" />
         </a>
       )}
-      {links.map((l) => (
-        <a
-          class="hover:text-slate-900"
-          href={l.url}
-          target="_blank"
-          rel="noopener"
-          aria-label={`${name} ${l.label}`}
-          title={l.label}
-        >
-          <Icon name={iconFor(l.url)} />
-        </a>
-      ))}
+      {links.map((l) =>
+        // 달력(일정) 링크는 아이콘만으로 뜻이 안 통해서 label 을 글자로 함께 보여 준다.
+        iconFor(l.url) === "calendar" ? (
+          <a
+            class="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-900"
+            href={l.url}
+            target="_blank"
+            rel="noopener"
+            aria-label={`${name} ${l.label}`}
+          >
+            <Icon name="calendar" />
+            {l.label}
+          </a>
+        ) : (
+          <a
+            class="hover:text-slate-900"
+            href={l.url}
+            target="_blank"
+            rel="noopener"
+            aria-label={`${name} ${l.label}`}
+            title={l.label}
+          >
+            <Icon name={iconFor(l.url)} />
+          </a>
+        ),
+      )}
     </div>
   )
 }

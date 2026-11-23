@@ -10,6 +10,8 @@ links:
     url: "https://scholar.google.com/citations?user=9XVeDF8AAAAJ&hl=en"
   - label: "LinkedIn"
     url: "https://www.linkedin.com/in/jaehoon-oh-841584184/"
+  - label: "스케줄 확인"
+    url: "https://teamup.com/ks7t2cvivhf6kkkwn8"
 education:
   - "Ph.D. in Graduate School of Data Science, KAIST (2017.08-2023.02)"
   - "    Optimization and Statistical Inference Lab (Supervisor: Se-Young Yun)"
