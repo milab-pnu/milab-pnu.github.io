@@ -410,4 +410,10 @@
     overflow-x: auto;
     white-space: nowrap;
   }
+  /* 문장 목록이 든 칸은 줄을 바꾼다. 숫자 표와 달리 가로 스크롤로는 읽기 어렵다 */
+  .prose-lecture td:has(ul),
+  .prose-lecture td:has(ol) {
+    white-space: normal;
+    min-width: 14rem;
+  }
 }
